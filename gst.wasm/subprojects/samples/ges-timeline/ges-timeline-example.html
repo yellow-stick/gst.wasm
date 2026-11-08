@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>gst.wasm GES timeline</title>
+    <style>
+      body { font-family: sans-serif; margin: 16px; }
+      canvas { display: block; background: #000; width: 320px; height: 240px; }
+      #controls { margin: 8px 0; display: flex; gap: 8px; align-items: center; }
+      #log { font: 12px monospace; white-space: pre-wrap; max-height: 320px; overflow: auto; background: #111; color: #ddd; padding: 6px; }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas" width="320" height="240"></canvas>
+    <div id="controls">
+      <button id="load">Load</button>
+      <button id="play">Play</button>
+      <button id="pause">Pause</button>
+      <input id="frame" type="number" min="0" value="0" style="width: 6em" />
+      <button id="seek">Seek frame</button>
+      <span id="status">starting…</span>
+    </div>
+    <div id="log"></div>
+    <script>
+      // Media and project are written into the Emscripten FS before main ()
+      // runs; GES then loads file:///media/… URIs through filesrc.
+      const params = new URLSearchParams(location.search);
+      const mediaBase = params.get("media") || "media/";
+      const files = {
+        "/media/clip-a.mp4": mediaBase + "clip-a.mp4",
+        "/media/clip-b.mp4": mediaBase + "clip-b.mp4",
+        "/media/two-clips-crossfade.xges": "two-clips-crossfade.xges",
+      };
+
+      const log = document.getElementById("log");
+      const status = document.getElementById("status");
+      window.ysEvents = [];
+      const waiters = [];
+
+      // Resolves with the first event (already received or future) matching
+      // predicate, after index `from` of ysEvents.
+      window.ysWaitFor = (predicate, timeoutMs = 30000, from = 0) =>
+        new Promise((resolve, reject) => {
+          const found = ysEvents.slice(from).find(predicate);
+          if (found) return resolve(found);
+          const waiter = { predicate, resolve };
+          waiters.push(waiter);
+          setTimeout(() => {
+            const i = waiters.indexOf(waiter);
+            if (i >= 0) {
+              waiters.splice(i, 1);
+              reject(new Error("Timed out waiting for event"));
+            }
+          }, timeoutMs);
+        });
+
+      var Module = {
+        canvas: document.getElementById("canvas"),
+        print: (text) => console.log(text),
+        printErr: (text) => console.warn(text),
+        preRun: [
+          () => {
+            Module.addRunDependency("ys-media");
+            Promise.all(
+              Object.entries(files).map(async ([path, url]) => {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`${url}: HTTP ${response.status}`);
+                return [path, new Uint8Array(await response.arrayBuffer())];
+              }),
+            )
+              .then((entries) => {
+                Module.FS.mkdir("/media");
+                for (const [path, data] of entries) Module.FS.writeFile(path, data);
+                Module.removeRunDependency("ys-media");
+              })
+              .catch((error) => Module.ysOnEvent({ event: "error", where: "media", message: String(error) }));
+          },
+        ],
+        ysOnEvent: (event) => {
+          ysEvents.push(event);
+          if (event.event !== "frame") {
+            log.textContent += JSON.stringify(event) + "\n";
+            status.textContent = event.event;
+          }
+          for (const waiter of [...waiters]) {
+            if (waiter.predicate(event)) {
+              waiters.splice(waiters.indexOf(waiter), 1);
+              waiter.resolve(event);
+            }
+          }
+        },
+      };
+
+      window.ys = {
+        load: (uri = "file:///media/two-clips-crossfade.xges") =>
+          Module.ccall("ys_load", null, ["string"], [uri]),
+        play: () => Module.ccall("ys_play", null, [], []),
+        pause: () => Module.ccall("ys_pause", null, [], []),
+        seekFrame: (frame) => Module.ccall("ys_seek_frame", null, ["number"], [frame]),
+      };
+
+      document.getElementById("load").onclick = () => ys.load();
+      document.getElementById("play").onclick = () => ys.play();
+      document.getElementById("pause").onclick = () => ys.pause();
+      document.getElementById("seek").onclick = () =>
+        ys.seekFrame(Number(document.getElementById("frame").value));
+    </script>
+    <script src="ges-timeline-example.js"></script>
+  </body>
+</html>

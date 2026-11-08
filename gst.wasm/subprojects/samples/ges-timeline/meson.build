@@ -1,0 +1,39 @@
+executable(executable_name,
+    executable_name + '.c',
+    dependencies: [
+      common_deps,
+      ges_dep,
+      gstnle_dep,
+      gstges_dep,
+      gstisomp4_dep,
+      dependency('gstreamer-pbutils-1.0'),
+      dependency('gstplayback'),
+      dependency('gsttypefindfunctions'),
+      dependency('gstvideoparsersbad'),
+      dependency('gstcompositor'),
+      dependency('gstvideoconvertscale'),
+      dependency('gstvideorate'),
+      dependency('gstvideotestsrc'),
+      dependency('gstopengl'),
+      dependency('gstweb'),
+    ],
+    link_args: common_link_args + [
+      '-sASYNCIFY',
+      '-sASYNCIFY_STACK_SIZE=65536',
+      '-sPROXY_TO_PTHREAD',
+      '-sOFFSCREENCANVAS_SUPPORT',
+      '-sFORCE_FILESYSTEM',
+      '-lGL',
+      '-lhtml5',
+      '-sEXPORTED_FUNCTIONS=_main,_malloc,_free,_ys_load,_ys_play,_ys_pause,_ys_seek_frame',
+      '-sEXPORTED_RUNTIME_METHODS=ccall,FS,UTF8ToString,addRunDependency,removeRunDependency',
+    ] + gio_wasm_link_args,
+    name_suffix: 'js',
+    install: true,
+    install_dir: install_dir
+)
+
+install_data(
+  executable_name + '.html',
+  'two-clips-crossfade.xges',
+  install_dir: install_dir)

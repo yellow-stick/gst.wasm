@@ -63,7 +63,6 @@ struct _GstWebCodecsVideoDecoder
 
   GstVideoCodecState *input_state;
   GstVideoCodecState *output_state;
-  gchar *output_format;
 
   /* TODO move this to a prv struct */
   GstWebCanvas *canvas;
@@ -71,12 +70,27 @@ struct _GstWebCodecsVideoDecoder
   gint height;
   GstVideoFormat format;
   gboolean need_negotiation;
+  /* Downstream does not prefer memory:WebVideoFrame, copy to system memory */
+  gboolean system_memory;
 
   emscripten::val decoder;
+  /* Runner thread only: decoder holds a VideoDecoder */
+  gboolean has_decoder;
+  /* Runner thread only: next chunk must be a key frame */
+  gboolean key_required;
   /* Amount of the output frames pending to be dequeued */
   gint dequeue_size;
   GMutex dequeue_lock;
   GCond dequeue_cond;
+
+  /* VideoFrames produced on the runner thread, pushed downstream from the
+   * streaming thread. Protected by output_lock */
+  GMutex output_lock;
+  GQueue output_queue;
+  /* Incremented on every flush, to discard frames submitted before it */
+  guint flush_epoch;
+  /* Set from the WebCodecs error callback */
+  gchar *error;
 };
 
 struct _GstWebCodecsVideoDecoderClass

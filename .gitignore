@@ -1,3 +1,6 @@
 build/gst.wasm_*_*
 _builddir
 .gitignore
+# Generated H.264 test clips (tools/make_test_clips.sh), never committed
+build/ys-media/
+gst.wasm/subprojects/.wraplock

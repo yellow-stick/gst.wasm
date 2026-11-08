@@ -73,6 +73,105 @@ Remarque : relire le canvas par `drawImage` donne du noir, car le contexte
 WebGL de SDL2 ne conserve pas son tampon (`preserveDrawingBuffer` faux). Les
 preuves visuelles passent donc par des captures du compositeur.
 
+## 2 — GES dans le navigateur (en cours)
+
+### Ce qui compile
+
+- Nouvelle recette `build/recipes/gst-editing-services-1.0.recipe`
+  (surcharge de celle de Cerbero) : sans `gst-devtools-1.0` (GstValidate,
+  qui tire json-glib et gst-rtsp-server), options meson `tools`,
+  `validate`, `python`, `introspection`, `bash-completion`, `xptv`
+  désactivées. `ges-launch-1.0` repose sur un exécutable en ligne de
+  commande et le chargement dynamique de plugins : son équivalent web est le
+  sample statique `ges-timeline`. GES et NLE sont des bibliothèques
+  statiques : `libges-1.0.a`, `libgstges.a`, `libgstnle.a`, leurs `.pc`.
+  `cerbero buildone gst-editing-services-1.0` → `All done!` en 47 s.
+- `gst.wasm.recipe` dépend de `gst-editing-services-1.0`. `gstinspect`
+  enregistre statiquement `nle` et `ges`.
+
+### Bloquants de portage trouvés et corrigés
+
+1. **GIO incomplet dans le fork GLib wasm.** GES utilise `GFile`, donc
+   GIO. Le fork exclut les sources Unix de GIO pour Emscripten
+   (`gio/meson.build:357`), mais `giomodule.c`, `glocalfile.c`,
+   `gdbusprivate.c`… les référencent toujours sous `G_OS_UNIX`. Toute
+   édition de liens d’un utilisateur de `GFile` échoue (aucun sample
+   n’utilisait GIO jusqu’ici). Deux traitements :
+   - symbole **de données** `g_io_watch_funcs` (défini par `giounix.c`,
+     non compilé) référencé par `gobject/gsourceclosure.c` : vrai correctif,
+     patch `build/recipes/glib/0013-gobject-gsourceclosure-no-g_io_watch_funcs-on-wasm.patch`
+     (mêmes gardes `G_PLATFORM_WASM` que le fork applique déjà aux sources
+     fd/signal Unix) ;
+   - 30 **fonctions** Unix restantes (`g_unix_mount_*`,
+     `_g_unix_volume_monitor_get_type`, backends de notification et
+     portails, `g_content_type_*`, `g_unix_fd_message_*`, `res_query`) :
+     les exécutables GES sont liés avec `-sERROR_ON_UNDEFINED_SYMBOLS=0`
+     (`gio_wasm_link_args`, `samples/meson.build`). L’éditeur de liens les
+     liste en avertissement ; un appel effectif avorterait avec
+     `missing function: <nom>`. Ce n’est pas un contournement silencieux,
+     mais ce n’est pas la correction finale : il faut des gardes
+     `G_PLATFORM_WASM` dans le fork GLib (prochaine étape, à remonter vers
+     fluendo/glib).
+2. **Appels indirects de signature incompatible.** Premier lancement de
+   `gstinspect` : `RuntimeError: function signature mismatch` dans
+   `g_once_impl ← ges_track_type_get_type ← ges_clip_class_intern_init`.
+   `ges-enums.c` passe à `g_once` six fonctions `void f (GType *)` castées
+   en `GThreadFunc` (`gpointer f (gpointer)`) : comportement indéfini en C,
+   piège fatal en wasm (`call_indirect` vérifie le type). C’est la même
+   classe de bug que la branche amont `RDI-3208-thread-func-return`, qui ne
+   couvrait pas GES. Patch
+   `build/recipes/gst-editing-services-1.0/0001-ges-enums-give-g_once-callbacks-the-GThreadFunc-sign.patch`.
+   Revue des autres casts de pointeurs de fonction de GES/NLE (`GFunc`,
+   `GCompareFunc`, `GHFunc`, `GSourceFunc`, `GstIteratorFoldFunction`…) :
+   aucun autre écart de **type de retour**.
+
+### Chaîne de décodage pour GES (préparée pour le critère 3)
+
+`webcodecsviddec*` (`gst-plugins-web`) n’était pas utilisable dans une
+timeline. Modifications de `gstwebcodecsvideodecoder.cpp/.h` :
+
+- **Appariement par timestamp** : `on_output` prenait
+  `gst_video_decoder_get_oldest_frame`. WebCodecs sort les images dans
+  l’ordre de présentation, la liste GStreamer est dans l’ordre de décodage :
+  avec des B-frames, les PTS étaient permutés. Les chunks portent désormais
+  le PTS en µs (au lieu de ms tronquées), et chaque VideoFrame retrouve sa
+  `GstVideoCodecFrame` par ce timestamp.
+- **Plus de push depuis le runner** : `finish_frame` était appelé sur le
+  thread du `GstWebRunner`, partagé par tous les éléments web du pipeline.
+  Pendant un fondu, le compositor bloque A en attendant B, qui a besoin du
+  runner : interblocage. Le runner ne fait plus que mettre la VideoFrame en
+  file ; elle est poussée depuis le thread de streaming (`handle_frame`,
+  `drain`).
+- **`flush` (seek)** : `reset()` puis `configure()` du VideoDecoder,
+  abandon des sorties de l’ancien segment, compteur d’époque pour les
+  images soumises pendant un flush, garde « key frame requise ».
+- **`drain`/`finish`** : `VideoDecoder.flush()` attendu, sinon les
+  dernières images retenues pour le réordonnancement des B-frames ne
+  sortaient jamais, ce qui faisait perdre la fin de chaque segment.
+- **Mémoire système** quand l’aval ne préfère pas `memory:WebVideoFrame`
+  (convertisseurs, compositor de GES) : `VideoFrame.copyTo()` selon le
+  layout `GstVideoInfo` (offsets/strides, `gstwebvideoframe.cpp`). Le
+  template de sortie accepte maintenant I420/NV12/… en mémoire système. Le
+  chemin rapide `webcodecsviddec ! webcanvassink` garde la VideoFrame.
+- **Erreurs** : le callback `error` de WebCodecs remonte en
+  `GST_ELEMENT_ERROR` au lieu d’être ignoré.
+
+### Sample `ges-timeline`
+
+`gst.wasm/subprojects/samples/ges-timeline/` : `ges-timeline-example.c`,
+page HTML autonome (COEP interdit les scripts CDN du template),
+`two-clips-crossfade.xges`. La boucle GLib tourne sur le thread principal
+proxifié, qui possède `#canvas`. Le contexte `GstWebCanvas` `#canvas` est
+posé sur le `GESPipeline` avant la première transition d’état, afin que
+décodeurs et puits partagent le runner qui possède le canvas. libav n’est
+pas enregistré : `decodebin` ne peut choisir que les décodeurs WebCodecs.
+Événements JSON vers `Module.ysOnEvent` : `ready`, `loaded` (clips de la
+timeline), `decoder` (fabrique réellement instanciée), `state`, `seek`,
+`async-done`, `frame` (code-barres lu dans le buffer rendu), `eos`, `error`.
+Commandes : `ys_load`, `ys_play`, `ys_pause`, `ys_seek_frame`.
+
+Preuve dans le navigateur : en cours (voir ci-dessous dès qu’exécutée).
+
 ## Contraintes et licences
 
 - La recette amont `build/recipes/ffmpeg.recipe:21-26` active explicitement

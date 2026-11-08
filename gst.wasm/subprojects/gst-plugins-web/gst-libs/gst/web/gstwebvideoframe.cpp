@@ -156,6 +156,21 @@ gst_web_video_frame_map_internal (
   }
 #endif
 
+  /* Without a layout copyTo () packs the planes tightly; GstVideoInfo may
+   * pad the strides. */
+  if (info != NULL) {
+    val layout = val::array ();
+
+    for (guint i = 0; i < GST_VIDEO_INFO_N_PLANES (info); i++) {
+      val plane = val::object ();
+
+      plane.set ("offset", (double) GST_VIDEO_INFO_PLANE_OFFSET (info, i));
+      plane.set ("stride", GST_VIDEO_INFO_PLANE_STRIDE (info, i));
+      layout.call<void> ("push", plane);
+    }
+    options.set ("layout", layout);
+  }
+
   video_frame.call<val> ("copyTo", data_view, options).await ();
 
   return TRUE;
