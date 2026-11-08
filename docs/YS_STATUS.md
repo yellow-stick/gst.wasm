@@ -120,6 +120,48 @@ pub fn frame_timestamp(frame: u32, fps: u32) -> u64 {
 compilation de cette dépendance et de cet export, pas celle de FlipEdit,
 ni un échange effectif avec Emscripten.
 
+### Coexistence réellement exécutée dans Chromium
+
+`wasm-bindgen-cli 0.2.130` a produit le chargeur web de ce module Rust :
+
+```sh
+wasm-bindgen target/wasm32-unknown-unknown/debug/ys_frb_web_probe.wasm \
+  --target web --out-dir pkg
+```
+
+Un second module, compilé avec le véritable Emscripten de Cerbero, exporte :
+
+```c
+#include <stdint.h>
+#include <emscripten.h>
+EMSCRIPTEN_KEEPALIVE
+uint32_t frame_milliseconds(uint32_t frame, uint32_t fps) {
+  return frame * 1000 / fps;
+}
+```
+
+Compilation :
+
+```sh
+poetry run cerbero -c build/gst.wasm.cbc run emcc \
+  /tmp/ys-frb-web-probe/emscripten.c \
+  -o /tmp/ys-frb-web-probe/emscripten.mjs \
+  -sMODULARIZE=1 -sEXPORT_ES6=1 -sENVIRONMENT=web \
+  -sEXPORTED_FUNCTIONS=_frame_milliseconds --no-entry
+```
+
+Emscripten émet un avertissement de version LLVM (22.0 vu, 23 attendu),
+mais cette compilation réussit. Une même page isolée charge les deux
+modules avec leurs initialisateurs distincts, puis appelle
+`frame_timestamp(45, 30)` et `emscripten._frame_milliseconds(45, 30)`.
+Résultats réels : `1500000000n` et `1500`, sans erreur navigateur.
+Voir [`evidence/wasm-coexistence.json`](evidence/wasm-coexistence.json).
+
+Conclusion limitée : wasm-bindgen avec la dépendance FRB et Emscripten
+peuvent cohabiter dans la même page. Aucune incompatibilité générale n’est
+démontrée. Cette sonde n’utilise pas le code Dart généré par FRB et ne
+prouve pas le pilotage GStreamer depuis Flutter.
+
 Choix d’intégration : frontière JavaScript/messages, sans échange de pointeurs
 Rust/GStreamer ni de vues de mémoire wasm entre les runtimes. Les réponses
 de seek devront attester la présentation de l’image, pas seulement le retour
