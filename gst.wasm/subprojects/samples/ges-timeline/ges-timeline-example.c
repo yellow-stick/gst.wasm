@@ -596,6 +596,12 @@ ys_seek_frame (int frame)
   g_main_context_invoke (NULL, do_seek_frame, GUINT_TO_POINTER (frame));
 }
 
+EMSCRIPTEN_KEEPALIVE void
+ys_set_debug (const char *thresholds)
+{
+  gst_debug_set_threshold_from_string (thresholds, TRUE);
+}
+
 int
 main (int argc, char **argv)
 {

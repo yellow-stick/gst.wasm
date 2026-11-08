@@ -27,6 +27,8 @@ class Recipe(original_recipe):
     patches = [
         'gst-editing-services-1.0/0001-ges-enums-give-g_once-callbacks-the-GThreadFunc-sign.patch',
         'gst-editing-services-1.0/0002-ges-give-signal-handlers-the-arity-their-marshaller-.patch',
+        'gst-editing-services-1.0/0003-ges-container-use-the-generic-marshaller-for-child-s.patch',
+        'gst-editing-services-1.0/0004-nle-composition-make-_initialize_stack_func-return-v.patch',
     ]
 
     # ges-launch-1.0 relies on dynamic plugin loading and a command line;

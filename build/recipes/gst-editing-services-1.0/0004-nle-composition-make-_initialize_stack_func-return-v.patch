@@ -1,0 +1,39 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yellow Stick <dev@yellow-stick.local>
+Date: Mon, 9 Nov 2026 00:20:00 +0100
+Subject: [PATCH] nle: composition: make _initialize_stack_func return void
+
+Composition actions are GCClosures invoked with
+g_cclosure_marshal_VOID__VOID, which calls them as
+void (*) (gpointer, gpointer). _initialize_stack_func returned a gboolean
+nobody reads: undefined behaviour that traps on WebAssembly ("function
+signature mismatch" in _execute_actions) when a composition starts.
+---
+ subprojects/gst-editing-services/plugins/nle/nlecomposition.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/subprojects/gst-editing-services/plugins/nle/nlecomposition.c b/subprojects/gst-editing-services/plugins/nle/nlecomposition.c
+--- a/subprojects/gst-editing-services/plugins/nle/nlecomposition.c
++++ b/subprojects/gst-editing-services/plugins/nle/nlecomposition.c
+@@ -754,7 +754,8 @@
+   return TRUE;
+ }
+ 
+-static gboolean
++/* Called by g_cclosure_marshal_VOID__VOID: must return void */
++static void
+ _initialize_stack_func (NleComposition * comp, UpdateCompositionData * ucompo)
+ {
+   NleCompositionPrivate *priv = comp->priv;
+@@ -773,8 +774,6 @@
+ 
+   _post_start_composition_update_done (comp, ucompo->seqnum, ucompo->reason);
+   priv->initialized = TRUE;
+-
+-  return G_SOURCE_REMOVE;
+ }
+ 
+ static void
+-- 
+2.43.0
+

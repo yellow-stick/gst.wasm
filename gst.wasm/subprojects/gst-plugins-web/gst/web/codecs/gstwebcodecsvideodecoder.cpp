@@ -342,13 +342,17 @@ gst_web_codecs_video_decoder_push_outputs (GstWebCodecsVideoDecoder *self)
   return ret;
 }
 
+/* Runner thread. The handler is detached before the VideoDecoder is closed,
+ * so self is alive and has_decoder is set */
 static void
 gst_web_codecs_video_decoder_on_dequeue (guintptr self_, val event)
 {
   GstWebCodecsVideoDecoder *self = (GstWebCodecsVideoDecoder *) self_;
   gint dequeue_size;
 
-  dequeue_size = self->decoder["decodeQueueSize"].as<int> ();
+  if (!self->has_decoder)
+    return;
+  dequeue_size = event["target"]["decodeQueueSize"].as<int> ();
 
   GST_INFO_OBJECT (
       self, "Dequeue received with current size %d", dequeue_size);
@@ -468,6 +472,8 @@ gst_web_codecs_video_decoder_close_decoder (gpointer data)
 
   if (!self->has_decoder)
     return;
+  /* No dequeue event may reach self after this */
+  self->decoder.set ("ondequeue", val::null ());
   if (self->decoder["state"].as<std::string> () != "closed")
     self->decoder.call<void> ("close");
   self->decoder = val::undefined ();
@@ -506,9 +512,9 @@ gst_web_codecs_video_decoder_ctor (gpointer data)
     const self = $0;
     const decoder = Emval.toValue ($1);
 
-    decoder.addEventListener ("dequeue", (event) => {
+    decoder.ondequeue = (event) => {
       Module.gst_web_codecs_video_decoder_on_dequeue (self, event);
-    });
+    };
   }, (guintptr) self, self->decoder.as_handle ());
   /* clang-format on */
 

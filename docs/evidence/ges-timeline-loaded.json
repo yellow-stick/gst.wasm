@@ -1,0 +1,39 @@
+[
+  {
+    "event": "ready",
+    "ges": "1.29.1"
+  },
+  {
+    "event": "loaded",
+    "duration": 3500000000,
+    "clips": [
+      {
+        "name": "clip-a",
+        "type": "GESUriClip",
+        "asset": "file:///media/clip-a.mp4",
+        "layer": 0,
+        "start": 0,
+        "inpoint": 333333333,
+        "duration": 2000000000
+      },
+      {
+        "name": "transitionclip0",
+        "type": "GESTransitionClip",
+        "asset": "crossfade",
+        "layer": 0,
+        "start": 1500000000,
+        "inpoint": 0,
+        "duration": 500000000
+      },
+      {
+        "name": "clip-b",
+        "type": "GESUriClip",
+        "asset": "file:///media/clip-b.mp4",
+        "layer": 0,
+        "start": 1500000000,
+        "inpoint": 666666666,
+        "duration": 2000000000
+      }
+    ]
+  }
+]
