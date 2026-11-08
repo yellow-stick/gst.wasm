@@ -10,11 +10,11 @@ Les critères restent non validés tant que leur scénario réel n’a pas réus
 
 | Critère | État | Preuve actuelle |
 | --- | --- | --- |
-| 1. Construction et exemples locaux | En cours | Installation de Poetry réussie ; installation des dépendances lancée |
+| 1. Construction et exemples locaux | ✅ Validé | `cerbero build gst.wasm` → `All done!` (29 recettes) ; `videotestsrc-example` anime la bille dans Chromium headless |
 | 2. GES inspectable et timeline chargée | Non validé | Dépend de la toolchain |
 | 3. Deux clips H.264, fondu, WebCodecs, canvas | Non validé | Aucun résultat d’exécution |
 | 4. Seeks exacts et [In, Out) | Non validé | Aucun résultat image par image |
-| 5. Flutter Web et pont Emscripten | Non validé | Vérification de coexistence à effectuer |
+| 5. Flutter Web et pont Emscripten | Non validé | Coexistence wasm-bindgen + Emscripten prouvée dans une page ; pilotage Flutter à faire |
 
 ## 1 — Construction
 
@@ -40,9 +40,38 @@ env GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=protocol.file.allow \
 
 Le bootstrap a terminé avec `All done!` après construction des 14 recettes
 d’outils. L’autorisation des sous-modules locaux est limitée à la commande,
-sans changer la configuration Git globale. La compilation de `gst.wasm`
-est lancée après `run emcc --clear-cache`.
-Le disque indiquait 99 Go disponibles avant construction.
+sans changer la configuration Git globale.
+
+```sh
+poetry run cerbero -c build/gst.wasm.cbc run emcc --clear-cache
+poetry run cerbero -c build/gst.wasm.cbc build gst.wasm
+```
+
+Résultat : `Building the following recipes: libffi zlib pcre2 … gst-libav-1.0
+gst.wasm`, 29 recettes, 8 jobs, fin `All done!` en 1458 s (≈ 24 min) sur
+8 cœurs. Emscripten 5.0.7 signale `LLVM version … seeing "22.0", expected
+"23"` (fork LLVM de Fluendo) : avertissement seulement. Les plugins installés
+comprennent `libgstcompositor.a`, `libgstisomp4.a`, `libgstlibav.a`,
+`libgstvideoconvertscale.a`, `libgstvideoparsersbad.a`. Aucun fichier GES
+(`gst-editing-services-1.0.pc`, `libgstnle`, `libgstges`) n’est produit.
+
+### Page d’exemples exécutée en local
+
+```sh
+python3 tools/serve_samples.py \
+  build/gst.wasm_web_wasm32/dist/web_wasm32/share/gst.wasm/samples --port 8082
+# Chromium : http://127.0.0.1:8082/videotestsrc-example/videotestsrc-example.html
+```
+
+`tools/serve_samples.py` envoie COOP `same-origin` et COEP `require-corp` ;
+la page rapporte `crossOriginIsolated: true`, aucune erreur JS. Deux captures
+du canvas 320×240 à 700 ms d’intervalle diffèrent et montrent la bille du
+motif `ball` à deux positions :
+[`videotestsrc-t0.png`](evidence/videotestsrc-t0.png),
+[`videotestsrc-t1.png`](evidence/videotestsrc-t1.png).
+Remarque : relire le canvas par `drawImage` donne du noir, car le contexte
+WebGL de SDL2 ne conserve pas son tampon (`preserveDrawingBuffer` faux). Les
+preuves visuelles passent donc par des captures du compositeur.
 
 ## Contraintes et licences
 
