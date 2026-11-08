@@ -70,8 +70,11 @@
               }),
             )
               .then((entries) => {
-                Module.FS.mkdir("/media");
-                for (const [path, data] of entries) Module.FS.writeFile(path, data);
+                Module.FS_createPath("/", "media", true, true);
+                for (const [path, data] of entries) {
+                  const name = path.slice("/media/".length);
+                  Module.FS_createDataFile("/media", name, data, true, false, false);
+                }
                 Module.removeRunDependency("ys-media");
               })
               .catch((error) => Module.ysOnEvent({ event: "error", where: "media", message: String(error) }));

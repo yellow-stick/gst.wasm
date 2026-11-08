@@ -107,10 +107,17 @@ preuves visuelles passent donc par des captures du compositeur.
      portails, `g_content_type_*`, `g_unix_fd_message_*`, `res_query`) :
      les exécutables GES sont liés avec `-sERROR_ON_UNDEFINED_SYMBOLS=0`
      (`gio_wasm_link_args`, `samples/meson.build`). L’éditeur de liens les
-     liste en avertissement ; un appel effectif avorterait avec
-     `missing function: <nom>`. Ce n’est pas un contournement silencieux,
-     mais ce n’est pas la correction finale : il faut des gardes
-     `G_PLATFORM_WASM` dans le fork GLib (prochaine étape, à remonter vers
+     liste en avertissement ; un appel effectif avorte avec
+     `missing function: <nom>`, sans échec silencieux.
+   - Le premier appel réel est arrivé au chargement du projet :
+     `Aborted(missing function: g_desktop_app_info_lookup_get_type)`.
+     `giomodule.c` enregistre au premier `GFile` des types Unix non
+     compilés pour Emscripten. Patch
+     `build/recipes/glib/0014-gio-giomodule-do-not-register-Unix-only-types-on-wasm.patch`
+     (gardes `G_PLATFORM_WASM` ; les types D-Bus compilés restent). Il
+     reste 21 symboles non définis (montages Unix, content-type,
+     fd-message, `res_query`). Aucun n’est atteint par les scénarios
+     ci-dessous ; leur correction relève du fork GLib (à remonter vers
      fluendo/glib).
 2. **Appels indirects de signature incompatible.** Premier lancement de
    `gstinspect` : `RuntimeError: function signature mismatch` dans
@@ -124,6 +131,51 @@ preuves visuelles passent donc par des captures du compositeur.
    Revue des autres casts de pointeurs de fonction de GES/NLE (`GFunc`,
    `GCompareFunc`, `GHFunc`, `GSourceFunc`, `GstIteratorFoldFunction`…) :
    aucun autre écart de **type de retour**.
+3. **Gestionnaires de signaux d’arité incorrecte.** Au chargement du
+   projet : `function signature mismatch` dans
+   `g_cclosure_marshal_VOID__OBJECTv ← uridecodebin_source_changed_cb`
+   (GstDiscoverer::source-setup). `ges-discoverer-manager.c` y connecte
+   `source_setup_cb (self, source)` en mode *swapped*, alors que le
+   marshaller passe 3 arguments.
+   - Expérience sur la vraie toolchain (`/tmp/ys-bitcast/probe.c`,
+     `EMCC_CFLAGS=-fwasm-fix-function-bitcasts`) : un cast **explicite**
+     avec un argument en trop (`(GCopyFunc) gst_object_ref`) fonctionne ;
+     un gestionnaire passé par `G_CALLBACK` puis appelé avec 3 arguments
+     déclenche `null function or function signature mismatch`. Le fork LLVM
+     de Fluendo ne peut pas corriger ce cas : la signature réelle n’est
+     connue que dans le marshaller.
+   - Voie écartée : `-sEMULATE_FUNCTION_POINTER_CASTS`. Elle impose `-O1`
+     (en `-O3`, Binaryen échoue à la validation après `--fpcast-emu`) et
+     fait passer le binaire de 15 à 37 Mo. Surtout, elle casse libffi
+     (`TypeError: Cannot convert … to a BigInt` dans `ffi_call_js`, appelé
+     par `g_cclosure_marshal_generic`) : incompatible avec GObject.
+   - Audit statique de chaque `g_signal_connect*` : arité du gestionnaire
+     comparée à `n_params + 2` du signal, extrait de chaque `g_signal_new`
+     de GLib, du cœur, des libs, de plugins-base, de GES/NLE et de
+     gst-plugins-web (252 signaux). GES/NLE : 68 connexions, 5 erreurs
+     (`duration_changed_cb` ×2, `proxy_load_serialized_info_cb`,
+     `source_setup_cb`, `commited_cb`). Cœur, libs, playback, pbutils,
+     compositor, videorate, videoconvertscale, typefind, isomp4,
+     videoparsers, gst-plugins-web : 0. Patch
+     `build/recipes/gst-editing-services-1.0/0002-ges-give-signal-handlers-the-arity-their-marshaller-.patch`
+     (ajout des paramètres manquants, `G_GNUC_UNUSED`).
+
+### Preuve : `gst-inspect` dans Chromium liste GES et NLE
+
+```sh
+python3 tools/serve_samples.py \
+  build/gst.wasm_web_wasm32/dist/web_wasm32/share/gst.wasm/samples --port 8082
+# Chromium : http://127.0.0.1:8082/gstinspect-example/gstinspect-example.html
+```
+
+Sortie complète capturée depuis la console de la page :
+[`evidence/gst-inspect-browser.txt`](evidence/gst-inspect-browser.txt)
+(1839 lignes, `Total count: 5 plugins, 19 features`). Fabriques listées :
+`gessrc gesdemux nlesource nlecomposition nleoperation nleurisource`
+(plus `webcodecsviddech264sw`, `webcodecsauddecaacsw`, `webcanvassink`, …).
+Seul le H.264 **logiciel** est enregistré ; le scan WebCodecs rapporte
+`No H.264 decoder found for H264HW`, cohérent avec la sonde
+`prefer-hardware: false`.
 
 ### Chaîne de décodage pour GES (préparée pour le critère 3)
 

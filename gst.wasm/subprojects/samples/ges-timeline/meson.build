@@ -26,7 +26,7 @@ executable(executable_name,
       '-lGL',
       '-lhtml5',
       '-sEXPORTED_FUNCTIONS=_main,_malloc,_free,_ys_load,_ys_play,_ys_pause,_ys_seek_frame',
-      '-sEXPORTED_RUNTIME_METHODS=ccall,FS,UTF8ToString,addRunDependency,removeRunDependency',
+      '-sEXPORTED_RUNTIME_METHODS=ccall,UTF8ToString,addRunDependency,removeRunDependency,FS_createPath,FS_createDataFile',
     ] + gio_wasm_link_args,
     name_suffix: 'js',
     install: true,
@@ -35,5 +35,6 @@ executable(executable_name,
 
 install_data(
   executable_name + '.html',
+  'ges-timeline-check.js',
   'two-clips-crossfade.xges',
   install_dir: install_dir)
