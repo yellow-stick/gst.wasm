@@ -28,7 +28,18 @@ uv tool install poetry
 poetry install
 ```
 
-La première commande a installé Poetry 2.5.1. La seconde est en cours.
+Poetry 2.5.1 et les dépendances Python ont été installés ; un `poetry.lock`
+a été généré. Le bootstrap initial a échoué sur la confirmation interactive
+d’apt. `--non-interactive` ne transmet pas `-y` à ce bootstrap ; l’option
+correcte, confirmée par `cerbero bootstrap --help`, est :
+
+```sh
+env GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=protocol.file.allow \
+  GIT_CONFIG_VALUE_0=always poetry run cerbero -c build/gst.wasm.cbc bootstrap -y -j 8
+```
+
+Cette commande est en cours. L’autorisation des sous-modules locaux est
+limitée à la commande, sans changer la configuration Git globale.
 Le disque indiquait 99 Go disponibles avant construction.
 
 ## Contraintes et licences
@@ -46,3 +57,37 @@ Le disque indiquait 99 Go disponibles avant construction.
   prouve pas l’accès à un décodeur matériel sur cette machine sans GPU.
 - wasm32 impose un espace d’adressage limité ; ni Vulkan ni VA-API ne sont
   des backends disponibles directement dans ce port navigateur.
+
+## Sonde navigateur préalable
+
+Commande et page réellement exercées :
+
+```sh
+python3 tools/serve_samples.py . --port 8080
+# Ouvrir http://127.0.0.1:8080/tools/browser-capabilities.html
+```
+
+Résultat enregistré dans [`evidence/browser-capabilities.json`](evidence/browser-capabilities.json).
+Le navigateur Chromium piloté rapporte l’isolation cross-origin active,
+SharedArrayBuffer et VideoDecoder disponibles. Pour H.264 `avc1.42E01E`,
+320×240, `isConfigSupported` répond vrai pour `no-preference` et
+`prefer-software`, faux pour `prefer-hardware`. Ce n’est ni une preuve de
+décodage effectif, ni une validation du critère 3. L’accélération matérielle
+n’est pas démontrable avec cette configuration.
+
+## 5 — Vérification précoce du pont
+
+Outils exécutés : Flutter 3.47.7, Dart 3.13.5,
+rustc 1.98.0-nightly (9e2abe0c6). La cible Rust
+`wasm32-unknown-unknown` est installée.
+
+La référence FlipEdit utilise FRB 2.13.0 et son chargeur web `wasm_bindgen`.
+Le sample existant `gstlaunch` utilise au contraire `Module.cwrap` et le
+runtime Emscripten. Ces lectures ne prouvent pas une incompatibilité de
+coexistence : il ne faut pas confondre deux modules dans la même page avec
+une ABI/mémoire partagée. Une compilation FRB minimale est en cours.
+
+Choix d’intégration : frontière JavaScript/messages, sans échange de pointeurs
+Rust/GStreamer ni de vues de mémoire wasm entre les runtimes. Les réponses
+de seek devront attester la présentation de l’image, pas seulement le retour
+de `gst_element_seek`. Aucun pilotage Flutter du pipeline n’est encore validé.
