@@ -73,8 +73,9 @@ typedef struct _GstWebCodecsVideoDecoderDecodeData
   GstVideoCodecFrame *frame;
 } GstWebCodecsVideoDecoderDecodeData;
 
-/* A decoded VideoFrame, wrapped on the runner thread and waiting to be
- * matched with its GstVideoCodecFrame on the streaming thread */
+/* A decoded VideoFrame, produced on the runner thread and waiting to be
+ * matched with its GstVideoCodecFrame on the streaming thread. Either the
+ * VideoFrame itself (memory) or its RGBA pixels (data) */
 typedef struct _GstWebCodecsVideoDecoderOutput
 {
   gint64 timestamp;
@@ -82,6 +83,7 @@ typedef struct _GstWebCodecsVideoDecoderOutput
   gint width;
   gint height;
   GstWebVideoFrame *memory;
+  guint8 *data;
 } GstWebCodecsVideoDecoderOutput;
 
 /* WebCodecs timestamps are microseconds. The same value identifies the
@@ -103,6 +105,7 @@ gst_web_codecs_video_decoder_output_free (GstWebCodecsVideoDecoderOutput *out)
   /* Freeing the memory closes the VideoFrame on its runner */
   if (out->memory)
     gst_memory_unref (GST_MEMORY_CAST (out->memory));
+  g_free (out->data);
   g_free (out);
 }
 
@@ -148,10 +151,16 @@ gst_web_codecs_video_decoder_parse_format (
   return TRUE;
 }
 
-/* Runner thread. Only wraps and queues the VideoFrame: pushing downstream
+/* Runner thread. Only produces and queues the output: pushing downstream
  * from here would block the runner, which every web element of the
  * pipeline shares, while e.g. a compositor waits for another decoder that
- * also needs the runner. */
+ * also needs the runner.
+ *
+ * Nothing here may await: under Asyncify the runner keeps calling into
+ * wasm (outputs, dequeue events, other elements' messages) while a call is
+ * suspended, which corrupts the suspended frames. VideoFrame.copyTo () is
+ * asynchronous, so system memory pixels are read synchronously through an
+ * OffscreenCanvas, as RGBA, and the VideoFrame is closed right away. */
 static void
 gst_web_codecs_video_decoder_on_output (guintptr self_, val video_frame)
 {
@@ -165,21 +174,45 @@ gst_web_codecs_video_decoder_on_output (guintptr self_, val video_frame)
   out->width = video_frame["displayWidth"].as<int> ();
   out->height = video_frame["displayHeight"].as<int> ();
 
-  /* The format is null for frames the browser can not expose as pixels */
-  if (video_frame["format"].isNull () ||
-      !gst_web_codecs_video_decoder_parse_format (
-          vf_format = video_frame["format"].as<std::string> (),
-          &out->format)) {
-    GST_ERROR_OBJECT (self, "Unsupported VideoFrame format '%s'",
-        vf_format.c_str ());
-    video_frame.call<void> ("close");
-    g_free (out);
-    return;
+  if (self->system_memory) {
+    out->format = GST_VIDEO_FORMAT_RGBA;
+    out->data = (guint8 *) g_malloc ((gsize) out->width * out->height * 4);
+    /* clang-format off */
+    EM_ASM ({
+      const frame = Emval.toValue ($0);
+      const w = $1;
+      const h = $2;
+      const ptr = $3;
+      let canvas = globalThis.__gstWebCodecsReadback;
+      if (!canvas || canvas.width !== w || canvas.height !== h) {
+        canvas = new OffscreenCanvas (w, h);
+        globalThis.__gstWebCodecsReadback = canvas;
+        globalThis.__gstWebCodecsReadbackCtx =
+            canvas.getContext ("2d", { willReadFrequently: true });
+      }
+      const ctx = globalThis.__gstWebCodecsReadbackCtx;
+      ctx.drawImage (frame, 0, 0, w, h);
+      HEAPU8.set (ctx.getImageData (0, 0, w, h).data, ptr);
+      frame.close ();
+    }, video_frame.as_handle (), out->width, out->height, out->data);
+    /* clang-format on */
+    vf_format = "RGBA (read back)";
+  } else {
+    /* The format is null for frames the browser can not expose as pixels */
+    if (video_frame["format"].isNull () ||
+        !gst_web_codecs_video_decoder_parse_format (
+            vf_format = video_frame["format"].as<std::string> (),
+            &out->format)) {
+      GST_ERROR_OBJECT (self, "Unsupported VideoFrame format '%s'",
+          vf_format.c_str ());
+      video_frame.call<void> ("close");
+      g_free (out);
+      return;
+    }
+    runner = gst_web_canvas_get_runner (self->canvas);
+    out->memory = gst_web_video_frame_wrap (video_frame, runner);
+    gst_object_unref (runner);
   }
-
-  runner = gst_web_canvas_get_runner (self->canvas);
-  out->memory = gst_web_video_frame_wrap (video_frame, runner);
-  gst_object_unref (runner);
 
   GST_LOG_OBJECT (self, "VideoFrame %s %dx%d at %" G_GINT64_FORMAT " us",
       vf_format.c_str (), out->width, out->height, out->timestamp);
@@ -278,9 +311,9 @@ gst_web_codecs_video_decoder_finish_output (
     return GST_FLOW_OK;
   }
 
-  if (self->system_memory) {
-    GstMapInfo map;
-    gboolean copied;
+  if (out->data) {
+    GstVideoFrame vframe;
+    gint y;
 
     ret = gst_video_decoder_allocate_output_frame (dec, frame);
     if (ret != GST_FLOW_OK) {
@@ -288,23 +321,19 @@ gst_web_codecs_video_decoder_finish_output (
       gst_web_codecs_video_decoder_output_free (out);
       return ret;
     }
-    if (!gst_buffer_map (frame->output_buffer, &map, GST_MAP_WRITE)) {
+    if (!gst_video_frame_map (&vframe, &self->output_state->info,
+            frame->output_buffer, GST_MAP_WRITE)) {
       GST_ELEMENT_ERROR (self, RESOURCE, WRITE, (NULL),
           ("Failed to map the output buffer"));
       gst_video_decoder_release_frame (dec, frame);
       gst_web_codecs_video_decoder_output_free (out);
       return GST_FLOW_ERROR;
     }
-    copied = gst_web_video_frame_copy_to (
-        out->memory, &self->output_state->info, map.data, map.size);
-    gst_buffer_unmap (frame->output_buffer, &map);
-    if (!copied) {
-      GST_ELEMENT_ERROR (self, STREAM, DECODE, (NULL),
-          ("Failed to copy the VideoFrame to system memory"));
-      gst_video_decoder_release_frame (dec, frame);
-      gst_web_codecs_video_decoder_output_free (out);
-      return GST_FLOW_ERROR;
-    }
+    for (y = 0; y < out->height; y++)
+      memcpy ((guint8 *) GST_VIDEO_FRAME_PLANE_DATA (&vframe, 0) +
+              y * GST_VIDEO_FRAME_PLANE_STRIDE (&vframe, 0),
+          out->data + (gsize) y * out->width * 4, (gsize) out->width * 4);
+    gst_video_frame_unmap (&vframe);
   } else {
     GstBuffer *b = gst_buffer_new ();
 
@@ -363,6 +392,8 @@ gst_web_codecs_video_decoder_on_dequeue (guintptr self_, val event)
   GST_DEBUG_OBJECT (self, "Handle frame notified");
 }
 
+static void gst_web_codecs_video_decoder_on_flushed (guintptr self_);
+
 EMSCRIPTEN_BINDINGS (gst_web_codecs_video_decoder)
 {
   function ("gst_web_codecs_video_decoder_on_output",
@@ -371,6 +402,8 @@ EMSCRIPTEN_BINDINGS (gst_web_codecs_video_decoder)
       &gst_web_codecs_video_decoder_on_error);
   function ("gst_web_codecs_video_decoder_on_dequeue",
       &gst_web_codecs_video_decoder_on_dequeue);
+  function ("gst_web_codecs_video_decoder_on_flushed",
+      &gst_web_codecs_video_decoder_on_flushed);
 }
 
 static void
@@ -521,12 +554,35 @@ gst_web_codecs_video_decoder_ctor (gpointer data)
   GST_DEBUG_OBJECT (self, "decoder created successfully");
 }
 
+/* Keep VideoFrames as memory only when downstream prefers them, e.g. a
+ * webcanvassink linked directly. Otherwise (unlinked decodebin pads,
+ * converters, mixers) output RGBA system memory. Decided before the first
+ * VideoFrame, which on_output () reads back accordingly. */
+static void
+gst_web_codecs_video_decoder_choose_memory (GstWebCodecsVideoDecoder *self)
+{
+  GstCaps *peer_caps = gst_pad_peer_query_caps (
+      GST_VIDEO_DECODER_SRC_PAD (GST_VIDEO_DECODER (self)), NULL);
+
+  self->system_memory = TRUE;
+  if (peer_caps && !gst_caps_is_any (peer_caps) &&
+      !gst_caps_is_empty (peer_caps)) {
+    GstCapsFeatures *features = gst_caps_get_features (peer_caps, 0);
+
+    self->system_memory = !(features &&
+        gst_caps_features_contains (
+            features, GST_CAPS_FEATURE_MEMORY_WEB_VIDEO_FRAME));
+  }
+  gst_clear_caps (&peer_caps);
+  GST_INFO_OBJECT (self, "Output in %s memory",
+      self->system_memory ? "system (RGBA)" : "WebVideoFrame");
+}
+
 /* Called with the streaming lock taken */
 static gboolean
 gst_web_codecs_video_decoder_negotiate (GstVideoDecoder *decoder)
 {
   GstWebCodecsVideoDecoder *self = GST_WEB_CODECS_VIDEO_DECODER (decoder);
-  GstCaps *peer_caps;
   GstCaps *caps;
 
   /* If we don't know the output format yet, skip this */
@@ -543,23 +599,7 @@ gst_web_codecs_video_decoder_negotiate (GstVideoDecoder *decoder)
   self->output_state = gst_video_decoder_set_output_state (
       decoder, self->format, self->width, self->height, self->input_state);
 
-  /* Keep VideoFrames as memory only when downstream prefers them, e.g. a
-   * webcanvassink linked directly. Otherwise (unlinked decodebin pads,
-   * converters, mixers) copy them to system memory. */
   caps = gst_video_info_to_caps (&self->output_state->info);
-  peer_caps =
-      gst_pad_peer_query_caps (GST_VIDEO_DECODER_SRC_PAD (decoder), NULL);
-  self->system_memory = TRUE;
-  if (peer_caps && !gst_caps_is_any (peer_caps) &&
-      !gst_caps_is_empty (peer_caps)) {
-    GstCapsFeatures *features = gst_caps_get_features (peer_caps, 0);
-
-    self->system_memory = !(features &&
-        gst_caps_features_contains (
-            features, GST_CAPS_FEATURE_MEMORY_WEB_VIDEO_FRAME));
-  }
-  gst_clear_caps (&peer_caps);
-
   if (!self->system_memory)
     gst_caps_set_features_simple (caps,
         gst_caps_features_new (
@@ -631,16 +671,45 @@ gst_web_codecs_video_decoder_handle_frame (
   return res;
 }
 
-/* Runner thread. Delivers every pending output to on_output () */
+static void
+gst_web_codecs_video_decoder_flush_done (GstWebCodecsVideoDecoder *self)
+{
+  g_mutex_lock (&self->output_lock);
+  self->flush_pending = FALSE;
+  g_cond_broadcast (&self->flush_cond);
+  g_mutex_unlock (&self->output_lock);
+}
+
+/* Runner thread, when VideoDecoder.flush () settles */
+static void
+gst_web_codecs_video_decoder_on_flushed (guintptr self_)
+{
+  gst_web_codecs_video_decoder_flush_done (
+      (GstWebCodecsVideoDecoder *) self_);
+}
+
+/* Runner thread. Starts flush (); its outputs reach on_output () before it
+ * settles. Not awaited: see on_output () */
 static void
 gst_web_codecs_video_decoder_flush_decoder (gpointer data)
 {
   GstWebCodecsVideoDecoder *self = GST_WEB_CODECS_VIDEO_DECODER (data);
 
-  if (!self->has_decoder)
+  if (!self->has_decoder ||
+      self->decoder["state"].as<std::string> () != "configured") {
+    gst_web_codecs_video_decoder_flush_done (self);
     return;
-  if (self->decoder["state"].as<std::string> () == "configured")
-    self->decoder.call<val> ("flush").await ();
+  }
+
+  /* clang-format off */
+  EM_ASM ({
+    const self = $0;
+    const decoder = Emval.toValue ($1);
+    decoder.flush ().catch (() => {}).finally (() => {
+      Module.gst_web_codecs_video_decoder_on_flushed (self);
+    });
+  }, (guintptr) self, self->decoder.as_handle ());
+  /* clang-format on */
 }
 
 /* Called with the stream lock taken, at EOS and before caps changes */
@@ -654,12 +723,21 @@ gst_web_codecs_video_decoder_drain (GstVideoDecoder *decoder)
     return GST_FLOW_OK;
 
   GST_DEBUG_OBJECT (self, "Draining");
-  /* on_output () does not take the stream lock, but the runner must be free
-   * to run it while flush () is pending */
+  g_mutex_lock (&self->output_lock);
+  self->flush_pending = TRUE;
+  g_mutex_unlock (&self->output_lock);
+
+  /* on_output () does not take the stream lock; the runner stays free to
+   * run it while flush () is pending. The pad stream lock we still hold
+   * keeps self alive until on_flushed () */
   runner = gst_web_canvas_get_runner (self->canvas);
   GST_VIDEO_DECODER_STREAM_UNLOCK (self);
   gst_web_runner_send_message (
       runner, gst_web_codecs_video_decoder_flush_decoder, self);
+  g_mutex_lock (&self->output_lock);
+  while (self->flush_pending)
+    g_cond_wait (&self->flush_cond, &self->output_lock);
+  g_mutex_unlock (&self->output_lock);
   GST_VIDEO_DECODER_STREAM_LOCK (self);
   gst_object_unref (runner);
 
@@ -699,6 +777,8 @@ gst_web_codecs_video_decoder_set_format (
   /* TODO Check if downstream OpenGL is supported, if so, request the GL
    * context */
 
+  gst_web_codecs_video_decoder_choose_memory (self);
+
   /* Call constructor */
   runner = gst_web_canvas_get_runner (self->canvas);
   gst_web_runner_send_message (
@@ -719,26 +799,24 @@ gst_web_codecs_video_decoder_set_format (
   return conf_data.ret;
 }
 
-/* Runner thread. Discards queued work, then configures again: after
- * reset () a VideoDecoder is unconfigured. */
+/* Runner thread. Discards queued work with a fresh VideoDecoder: after
+ * reset () + configure () Chrome's software H.264 VideoDecoder accepted
+ * chunks but never output a frame again (seen after an NLE seek). */
 static void
 gst_web_codecs_video_decoder_reset_decoder (gpointer data)
 {
   GstWebCodecsVideoDecoder *self = GST_WEB_CODECS_VIDEO_DECODER (data);
   GstWebCodecsVideoDecoderConfigureData conf_data;
 
-  if (!self->has_decoder)
-    return;
-  if (self->decoder["state"].as<std::string> () == "closed")
+  if (!self->has_decoder || !self->input_state)
     return;
 
-  self->decoder.call<void> ("reset");
-  if (self->input_state) {
-    conf_data.self = self;
-    conf_data.state = self->input_state;
-    conf_data.ret = FALSE;
-    gst_web_codecs_video_decoder_configure (&conf_data);
-  }
+  /* Closes the current VideoDecoder first */
+  gst_web_codecs_video_decoder_ctor (self);
+  conf_data.self = self;
+  conf_data.state = self->input_state;
+  conf_data.ret = FALSE;
+  gst_web_codecs_video_decoder_configure (&conf_data);
 }
 
 /* Called with the stream lock taken, on FLUSH_STOP (seeks) */
@@ -854,7 +932,11 @@ gst_web_codecs_video_decoder_set_context (
 {
   GstWebCodecsVideoDecoder *self = GST_WEB_CODECS_VIDEO_DECODER (element);
 
-  gst_web_utils_element_set_context (element, context, &self->canvas);
+  /* The VideoDecoder and its VideoFrames live on the runner of the first
+   * canvas; JS values are local to that thread, so never switch runners */
+  if (!self->canvas)
+    gst_web_utils_element_set_context (element, context, &self->canvas);
+  GST_ELEMENT_CLASS (parent_class)->set_context (element, context);
 }
 
 static gboolean
@@ -888,6 +970,7 @@ gst_web_codecs_video_decoder_finalize (GObject *object)
   g_queue_clear_full (&self->output_queue,
       (GDestroyNotify) gst_web_codecs_video_decoder_output_free);
   g_mutex_clear (&self->output_lock);
+  g_cond_clear (&self->flush_cond);
   g_free (self->error);
   if (self->canvas) {
     gst_object_unref (self->canvas);
@@ -907,6 +990,7 @@ gst_web_codecs_video_decoder_init (
   g_cond_init (&self->dequeue_cond);
   g_mutex_init (&self->output_lock);
   g_queue_init (&self->output_queue);
+  g_cond_init (&self->flush_cond);
 }
 
 static void

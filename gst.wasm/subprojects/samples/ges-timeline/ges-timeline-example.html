@@ -101,6 +101,7 @@
         pause: () => Module.ccall("ys_pause", null, [], []),
         seekFrame: (frame) => Module.ccall("ys_seek_frame", null, ["number"], [frame]),
         setDebug: (thresholds) => Module.ccall("ys_set_debug", null, ["string"], [thresholds]),
+        fatalCriticals: (pattern) => Module.ccall("ys_fatal_criticals", null, ["string"], [pattern]),
       };
 
       document.getElementById("load").onclick = () => ys.load();

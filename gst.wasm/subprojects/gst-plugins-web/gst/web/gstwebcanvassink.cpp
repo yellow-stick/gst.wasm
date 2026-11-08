@@ -175,34 +175,43 @@ gst_web_canvas_sink_draw_video_frame (gpointer data)
   gst_memory_unref (GST_MEMORY_CAST (vf));
 }
 
+/* Synchronous: under Asyncify an await here would let the shared runner
+ * call into wasm (decoder outputs, other messages) while this frame is
+ * suspended, which corrupts it */
 static void
 gst_web_canvas_sink_draw_raw (gpointer data)
 {
   GstWebCanvasSinkDrawData *draw_data = (GstWebCanvasSinkDrawData *) data;
   GstWebCanvasSink *self = draw_data->self;
   GstMapInfo map;
-  val buffer_data;
-  val image_data_data;
-  val image_data;
-  val image_bitmap;
-  val options;
 
   GST_DEBUG_OBJECT (self, "About to draw from system memory %" GST_TIME_FORMAT,
       GST_TIME_ARGS (GST_BUFFER_TIMESTAMP (draw_data->buffer)));
-  /* destination buffer */
-  /* map the buffer into an ArrayBuffer */
   gst_buffer_map (draw_data->buffer, &map, GST_MAP_READ);
-  buffer_data = val (typed_memory_view (map.size, map.data));
-  /* Create an ImageData */
-  image_data_data = val::global ("Uint8ClampedArray").new_ (buffer_data);
-  image_data =
-      val::global ("ImageData")
-          .new_ (image_data_data, self->buffer_width, self->buffer_height);
-  /* We create an ImageBitmap to support scaling if needed */
-  image_bitmap = val::global ("createImageBitmap") (image_data).await ();
-  self->val_context.call<void> ("drawImage", image_bitmap, 0, 0,
-      self->buffer_width, self->buffer_height, 0, 0, self->val_canvas["width"],
-      self->val_canvas["height"]);
+  /* clang-format off */
+  EM_ASM ({
+    const ctx = Emval.toValue ($0);
+    const canvas = Emval.toValue ($1);
+    const w = $2;
+    const h = $3;
+    const ptr = $4;
+    /* ImageData can not view shared memory: copy */
+    const image = new ImageData (w, h);
+    image.data.set (HEAPU8.subarray (ptr, ptr + w * h * 4));
+    if (canvas.width === w && canvas.height === h) {
+      ctx.putImageData (image, 0, 0);
+      return;
+    }
+    let scratch = globalThis.__gstWebCanvasSinkScratch;
+    if (!scratch || scratch.width !== w || scratch.height !== h) {
+      scratch = new OffscreenCanvas (w, h);
+      globalThis.__gstWebCanvasSinkScratch = scratch;
+    }
+    scratch.getContext ("2d").putImageData (image, 0, 0);
+    ctx.drawImage (scratch, 0, 0, canvas.width, canvas.height);
+  }, self->val_context.as_handle (), self->val_canvas.as_handle (),
+      self->buffer_width, self->buffer_height, map.data);
+  /* clang-format on */
   gst_buffer_unmap (draw_data->buffer, &map);
 }
 

@@ -89,6 +89,10 @@ struct _GstWebCodecsVideoDecoder
   GQueue output_queue;
   /* Incremented on every flush, to discard frames submitted before it */
   guint flush_epoch;
+  /* VideoDecoder.flush () started by drain () not settled yet. Protected
+   * by output_lock, signalled with flush_cond */
+  gboolean flush_pending;
+  GCond flush_cond;
   /* Set from the WebCodecs error callback */
   gchar *error;
 };

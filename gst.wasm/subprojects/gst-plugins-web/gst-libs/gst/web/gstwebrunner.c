@@ -107,10 +107,20 @@ _run_message_async (GstWebRunnerAsyncMessage *message)
   return FALSE;
 }
 
+/* Runs on the runner thread. On Emscripten g_main_loop_run () never
+ * returns (emscripten_set_main_loop simulates an infinite loop), so the
+ * code after it in gst_web_runner_run_thread () never runs: report the
+ * thread as gone from inside the loop, then stop it. */
 static void
-gst_web_runner_quit (GstWebRunner *self)
+_quit_and_notify (GstWebRunner *self)
 {
   g_main_loop_quit (self->priv->loop);
+
+  g_mutex_lock (&self->priv->create_lock);
+  self->priv->alive = FALSE;
+  self->priv->created = FALSE;
+  g_cond_signal (&self->priv->destroy_cond);
+  g_mutex_unlock (&self->priv->create_lock);
 }
 
 static gpointer
@@ -197,7 +207,10 @@ gst_web_runner_finalize (GObject *object)
 
   g_mutex_lock (&self->priv->create_lock);
   if (self->priv->alive) {
-    gst_web_runner_quit (self);
+    g_mutex_unlock (&self->priv->create_lock);
+    gst_web_runner_send_message_async (
+        self, (GstWebRunnerCB) _quit_and_notify, self, NULL);
+    g_mutex_lock (&self->priv->create_lock);
 
     GST_INFO_OBJECT (self, "joining thread");
     while (self->priv->alive)

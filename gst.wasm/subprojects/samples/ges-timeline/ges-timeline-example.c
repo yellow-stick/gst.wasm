@@ -602,6 +602,27 @@ ys_set_debug (const char *thresholds)
   gst_debug_set_threshold_from_string (thresholds, TRUE);
 }
 
+/* Debugging aid: abort on the first critical whose message contains
+ * @pattern, to get its stack trace */
+static gchar *fatal_pattern;
+
+static void
+fatal_log_handler (const gchar *domain, GLogLevelFlags level,
+    const gchar *message, gpointer user_data)
+{
+  g_log_default_handler (domain, level, message, user_data);
+  if ((level & G_LOG_LEVEL_CRITICAL) && strstr (message, fatal_pattern))
+    abort ();
+}
+
+EMSCRIPTEN_KEEPALIVE void
+ys_fatal_criticals (const char *pattern)
+{
+  g_free (fatal_pattern);
+  fatal_pattern = g_strdup (pattern);
+  g_log_set_default_handler (fatal_log_handler, NULL);
+}
+
 int
 main (int argc, char **argv)
 {

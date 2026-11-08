@@ -53,6 +53,7 @@ class Recipe(recipe.Recipe):
         # TODO upstreaming to the fluendo/glib gst.wasm branch
         f'{name}/0013-gobject-gsourceclosure-no-g_io_watch_funcs-on-wasm.patch',
         f'{name}/0014-gio-giomodule-do-not-register-Unix-only-types-on-wasm.patch',
+        f'{name}/0015-glib-free_full-call-the-GDestroyNotify-without-a-GFu.patch',
     ]
 
     files_libs = [
