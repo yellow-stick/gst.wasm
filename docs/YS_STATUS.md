@@ -38,8 +38,10 @@ env GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=protocol.file.allow \
   GIT_CONFIG_VALUE_0=always poetry run cerbero -c build/gst.wasm.cbc bootstrap -y -j 8
 ```
 
-Cette commande est en cours. L’autorisation des sous-modules locaux est
-limitée à la commande, sans changer la configuration Git globale.
+Le bootstrap a terminé avec `All done!` après construction des 14 recettes
+d’outils. L’autorisation des sous-modules locaux est limitée à la commande,
+sans changer la configuration Git globale. La compilation de `gst.wasm`
+est lancée après `run emcc --clear-cache`.
 Le disque indiquait 99 Go disponibles avant construction.
 
 ## Contraintes et licences
@@ -85,7 +87,38 @@ La référence FlipEdit utilise FRB 2.13.0 et son chargeur web `wasm_bindgen`.
 Le sample existant `gstlaunch` utilise au contraire `Module.cwrap` et le
 runtime Emscripten. Ces lectures ne prouvent pas une incompatibilité de
 coexistence : il ne faut pas confondre deux modules dans la même page avec
-une ABI/mémoire partagée. Une compilation FRB minimale est en cours.
+une ABI/mémoire partagée.
+
+Compilation réellement exécutée dans `/tmp/ys-frb-web-probe` :
+
+```toml
+[package]
+name = "ys-frb-web-probe"
+version = "0.1.0"
+edition = "2021"
+[lib]
+crate-type = ["cdylib"]
+[dependencies]
+flutter_rust_bridge = "=2.13.0"
+wasm-bindgen = "0.2"
+```
+
+Source `src/lib.rs` :
+
+```rust
+use wasm_bindgen::prelude::*;
+#[flutter_rust_bridge::frb(sync)]
+#[wasm_bindgen]
+pub fn frame_timestamp(frame: u32, fps: u32) -> u64 {
+    u64::from(frame) * 1_000_000_000 / u64::from(fps)
+}
+```
+
+`cargo build --target wasm32-unknown-unknown` termine avec
+`Finished dev profile ... in 45.06s`. Un avertissement FRB
+`unexpected cfg condition name: frb_expand` subsiste. Cela prouve la
+compilation de cette dépendance et de cet export, pas celle de FlipEdit,
+ni un échange effectif avec Emscripten.
 
 Choix d’intégration : frontière JavaScript/messages, sans échange de pointeurs
 Rust/GStreamer ni de vues de mémoire wasm entre les runtimes. Les réponses
