@@ -72,6 +72,12 @@ register_elements (void)
   GST_PLUGIN_STATIC_DECLARE (videotestsrc);
   GST_PLUGIN_STATIC_DECLARE (nle);
   GST_PLUGIN_STATIC_DECLARE (ges);
+  /* Instantiated by GES video sources (deinterlace, imagefreeze, videoflip
+   * from videofilter) and video transitions (smptealpha from smpte) */
+  GST_PLUGIN_STATIC_DECLARE (deinterlace);
+  GST_PLUGIN_STATIC_DECLARE (imagefreeze);
+  GST_PLUGIN_STATIC_DECLARE (videofilter);
+  GST_PLUGIN_STATIC_DECLARE (smpte);
   /* FIXME: Should not be needed. (RDI-2866), as in the codecs example */
   GST_ELEMENT_REGISTER_DECLARE (glimagesink);
 
@@ -87,6 +93,10 @@ register_elements (void)
   GST_PLUGIN_STATIC_REGISTER (videotestsrc);
   GST_PLUGIN_STATIC_REGISTER (nle);
   GST_PLUGIN_STATIC_REGISTER (ges);
+  GST_PLUGIN_STATIC_REGISTER (deinterlace);
+  GST_PLUGIN_STATIC_REGISTER (imagefreeze);
+  GST_PLUGIN_STATIC_REGISTER (videofilter);
+  GST_PLUGIN_STATIC_REGISTER (smpte);
   GST_ELEMENT_REGISTER (glimagesink, NULL);
 }
 
@@ -402,6 +412,11 @@ append_timeline_description (GString *json)
   g_string_append_c (json, ']');
 }
 
+/* When set (before ys_load), the canvas sink renders every buffer even when
+ * late and sends no QoS upstream, so decoders drop nothing: playback shows
+ * every timeline frame but stalls whenever GES switches NLE stacks */
+static gboolean render_all = FALSE;
+
 static GstElement *
 create_video_sink (void)
 {
@@ -423,6 +438,8 @@ create_video_sink (void)
   gst_pad_add_probe (
       pad, GST_PAD_PROBE_TYPE_BUFFER, rendered_frame_probe, NULL, NULL);
   gst_object_unref (pad);
+  if (render_all)
+    g_object_set (sink, "qos", FALSE, "max-lateness", (gint64) -1, NULL);
   gst_object_unref (sink);
 
   return bin;
@@ -600,6 +617,12 @@ EMSCRIPTEN_KEEPALIVE void
 ys_set_debug (const char *thresholds)
 {
   gst_debug_set_threshold_from_string (thresholds, TRUE);
+}
+
+EMSCRIPTEN_KEEPALIVE void
+ys_set_render_all (int enabled)
+{
+  render_all = enabled != 0;
 }
 
 /* Debugging aid: abort on the first critical whose message contains

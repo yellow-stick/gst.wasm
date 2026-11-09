@@ -30,6 +30,7 @@
         "/media/clip-a.mp4": mediaBase + "clip-a.mp4",
         "/media/clip-b.mp4": mediaBase + "clip-b.mp4",
         "/media/two-clips-crossfade.xges": "two-clips-crossfade.xges",
+        "/media/two-clips-cut.xges": "two-clips-cut.xges",
       };
 
       const log = document.getElementById("log");
@@ -102,6 +103,7 @@
         seekFrame: (frame) => Module.ccall("ys_seek_frame", null, ["number"], [frame]),
         setDebug: (thresholds) => Module.ccall("ys_set_debug", null, ["string"], [thresholds]),
         fatalCriticals: (pattern) => Module.ccall("ys_fatal_criticals", null, ["string"], [pattern]),
+        renderAll: (enabled) => Module.ccall("ys_set_render_all", null, ["number"], [enabled ? 1 : 0]),
       };
 
       document.getElementById("load").onclick = () => ys.load();

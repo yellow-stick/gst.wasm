@@ -7,9 +7,12 @@
 // test clips (tools/make_test_clips.sh) with what the GES project says:
 //   - clip c is present at t  <=>  start <= T(t) < start + duration
 //     (half-open [In, Out) on the timeline);
-//   - a present clip shows source frame (T(t) - start + inpoint) * fps;
+//   - a present clip shows source frame floor ((T(t) - start + inpoint) * fps)
+//     (inpoints address the middle of a source frame, see the .xges);
 //   - an absent clip shows no strip; outside overlaps the present clip is
-//     fully opaque; inside an overlap the two alphas add up to 1.
+//     fully opaque; inside an overlap both are translucent, the outgoing one
+//     fading out and the incoming one fading in (alphas monotonic over
+//     consecutive frames). A strip below ~16% alpha is too faint to read.
 // Expected values come only from the "loaded" event (what GES loaded), the
 // observed ones only from the pixels of the buffer sent to the canvas sink.
 
@@ -29,7 +32,11 @@
       if (!strip) continue;
       const present = clip.start <= time && time < clip.start + clip.duration;
       result[strip] = present
-        ? { present, frame: Math.round(((time - clip.start + clip.inpoint) * FPS) / 1e9) }
+        ? {
+            present,
+            frame: Math.floor(((time - clip.start + clip.inpoint) * FPS) / 1e9),
+            first: time === clip.start,
+          }
         : { present };
     }
     return result;
@@ -72,10 +79,13 @@
       if (present.length === 1 && (!obs || obs.alpha < 1 - ALPHA_EPSILON))
         problems.push(`${strip} alone but alpha ${obs ? obs.alpha : 0}`);
     }
-    if (present.length === 2) {
-      const sum = present.reduce((s, strip) => s + (frame[strip] ? frame[strip].alpha : 0), 0);
-      if (Math.abs(sum - 1) > 2 * ALPHA_EPSILON) problems.push(`alphas add up to ${sum.toFixed(3)}`);
-    }
+    /* The crossfade ramps from (1, 0): on its first frame the incoming clip
+     * is still invisible and the outgoing one opaque */
+    const overlapStart = present.some((s) => expected[s].first);
+    if (present.length === 2 && !overlapStart)
+      for (const strip of present)
+        if (frame[strip] && frame[strip].alpha > 1 - ALPHA_EPSILON)
+          problems.push(`${strip} opaque (alpha ${frame[strip].alpha}) inside the crossfade`);
     return problems;
   }
 
@@ -86,16 +96,19 @@
     const total = Math.round((loaded.duration * FPS) / 1e9);
     const list = frames || [...Array(total + 1).keys()]; // includes `total`: one past the end
     const rows = [];
-    let previousAlphaB = -1;
+    let previous = null;
 
     for (const t of list) {
       const expected = expectedAt(t, clips);
       const { frame } = await seekAndGetFrame(t, timeoutMs);
       const problems = check(t, expected, frame);
       if (frame && expected.a && expected.b && expected.a.present && expected.b.present) {
-        const alphaB = frame.b ? frame.b.alpha : 0;
-        if (alphaB + ALPHA_EPSILON < previousAlphaB) problems.push(`b alpha decreased to ${alphaB}`);
-        previousAlphaB = alphaB;
+        const alpha = { a: frame.a ? frame.a.alpha : 0, b: frame.b ? frame.b.alpha : 0 };
+        if (previous && previous.t === t - 1) {
+          if (alpha.a > previous.a + ALPHA_EPSILON) problems.push(`a alpha rose to ${alpha.a}`);
+          if (alpha.b + ALPHA_EPSILON < previous.b) problems.push(`b alpha fell to ${alpha.b}`);
+        }
+        previous = { t, ...alpha };
       }
       rows.push({
         t,

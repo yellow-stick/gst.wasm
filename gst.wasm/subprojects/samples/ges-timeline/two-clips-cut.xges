@@ -1,0 +1,33 @@
+<ges version='0.7'>
+  <project properties='properties;' metadatas='metadatas, name=(string)ys-two-clips-cut;'>
+    <encoding-profiles>
+    </encoding-profiles>
+    <ressources>
+      <asset id='file:///media/clip-a.mp4' extractable-type-name='GESUriClip' properties='properties, supported-formats=(int)4;' metadatas='metadatas;'/>
+      <asset id='file:///media/clip-b.mp4' extractable-type-name='GESUriClip' properties='properties, supported-formats=(int)4;' metadatas='metadatas;'/>
+      <asset id='GESTestClip' extractable-type-name='GESTestClip' properties='properties, supported-formats=(int)4;' metadatas='metadatas;'/>
+    </ressources>
+    <!--
+      Hard cut, so both edges of both clips are visible (a crossfade hides
+      the Out of the outgoing clip and the In of the incoming one). Same
+      conventions as two-clips-crossfade.xges.
+        clip-a: start 0, inpoint 350000000 (source frame 10),
+                duration 1500000000            -> timeline frames [0, 45)
+        clip-b: start 1500000000, inpoint 683333333 (source frame 20),
+                duration 1500000000            -> timeline frames [45, 90)
+        gap                                    -> timeline frames [90, 105)
+        tail:   black test clip                -> timeline frames [105, 120)
+    -->
+    <timeline properties='properties, auto-transition=(boolean)true, snapping-distance=(guint64)0;' metadatas='metadatas;'>
+      <track caps='video/x-raw(ANY)' track-type='4' track-id='0' properties='properties, restriction-caps=(string)&quot;video/x-raw\,\ width\=\(int\)320\,\ height\=\(int\)240\,\ framerate\=\(fraction\)30/1&quot;, mixing=(boolean)true;' metadatas='metadatas;'/>
+      <layer priority='0' properties='properties, auto-transition=(boolean)true;' metadatas='metadatas;'>
+        <clip id='0' asset-id='file:///media/clip-a.mp4' type-name='GESUriClip' layer-priority='0' track-types='4' start='0' duration='1500000000' inpoint='350000000' rate='0' properties='properties, name=(string)clip-a, mute=(boolean)false, is-image=(boolean)false;' metadatas='metadatas;'>
+        </clip>
+        <clip id='1' asset-id='file:///media/clip-b.mp4' type-name='GESUriClip' layer-priority='0' track-types='4' start='1500000000' duration='1500000000' inpoint='683333333' rate='0' properties='properties, name=(string)clip-b, mute=(boolean)false, is-image=(boolean)false;' metadatas='metadatas;'>
+        </clip>
+        <clip id='2' asset-id='GESTestClip' type-name='GESTestClip' layer-priority='0' track-types='4' start='3500000000' duration='500000000' inpoint='0' rate='0' properties='properties, name=(string)tail, vpattern=(int)2;' metadatas='metadatas;'>
+        </clip>
+      </layer>
+    </timeline>
+  </project>
+</ges>

@@ -5,21 +5,39 @@
     <ressources>
       <asset id='file:///media/clip-a.mp4' extractable-type-name='GESUriClip' properties='properties, supported-formats=(int)4;' metadatas='metadatas;'/>
       <asset id='file:///media/clip-b.mp4' extractable-type-name='GESUriClip' properties='properties, supported-formats=(int)4;' metadatas='metadatas;'/>
+      <asset id='GESTestClip' extractable-type-name='GESTestClip' properties='properties, supported-formats=(int)4;' metadatas='metadatas;'/>
     </ressources>
     <!--
-      30 fps timeline, times are floor(frame * 1e9 / 30) ns:
-        clip-a: start 0 (frame 0), inpoint 333333333 (source frame 10),
-                duration 2000000000 (60 frames)  -> timeline frames [0, 60)
-        clip-b: start 1500000000 (frame 45), inpoint 666666666 (source frame 20),
-                duration 2000000000 (60 frames)  -> timeline frames [45, 105)
-      The 15 frame overlap [45, 60) gets an automatic crossfade.
+      30 fps timeline; timeline frame t starts at ceil (t * 1e9 / 30) ns, as
+      ges_timeline_get_frame_time () computes it.
+
+      Source frame k is addressed in the middle of its interval,
+      (k + 0.5) / 30 s. A position exactly on a frame boundary is ambiguous
+      by 1 ns in the pipeline: qtdemux rounds some frame durations up
+      (33333334 ns) and GES adds the stream start (2 frames in these B-frame
+      MP4s) to the inpoint, so the previous frame can overlap the requested
+      position and be shown instead.
+
+        clip-a: start 0, inpoint 350000000 (source frame 10),
+                duration 2000000000            -> timeline frames [0, 60)
+        clip-b: start 1500000000 (frame 45), inpoint 683333333 (source frame 20),
+                duration 2000000000            -> timeline frames [45, 105)
+        gap                                    -> timeline frames [105, 120)
+        tail:   black test clip, start 4000000000 (frame 120),
+                duration 500000000             -> timeline frames [120, 135)
+
+      The 15 frame overlap [45, 60) gets an automatic crossfade. The gap and
+      the tail make B's Out (frame 105) observable instead of the end of the
+      timeline.
     -->
-    <timeline properties='properties, auto-transition=(boolean)true, snapping-distance=(guint64)0;' metadatas='metadatas, duration=(guint64)3500000000;'>
+    <timeline properties='properties, auto-transition=(boolean)true, snapping-distance=(guint64)0;' metadatas='metadatas;'>
       <track caps='video/x-raw(ANY)' track-type='4' track-id='0' properties='properties, restriction-caps=(string)&quot;video/x-raw\,\ width\=\(int\)320\,\ height\=\(int\)240\,\ framerate\=\(fraction\)30/1&quot;, mixing=(boolean)true;' metadatas='metadatas;'/>
       <layer priority='0' properties='properties, auto-transition=(boolean)true;' metadatas='metadatas;'>
-        <clip id='0' asset-id='file:///media/clip-a.mp4' type-name='GESUriClip' layer-priority='0' track-types='4' start='0' duration='2000000000' inpoint='333333333' rate='0' properties='properties, name=(string)clip-a, mute=(boolean)false, is-image=(boolean)false;' metadatas='metadatas;'>
+        <clip id='0' asset-id='file:///media/clip-a.mp4' type-name='GESUriClip' layer-priority='0' track-types='4' start='0' duration='2000000000' inpoint='350000000' rate='0' properties='properties, name=(string)clip-a, mute=(boolean)false, is-image=(boolean)false;' metadatas='metadatas;'>
         </clip>
-        <clip id='1' asset-id='file:///media/clip-b.mp4' type-name='GESUriClip' layer-priority='0' track-types='4' start='1500000000' duration='2000000000' inpoint='666666666' rate='0' properties='properties, name=(string)clip-b, mute=(boolean)false, is-image=(boolean)false;' metadatas='metadatas;'>
+        <clip id='1' asset-id='file:///media/clip-b.mp4' type-name='GESUriClip' layer-priority='0' track-types='4' start='1500000000' duration='2000000000' inpoint='683333333' rate='0' properties='properties, name=(string)clip-b, mute=(boolean)false, is-image=(boolean)false;' metadatas='metadatas;'>
+        </clip>
+        <clip id='2' asset-id='GESTestClip' type-name='GESTestClip' layer-priority='0' track-types='4' start='4000000000' duration='500000000' inpoint='0' rate='0' properties='properties, name=(string)tail, vpattern=(int)2;' metadatas='metadatas;'>
         </clip>
       </layer>
     </timeline>
