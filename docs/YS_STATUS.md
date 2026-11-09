@@ -6,15 +6,17 @@ Branche de travail : `remymenard/gst-wasm-full-port`. Remote de publication :
 `origin` (`git@github.com:yellow-stick/gst.wasm.git`). Aucun changement à `main`
 ni à `/home/admin/code/flipedit`.
 
-Les critères restent non validés tant que leur scénario réel n’a pas réussi.
+Un critère n’est marqué validé qu’après réussite de son scénario réel dans
+Chromium (headless, sans GPU, 8 cœurs) ; les preuves sont sous
+[`evidence/`](evidence/).
 
-| Critère | État | Preuve actuelle |
+| Critère | État | Preuve |
 | --- | --- | --- |
-| 1. Construction et exemples locaux | ✅ Validé | `cerbero build gst.wasm` → `All done!` (29 recettes) ; `videotestsrc-example` anime la bille dans Chromium headless |
-| 2. GES inspectable et timeline chargée | Non validé | Dépend de la toolchain |
-| 3. Deux clips H.264, fondu, WebCodecs, canvas | Non validé | Aucun résultat d’exécution |
-| 4. Seeks exacts et [In, Out) | Non validé | Aucun résultat image par image |
-| 5. Flutter Web et pont Emscripten | Non validé | Coexistence wasm-bindgen + Emscripten prouvée dans une page ; pilotage Flutter à faire |
+| 1. Construction et exemples locaux | ✅ Validé | `cerbero build gst.wasm` → `All done!` (29 recettes) ; `videotestsrc-example` anime la bille dans Chromium |
+| 2. GES inspectable et timeline chargée | ✅ Validé | `gst-inspect` navigateur liste `gessrc gesdemux nlesource nlecomposition nleoperation nleurisource` ; projet `.xges` chargé (clips, transition, durée) et prérollé |
+| 3. Deux clips H.264, fondu, WebCodecs, canvas | ✅ Validé, ⚠️ pas temps réel aux transitions | Lecture jusqu’à EOS, décodage `webcodecsviddech264sw`, 135 tracés canvas dont le fondu (mode `renderAll`) ; blocages de 0,4 s et 1 s aux changements de pile NLE, qui font sauter le fondu en mode QoS par défaut |
+| 4. Seeks exacts et [In, Out) | ✅ Validé | 136/136 images (fondu + trou + queue) et 121/121 (coupe franche), lues dans les pixels rendus et recoupées sur les captures du canvas (0 écart) |
+| 5. Flutter Web et pont Emscripten | ✅ Validé | App Flutter (`flutter/ys_gst_web`) : Load, 7 seeks et Play pilotés par clics sur les contrôles Flutter ; canvas décodé conforme ; choix : pont JS/messages, pas FRB |
 
 ## 1 — Construction
 
@@ -73,7 +75,7 @@ Remarque : relire le canvas par `drawImage` donne du noir, car le contexte
 WebGL de SDL2 ne conserve pas son tampon (`preserveDrawingBuffer` faux). Les
 preuves visuelles passent donc par des captures du compositeur.
 
-## 2 — GES dans le navigateur (en cours)
+## 2 — GES dans le navigateur
 
 ### Ce qui compile
 
@@ -177,10 +179,11 @@ Seul le H.264 **logiciel** est enregistré ; le scan WebCodecs rapporte
 `No H.264 decoder found for H264HW`, cohérent avec la sonde
 `prefer-hardware: false`.
 
-### Chaîne de décodage pour GES (préparée pour le critère 3)
+### Chaîne de décodage pour GES
 
 `webcodecsviddec*` (`gst-plugins-web`) n’était pas utilisable dans une
-timeline. Modifications de `gstwebcodecsvideodecoder.cpp/.h` :
+timeline. Modifications de
+`gst-plugins-web/gst/web/codecs/gstwebcodecsvideodecoder.cpp/.h` :
 
 - **Appariement par timestamp** : `on_output` prenait
   `gst_video_decoder_get_oldest_frame`. WebCodecs sort les images dans
@@ -191,48 +194,259 @@ timeline. Modifications de `gstwebcodecsvideodecoder.cpp/.h` :
 - **Plus de push depuis le runner** : `finish_frame` était appelé sur le
   thread du `GstWebRunner`, partagé par tous les éléments web du pipeline.
   Pendant un fondu, le compositor bloque A en attendant B, qui a besoin du
-  runner : interblocage. Le runner ne fait plus que mettre la VideoFrame en
-  file ; elle est poussée depuis le thread de streaming (`handle_frame`,
-  `drain`).
-- **`flush` (seek)** : `reset()` puis `configure()` du VideoDecoder,
-  abandon des sorties de l’ancien segment, compteur d’époque pour les
-  images soumises pendant un flush, garde « key frame requise ».
-- **`drain`/`finish`** : `VideoDecoder.flush()` attendu, sinon les
-  dernières images retenues pour le réordonnancement des B-frames ne
-  sortaient jamais, ce qui faisait perdre la fin de chaque segment.
-- **Mémoire système** quand l’aval ne préfère pas `memory:WebVideoFrame`
-  (convertisseurs, compositor de GES) : `VideoFrame.copyTo()` selon le
-  layout `GstVideoInfo` (offsets/strides, `gstwebvideoframe.cpp`). Le
-  template de sortie accepte maintenant I420/NV12/… en mémoire système. Le
-  chemin rapide `webcodecsviddec ! webcanvassink` garde la VideoFrame.
+  runner : interblocage. Le runner ne fait plus que mettre l’image en file
+  (`output_queue`) ; elle est poussée depuis le thread de streaming.
+- **`flush` (seek)** : `reset()` puis `configure()` ne produisait plus
+  aucune sortie dans Chromium. Le VideoDecoder est donc **recréé**
+  (constructeur + `configure`). S’y ajoutent un compteur d’époque
+  (`flush_epoch`) pour rejeter les images soumises pendant le flush, et une
+  garde « key frame requise » (`key_required`).
+- **`drain`/`finish`** : `VideoDecoder.flush()` non attendu sur le runner
+  (pas d’`await` : la réentrance Asyncify corrompait les piles
+  suspendues) ; fin signalée par `on_flushed` et une condition. Sans ce
+  flush, les dernières images retenues pour le réordonnancement des
+  B-frames ne sortaient jamais.
+- **Mémoire système RGBA** quand l’aval ne préfère pas
+  `memory:WebVideoFrame` (`choose_memory`, convertisseurs, compositor de
+  GES) : lecture synchrone dans `on_output`, via `drawImage` sur un
+  OffscreenCanvas, `getImageData`, `HEAPU8.set`, puis `frame.close()`.
+  `VideoFrame.copyTo()` est asynchrone et demandait un `await` sur le
+  runner partagé. Le chemin rapide `webcodecsviddec ! webcanvassink` garde
+  la VideoFrame.
 - **Erreurs** : le callback `error` de WebCodecs remonte en
   `GST_ELEMENT_ERROR` au lieu d’être ignoré.
+
+Autres correctifs du runtime web nécessaires au même scénario :
+
+- `gstwebutils.cpp` : `handle_context_query` libérait le contexte reçu en
+  *transfer none* (`gst_context_unref`), ce qui provoquait un double free
+  au deuxième élément web. `set_context` libère désormais l’ancien canvas.
+- `gstwebrunner.c` : sur wasm, `g_main_loop_run` du runner ne rend jamais
+  la main. `finalize` attendait sa fin, d’où un interblocage à chaque
+  destruction de décodeur (seek dans GES). Le runner reçoit maintenant un
+  `_quit_and_notify`.
+- `gstwebcanvassink.cpp` : `draw_raw` synchrone (`putImageData`, mise à
+  l’échelle par un OffscreenCanvas intermédiaire), sans `await`.
+- **Bus sans descripteur pollable** : sur wasm, le GSource du bus n’était
+  jamais réveillé. Les messages (`async-done`, `eos`, erreurs) n’arrivaient
+  pas à la boucle principale. Patch
+  `build/recipes/gstreamer-1.0/0001-bus-make-bus-watches-work-without-a-pollable-fd.patch`
+  (`prepare`/`check` via `gst_bus_have_pending`, réveil explicite).
 
 ### Sample `ges-timeline`
 
 `gst.wasm/subprojects/samples/ges-timeline/` : `ges-timeline-example.c`,
 page HTML autonome (COEP interdit les scripts CDN du template),
-`two-clips-crossfade.xges`. La boucle GLib tourne sur le thread principal
+`two-clips-crossfade.xges`, `two-clips-cut.xges`, et un vérificateur
+`ges-timeline-check.js`. La boucle GLib tourne sur le thread principal
 proxifié, qui possède `#canvas`. Le contexte `GstWebCanvas` `#canvas` est
 posé sur le `GESPipeline` avant la première transition d’état, afin que
-décodeurs et puits partagent le runner qui possède le canvas. libav n’est
-pas enregistré : `decodebin` ne peut choisir que les décodeurs WebCodecs.
+décodeurs et puits partagent le runner qui possède le canvas. Puits vidéo :
+`videoconvert ! video/x-raw,format=RGBA ! webcanvassink`. libav n’est pas
+enregistré : `decodebin` ne peut choisir que les décodeurs WebCodecs. Les
+plugins statiques requis par GES sont `coreelements playback
+typefindfunctions isomp4 videoparsersbad web compositor videoconvertscale
+videorate videotestsrc nle ges deinterlace imagefreeze videofilter smpte`.
+
 Événements JSON vers `Module.ysOnEvent` : `ready`, `loaded` (clips de la
 timeline), `decoder` (fabrique réellement instanciée), `state`, `seek`,
-`async-done`, `frame` (code-barres lu dans le buffer rendu), `eos`, `error`.
-Commandes : `ys_load`, `ys_play`, `ys_pause`, `ys_seek_frame`.
+`async-done`, `frame` (code-barres lu dans le buffer reçu par le puits),
+`eos`, `error`. Commandes : `ys_load`, `ys_play`, `ys_pause`,
+`ys_seek_frame`, `ys_set_render_all`, `ys_set_debug`, `ys_fatal_criticals`.
 
-Preuve dans le navigateur : en cours (voir ci-dessous dès qu’exécutée).
+### Preuve : timeline chargée
+
+[`evidence/ges-timeline-loaded.json`](evidence/ges-timeline-loaded.json) :
+clip-a, `transitionclip0` (GESTransitionClip crossfade, 1,5 s → 0,5 s),
+clip-b, durée, GES 1.29.1. Le préroll rend l’image 0 de la timeline
+(source A, image 10), décodée par `webcodecsviddech264sw`. Le chargement
+est stable (5/5). Ce fichier date de la première version du projet
+(inpoints `333333333`/`666666666`, sans trou ni queue). Le chargement du
+projet actuel figure dans `evidence/flutter-ui-scenario.json` (`loaded`).
+
+Deux autres patchs GES corrigent des pièges `function signature mismatch`
+rencontrés à l’exécution :
+`0003-ges-container-use-the-generic-marshaller-for-child-s.patch`. Les
+gestionnaires de classe `child_added`/`child_removed` prennent
+`(container, element)`, alors que le marshaller `VOID__OBJECT` passe un
+`user_data` final ; le marshaller générique (libffi) les appelle avec les
+arguments déclarés, sans casser l’ABI.
+`0004-nle-composition-make-_initialize_stack_func-return-v.patch` : une
+action de composition invoquée par `g_cclosure_marshal_VOID__VOID`
+renvoyait un `gboolean`.
+
+### Bugs de pointeurs de fonction restants dans GLib
+
+Le fork LLVM de Fluendo (`-fwasm-fix-function-bitcasts`) remplace chaque
+site d’appel casté par un *wrapper* d’exécution. Chaque site dispose d’un
+pool de 64 emplacements dont la cible est stockée à une adresse fixe : deux
+threads qui utilisent le même site se réaffectent mutuellement la cible.
+GES appelle `g_list_sort`/`g_sequence` en parallèle (discoverer, NLE) :
+appels vers la mauvaise fonction et corruption de la mémoire. Patchs
+GLib :
+
+- `build/recipes/glib/0015-glib-free_full-call-the-GDestroyNotify-without-a-GFu.patch` ;
+- `build/recipes/glib/0016-glib-sort-without-GCompareFunc-to-GCompareDataFunc-c.patch`
+  (trampoline `compare_func_trampoline` dans glist/gslist/garray/gtree).
+
+Le même mécanisme reste présent dans le cœur GStreamer
+(gstpad/gstelement/gstbin…). Aucun échec observé dans les scénarios
+ci-dessous ; à corriger dans le fork LLVM ou site par site en amont.
+
+## 3 — Deux clips H.264 avec fondu, WebCodecs, canvas
+
+Clips de test (`tools/make_test_clips.sh build/ys-media`, libx264,
+**non commités**) : 320×240, 30 i/s, 90 images, GOP 30 avec B-frames.
+Chaque image porte son numéro en code-barres de 12 bits (bande haute pour
+A, bande basse pour B), lu par `tools/framecode.py` (validé 90/90 par clip)
+ou par la sonde du puits.
+
+Projet `two-clips-crossfade.xges` (30 i/s) : A sur `[0, 60)`, B sur
+`[45, 105)`, fondu automatique sur `[45, 60)`, trou `[105, 120)`, clip test
+noir `[120, 135)`.
+
+Lecture, mesurée par instrumentation de `putImageData` dans le worker qui
+dessine le canvas. Les bandes sont décodées depuis l’`ImageData` réellement
+tracée :
+
+| Mode | Tracés canvas pendant la lecture | Tracés du fondu (A et B visibles) | Blocages > 100 ms | Durée de la lecture |
+| --- | --- | --- | --- | --- |
+| QoS par défaut | 74 | 0 (A 54 puis directement B 70) | 1697 ms à l’entrée du fondu | 4,4 s |
+| `renderAll` (`qos=false`, `max-lateness=-1`) | 135 | 6 (A 58→63, alpha 0,635→0,216 ; B 23→28, alpha 0,196→0,525) | 420 ms (entrée), 990 ms (sortie), 126 ms, 192 ms | 5,3 s pour 4,5 s de timeline |
+
+Détails : [`evidence/ges-playback-render-all-draws.json`](evidence/ges-playback-render-all-draws.json),
+[`evidence/ges-playback-qos-draws.json`](evidence/ges-playback-qos-draws.json).
+Le décodeur instancié est `webcodecsviddech264sw` (événements `decoder`).
+La lecture se termine par `eos`, sans erreur.
+
+Limite : le fondu n’est pas joué **en temps réel**. À chaque changement de
+pile NLE, GES reconstruit les sources (`uridecodebin`, typefind, qtdemux)
+et recrée les VideoDecoder, puis décode depuis la keyframe. Ce coût
+(0,4 à 1 s ici) dépasse le budget d’une image. En mode QoS, les images en
+retard sont jetées et le fondu disparaît. En dehors des transitions,
+l’intervalle médian entre tracés est de 24 ms (< 33 ms). Pistes, non
+mesurées : garder les décodeurs entre piles, précharger la pile suivante,
+chemin `memory:WebVideoFrame` jusqu’au compositor (WebGL) au lieu de la
+relecture RGBA.
+
+Sans GPU, seul le décodeur H.264 **logiciel** existe
+(`prefer-hardware: false`).
+
+## 4 — Seeks exacts à l’image et intervalles [In, Out)
+
+`ys_seek_frame(t)` lance un seek flush + accurate à
+`ges_timeline_get_frame_time(t)` (arrondi supérieur). Le vérificateur
+`ysCheckTimeline()` (`ges-timeline-check.js`) parcourt chaque image et
+compare :
+
+- les valeurs attendues, tirées **uniquement** de l’événement `loaded` :
+  clip présent ⇔ `start ≤ T(t) < start + duration`, image source
+  `floor((T(t) − start + inpoint) · 30)` ;
+- les valeurs observées dans les pixels du buffer reçu par le puits :
+  présence, numéro d’image source, alpha. Dans un chevauchement, les deux
+  clips doivent être translucides, A décroissant et B croissant.
+
+| Projet | Images vérifiées | Échecs | Rapport |
+| --- | --- | --- | --- |
+| Fondu + trou + queue (`two-clips-crossfade.xges`) | 136 (t = 0…135) | 0 | [`ges-seek-crossfade-report.json`](evidence/ges-seek-crossfade-report.json) |
+| Coupe franche (`two-clips-cut.xges`) | 121 (t = 0…120) | 0 | [`ges-seek-cut-report.json`](evidence/ges-seek-cut-report.json) |
+
+Contrôle indépendant de l’affichage : une capture du canvas par seek
+(136), décodée par `tools/framecode.py`, est comparée à la sonde et aux
+valeurs attendues. 0 écart :
+[`ges-seek-crossfade-canvas.json`](evidence/ges-seek-crossfade-canvas.json),
+planches [`ges-seek-crossfade-sheet.png`](evidence/ges-seek-crossfade-sheet.png)
+et [`ges-seek-cut-sheet.png`](evidence/ges-seek-cut-sheet.png).
+
+Bornes observées directement :
+
+| t | Fondu | Coupe franche |
+| --- | --- | --- |
+| 44 | A 54 | A 54 (dernière image de A) |
+| 45 | A 55, B à alpha 0 (début de rampe) | B 20 (In de B, A absent) |
+| 59 / 89 | B 34 (A à alpha ≈ 0) | B 64 (dernière image de B) |
+| 60 / 90 | B 35 seul (Out de A) | rien (Out de B) |
+| 104 / 105 | B 79 / rien (Out de B) | — |
+
+Le fondu masque l’Out de A et l’In de B (alpha ≈ 0 aux extrémités). Le
+projet en coupe franche les rend visibles. Dans le fondu, l’alpha de A suit
+(1 − x)² et celui de B suit x : GES applique l’alpha de la transition au
+clip sortant, puis le compositor le multiplie à nouveau. Le contrôle porte
+donc sur la monotonie des alphas, pas sur une somme égale à 1.
+
+### Constat : bornes d’image ambiguës à 1 ns près
+
+Premier passage avec des inpoints alignés sur le **début** d’image
+(`floor(k·10⁹/30)`) : 63/106 images correctes, les autres décalées de −1.
+Deux arrondis se cumulent (trace `videodecoder:5` d’un seek) :
+
+1. Dans ces MP4 avec B-frames, l’image k est à `(k+2)/30` s (liste
+   d’éditions), et GES ajoute ce décalage de flux à l’inpoint :
+   `floor(20/30) + floor(2/30)` = `733333332`, soit 1 ns sous
+   `floor(22/30)` = `733333333`.
+2. qtdemux arrondit au-dessus la durée des images placées sur un multiple
+   de 0,1 s (`33333334` ns) : leur fin déborde de 1 ns sur l’image
+   suivante.
+
+Dans les deux cas, le segment commence dans les 2 dernières ns de l’image
+précédente. `GstVideoDecoder` la garde alors, coupée à 1–2 ns, et elle
+remplit la première sortie. Règle retenue pour Yellow Stick : adresser
+l’image source k **au milieu de son intervalle**, `(k + ½)/30` s (inpoints
+`350000000` et `683333333`). Les positions de timeline restent celles de
+`ges_timeline_get_frame_time`. Correctif amont possible : arrondis cohérents
+dans qtdemux/GES.
+
+Seek exactement à la fin de la timeline : NLE limite la position et
+affiche la dernière image. Le trou et la queue noire du projet rendent l’Out
+de B mesurable.
+
+## 5 — Flutter Web pilote le pipeline
+
+Application `flutter/ys_gst_web` (Flutter 3.47.7) : `lib/main.dart`
+(canvas `#canvas` en `HtmlElementView`, boutons Load/Play/Pause, champ
+Frame + Seek, affichage du dernier événement). Le pont
+`web/ys_gst_adapter.js` expose `window.ysGst`
+(`start/load/play/pause/seekFrame/renderAll/onEvent`), crée `Module` comme
+la page du sample et renvoie les événements JSON. Construction et service :
+voir `flutter/ys_gst_web/README.md`
+(`flutter build web --release --no-web-resources-cdn`, module et médias
+copiés sous `build/web/gst/`, `tools/serve_samples.py … --port 8090`).
+
+Scénario exécuté par **clics souris et saisie clavier sur les contrôles
+Flutter**, sans appel JS direct : Load, puis Seek 44, 45, 50, 59, 60, 104,
+105, puis Play. Résultat
+([`evidence/flutter-ui-scenario.json`](evidence/flutter-ui-scenario.json)) :
+
+- `loaded` : 4 clips, durée 4,5 s ;
+- les 7 seeks rendent exactement les images attendues (t=50 : A 60 @ 0,435
+  + B 25 @ 0,329 ; t=105 : rien) ;
+- les captures du canvas Flutter, décodées par `framecode.py`, sont
+  identiques à la sonde
+  ([`flutter-seeks-sheet.png`](evidence/flutter-seeks-sheet.png),
+  page complète [`flutter-seek50.png`](evidence/flutter-seek50.png)) ;
+- Play jusqu’à `eos` (54 images rendues en mode QoS, comme dans la page du
+  sample) ; aucune exception.
+
+Constat : sans GPU, Chromium rend CanvasKit en WebGL logiciel
+(SwiftShader). Chaque `setState` déclenché par un événement `frame` coûte
+donc du CPU au pipeline. Un éditeur devra limiter la fréquence des mises à
+jour de l’interface.
 
 ## Contraintes et licences
 
 - La recette amont `build/recipes/ffmpeg.recipe:21-26` active explicitement
-  les décodeurs logiciels H.264 et AAC. La recette `gst.wasm` dépend de
-  `gst-libav-1.0`. Une construction amont ne prouve donc pas un décodage
-  WebCodecs. Aucun binaire de codec n’est publié par ce chantier à ce stade.
+  les décodeurs logiciels H.264 et AAC, et `gst.wasm` dépend de
+  `gst-libav-1.0` : ces décodeurs sont compilés. Le sample `ges-timeline`
+  n’enregistre pas libav ; le décodage prouvé passe par WebCodecs. Les
+  binaires construits (wasm, avec ou sans libav) ne sont **pas publiés** :
+  leur diffusion poserait la question des brevets H.264/AAC, à trancher
+  avant toute mise en ligne.
+- Les clips de test H.264 sont générés localement avec libx264
+  (`tools/make_test_clips.sh`, sous `build/ys-media/`, ignoré par Git) et
+  ne sont pas commités.
 - GStreamer est LGPL ; les licences des dépendances et les droits éventuels
-  sur les codecs restent distincts. Les sorties de compilation ne seront
-  pas ajoutées au dépôt.
+  sur les codecs restent distincts. Les sorties de compilation ne sont pas
+  ajoutées au dépôt.
 - Les pthreads Emscripten nécessitent SharedArrayBuffer et l’isolation
   cross-origin (COOP/COEP). Le serveur de preuve doit envoyer ces en-têtes.
 - WebCodecs est l’interface de décodage navigateur visée ; sa présence ne
@@ -257,7 +471,7 @@ SharedArrayBuffer et VideoDecoder disponibles. Pour H.264 `avc1.42E01E`,
 décodage effectif, ni une validation du critère 3. L’accélération matérielle
 n’est pas démontrable avec cette configuration.
 
-## 5 — Vérification précoce du pont
+## Annexe — vérification précoce du pont (critère 5)
 
 Outils exécutés : Flutter 3.47.7, Dart 3.13.5,
 rustc 1.98.0-nightly (9e2abe0c6). La cible Rust
@@ -342,7 +556,13 @@ peuvent cohabiter dans la même page. Aucune incompatibilité générale n’est
 démontrée. Cette sonde n’utilise pas le code Dart généré par FRB et ne
 prouve pas le pilotage GStreamer depuis Flutter.
 
-Choix d’intégration : frontière JavaScript/messages, sans échange de pointeurs
-Rust/GStreamer ni de vues de mémoire wasm entre les runtimes. Les réponses
-de seek devront attester la présentation de l’image, pas seulement le retour
-de `gst_element_seek`. Aucun pilotage Flutter du pipeline n’est encore validé.
+Choix d’intégration : frontière JavaScript/messages, sans échange de
+pointeurs Rust/GStreamer ni de vues de mémoire wasm entre les runtimes.
+FRB n’apporte rien entre Dart et un module Emscripten : il génère des
+liaisons vers du Rust compilé par wasm-bindgen, alors que GStreamer est en
+C compilé par Emscripten, avec sa propre mémoire partagée et ses pthreads.
+Un éditeur qui garde du Rust côté FRB peut coexister dans la page, mais il
+parle au pipeline par le même adaptateur JS. Les commandes sont asynchrones
+(invocation sur la boucle GLib) ; l’accusé de seek est l’événement `frame`
+de ce seek, lu dans les pixels, pas le retour de `gst_element_seek`. Mise en
+œuvre et preuve : section 5.

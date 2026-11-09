@@ -1,0 +1,94 @@
+{
+ "url": "http://127.0.0.1:8090/ (flutter build web --release --no-web-resources-cdn, module in build/web/gst/)",
+ "driver": "mouse clicks / keyboard on Flutter controls (Load, Frame field + Seek, Play)",
+ "seeks": [
+  {
+   "t": 44,
+   "requested": 44,
+   "timelineFrame": 44,
+   "a": {
+    "frame": 54,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "t": 45,
+   "requested": 45,
+   "timelineFrame": 45,
+   "a": {
+    "frame": 55,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "t": 50,
+   "requested": 50,
+   "timelineFrame": 50,
+   "a": {
+    "frame": 60,
+    "alpha": 0.435
+   },
+   "b": {
+    "frame": 25,
+    "alpha": 0.329
+   }
+  },
+  {
+   "t": 59,
+   "requested": 59,
+   "timelineFrame": 59,
+   "a": null,
+   "b": {
+    "frame": 34,
+    "alpha": 0.929
+   }
+  },
+  {
+   "t": 60,
+   "requested": 60,
+   "timelineFrame": 60,
+   "a": null,
+   "b": {
+    "frame": 35,
+    "alpha": 1
+   }
+  },
+  {
+   "t": 104,
+   "requested": 104,
+   "timelineFrame": 104,
+   "a": null,
+   "b": {
+    "frame": 79,
+    "alpha": 1
+   }
+  },
+  {
+   "t": 105,
+   "requested": 105,
+   "timelineFrame": 105,
+   "a": null,
+   "b": null
+  }
+ ],
+ "loaded": {
+  "event": "loaded",
+  "duration": 4500000000,
+  "clips": [
+   "clip-a@0+2000000000 in=350000000",
+   "transitionclip0@1500000000+500000000 in=0",
+   "clip-b@1500000000+2000000000 in=683333333",
+   "tail@4000000000+500000000 in=0"
+  ]
+ },
+ "play": {
+  "end": "eos",
+  "wallMs": 6899,
+  "frames": 54,
+  "first": 1,
+  "last": 121
+ },
+ "exceptions": []
+}

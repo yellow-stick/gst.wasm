@@ -53,6 +53,7 @@
         "/media/clip-a.mp4": baseUrl + "media/clip-a.mp4",
         "/media/clip-b.mp4": baseUrl + "media/clip-b.mp4",
         "/media/two-clips-crossfade.xges": baseUrl + "two-clips-crossfade.xges",
+        "/media/two-clips-cut.xges": baseUrl + "two-clips-cut.xges",
       };
       window.Module = {
         canvas,
@@ -99,6 +100,11 @@
     },
     seekFrame(frame) {
       ccall("ys_seek_frame", ["number"], [frame]);
+    },
+    // Before load(): render every frame even when late (no QoS), see
+    // ys_set_render_all in ges-timeline-example.c
+    renderAll(enabled) {
+      ccall("ys_set_render_all", ["number"], [enabled ? 1 : 0]);
     },
     onEvent(callback) {
       callbacks.push(callback);
