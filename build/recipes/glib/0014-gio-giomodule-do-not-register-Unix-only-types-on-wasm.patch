@@ -1,0 +1,56 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yellow Stick <dev@yellow-stick.local>
+Date: Sun, 8 Nov 2026 22:45:00 +0100
+Subject: [PATCH] gio: giomodule: do not register Unix-only types on wasm
+
+gio/meson.build leaves the Unix volume monitor, the fdo/gtk/portal
+notification backends, the portals and GDesktopAppInfoLookup out of the
+Emscripten build, but _g_io_modules_ensure_loaded () and
+_g_io_modules_ensure_extension_points_registered () still reference them
+under G_OS_UNIX. Any GFile user then aborts at runtime with
+"missing function: g_desktop_app_info_lookup_get_type" (or fails to link).
+---
+ gio/giomodule.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletions(-)
+
+diff --git a/gio/giomodule.c b/gio/giomodule.c
+--- a/gio/giomodule.c
++++ b/gio/giomodule.c
+@@ -1192,7 +1192,7 @@
+ 
+   if (g_once_init_enter (&registered_extensions))
+     {
+-#if defined(G_OS_UNIX) && !defined(__APPLE__)
++#if defined(G_OS_UNIX) && !defined(__APPLE__) && !defined(G_PLATFORM_WASM)
+ #if !GLIB_CHECK_VERSION (3, 0, 0)
+       ep = g_io_extension_point_register (G_DESKTOP_APP_INFO_LOOKUP_EXTENSION_POINT_NAME);
+       g_io_extension_point_set_required_type (ep, G_TYPE_DESKTOP_APP_INFO_LOOKUP);
+@@ -1374,17 +1374,25 @@
+       g_type_ensure (g_osx_app_info_get_type ());
+ #endif
+ #ifdef G_OS_UNIX
++      /* The Unix volume monitor, notification backends and portals are not
++       * built for Emscripten (gio/meson.build) */
++#ifndef G_PLATFORM_WASM
+       g_type_ensure (_g_unix_volume_monitor_get_type ());
++#endif
+       g_type_ensure (g_debug_controller_dbus_get_type ());
++#ifndef G_PLATFORM_WASM
+       g_type_ensure (g_fdo_notification_backend_get_type ());
+       g_type_ensure (g_gtk_notification_backend_get_type ());
+       g_type_ensure (g_portal_notification_backend_get_type ());
++#endif
+       g_type_ensure (g_memory_monitor_dbus_get_type ());
++#ifndef G_PLATFORM_WASM
+       g_type_ensure (g_memory_monitor_portal_get_type ());
+       g_type_ensure (g_network_monitor_portal_get_type ());
+       g_type_ensure (g_power_profile_monitor_portal_get_type ());
+       g_type_ensure (g_proxy_resolver_portal_get_type ());
+ #endif
++#endif
+ #if MAC_OS_X_VERSION_MIN_REQUIRED >= 1090
+       g_type_ensure (g_cocoa_notification_backend_get_type ());
+ #endif
+-- 
+2.43.0
+

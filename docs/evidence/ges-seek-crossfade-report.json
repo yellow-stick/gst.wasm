@@ -1,0 +1,3042 @@
+{
+ "clips": [
+  {
+   "name": "clip-a",
+   "start": 0,
+   "inpoint": 350000000,
+   "duration": 2000000000
+  },
+  {
+   "name": "clip-b",
+   "start": 1500000000,
+   "inpoint": 683333333,
+   "duration": 2000000000
+  }
+ ],
+ "totalFrames": 135,
+ "checked": 136,
+ "failures": 0,
+ "rows": [
+  {
+   "t": 0,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 10,
+     "first": true
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 0,
+    "a": {
+     "frame": 10,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 1,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 11,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 1,
+    "a": {
+     "frame": 11,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 2,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 12,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 2,
+    "a": {
+     "frame": 12,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 3,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 13,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 3,
+    "a": {
+     "frame": 13,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 4,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 14,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 4,
+    "a": {
+     "frame": 14,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 5,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 15,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 5,
+    "a": {
+     "frame": 15,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 6,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 16,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 6,
+    "a": {
+     "frame": 16,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 7,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 17,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 7,
+    "a": {
+     "frame": 17,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 8,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 18,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 8,
+    "a": {
+     "frame": 18,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 9,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 19,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 9,
+    "a": {
+     "frame": 19,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 10,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 20,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 10,
+    "a": {
+     "frame": 20,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 11,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 21,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 11,
+    "a": {
+     "frame": 21,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 12,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 22,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 12,
+    "a": {
+     "frame": 22,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 13,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 23,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 13,
+    "a": {
+     "frame": 23,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 14,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 24,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 14,
+    "a": {
+     "frame": 24,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 15,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 25,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 15,
+    "a": {
+     "frame": 25,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 16,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 26,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 16,
+    "a": {
+     "frame": 26,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 17,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 27,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 17,
+    "a": {
+     "frame": 27,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 18,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 28,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 18,
+    "a": {
+     "frame": 28,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 19,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 29,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 19,
+    "a": {
+     "frame": 29,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 20,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 30,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 20,
+    "a": {
+     "frame": 30,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 21,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 31,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 21,
+    "a": {
+     "frame": 31,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 22,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 32,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 22,
+    "a": {
+     "frame": 32,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 23,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 33,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 23,
+    "a": {
+     "frame": 33,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 24,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 34,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 24,
+    "a": {
+     "frame": 34,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 25,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 35,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 25,
+    "a": {
+     "frame": 35,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 26,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 36,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 26,
+    "a": {
+     "frame": 36,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 27,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 37,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 27,
+    "a": {
+     "frame": 37,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 28,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 38,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 28,
+    "a": {
+     "frame": 38,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 29,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 39,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 29,
+    "a": {
+     "frame": 39,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 30,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 40,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 30,
+    "a": {
+     "frame": 40,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 31,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 41,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 31,
+    "a": {
+     "frame": 41,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 32,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 42,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 32,
+    "a": {
+     "frame": 42,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 33,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 43,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 33,
+    "a": {
+     "frame": 43,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 34,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 44,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 34,
+    "a": {
+     "frame": 44,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 35,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 45,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 35,
+    "a": {
+     "frame": 45,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 36,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 46,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 36,
+    "a": {
+     "frame": 46,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 37,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 47,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 37,
+    "a": {
+     "frame": 47,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 38,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 48,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 38,
+    "a": {
+     "frame": 48,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 39,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 49,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 39,
+    "a": {
+     "frame": 49,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 40,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 50,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 40,
+    "a": {
+     "frame": 50,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 41,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 51,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 41,
+    "a": {
+     "frame": 51,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 42,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 52,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 42,
+    "a": {
+     "frame": 52,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 43,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 53,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 43,
+    "a": {
+     "frame": 53,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 44,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 54,
+     "first": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 44,
+    "a": {
+     "frame": 54,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 45,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 55,
+     "first": false
+    },
+    "b": {
+     "present": true,
+     "frame": 20,
+     "first": true
+    }
+   },
+   "observed": {
+    "timelineFrame": 45,
+    "a": {
+     "frame": 55,
+     "alpha": 1
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 46,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 56,
+     "first": false
+    },
+    "b": {
+     "present": true,
+     "frame": 21,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 46,
+    "a": {
+     "frame": 56,
+     "alpha": 0.863
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 47,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 57,
+     "first": false
+    },
+    "b": {
+     "present": true,
+     "frame": 22,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 47,
+    "a": {
+     "frame": 57,
+     "alpha": 0.741
+    },
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 48,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 58,
+     "first": false
+    },
+    "b": {
+     "present": true,
+     "frame": 23,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 48,
+    "a": {
+     "frame": 58,
+     "alpha": 0.635
+    },
+    "b": {
+     "frame": 23,
+     "alpha": 0.196
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 49,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 59,
+     "first": false
+    },
+    "b": {
+     "present": true,
+     "frame": 24,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 49,
+    "a": {
+     "frame": 59,
+     "alpha": 0.533
+    },
+    "b": {
+     "frame": 24,
+     "alpha": 0.267
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 50,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 60,
+     "first": false
+    },
+    "b": {
+     "present": true,
+     "frame": 25,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 50,
+    "a": {
+     "frame": 60,
+     "alpha": 0.435
+    },
+    "b": {
+     "frame": 25,
+     "alpha": 0.329
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 51,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 61,
+     "first": false
+    },
+    "b": {
+     "present": true,
+     "frame": 26,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 51,
+    "a": {
+     "frame": 61,
+     "alpha": 0.353
+    },
+    "b": {
+     "frame": 26,
+     "alpha": 0.396
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 52,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 62,
+     "first": false
+    },
+    "b": {
+     "present": true,
+     "frame": 27,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 52,
+    "a": {
+     "frame": 62,
+     "alpha": 0.278
+    },
+    "b": {
+     "frame": 27,
+     "alpha": 0.463
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 53,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 63,
+     "first": false
+    },
+    "b": {
+     "present": true,
+     "frame": 28,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 53,
+    "a": {
+     "frame": 63,
+     "alpha": 0.212
+    },
+    "b": {
+     "frame": 28,
+     "alpha": 0.529
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 54,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 64,
+     "first": false
+    },
+    "b": {
+     "present": true,
+     "frame": 29,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 54,
+    "a": null,
+    "b": {
+     "frame": 29,
+     "alpha": 0.596
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 55,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 65,
+     "first": false
+    },
+    "b": {
+     "present": true,
+     "frame": 30,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 55,
+    "a": null,
+    "b": {
+     "frame": 30,
+     "alpha": 0.663
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 56,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 66,
+     "first": false
+    },
+    "b": {
+     "present": true,
+     "frame": 31,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 56,
+    "a": null,
+    "b": {
+     "frame": 31,
+     "alpha": 0.729
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 57,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 67,
+     "first": false
+    },
+    "b": {
+     "present": true,
+     "frame": 32,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 57,
+    "a": null,
+    "b": {
+     "frame": 32,
+     "alpha": 0.796
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 58,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 68,
+     "first": false
+    },
+    "b": {
+     "present": true,
+     "frame": 33,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 58,
+    "a": null,
+    "b": {
+     "frame": 33,
+     "alpha": 0.863
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 59,
+   "expected": {
+    "a": {
+     "present": true,
+     "frame": 69,
+     "first": false
+    },
+    "b": {
+     "present": true,
+     "frame": 34,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 59,
+    "a": null,
+    "b": {
+     "frame": 34,
+     "alpha": 0.929
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 60,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 35,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 60,
+    "a": null,
+    "b": {
+     "frame": 35,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 61,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 36,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 61,
+    "a": null,
+    "b": {
+     "frame": 36,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 62,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 37,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 62,
+    "a": null,
+    "b": {
+     "frame": 37,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 63,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 38,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 63,
+    "a": null,
+    "b": {
+     "frame": 38,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 64,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 39,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 64,
+    "a": null,
+    "b": {
+     "frame": 39,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 65,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 40,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 65,
+    "a": null,
+    "b": {
+     "frame": 40,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 66,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 41,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 66,
+    "a": null,
+    "b": {
+     "frame": 41,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 67,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 42,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 67,
+    "a": null,
+    "b": {
+     "frame": 42,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 68,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 43,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 68,
+    "a": null,
+    "b": {
+     "frame": 43,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 69,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 44,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 69,
+    "a": null,
+    "b": {
+     "frame": 44,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 70,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 45,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 70,
+    "a": null,
+    "b": {
+     "frame": 45,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 71,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 46,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 71,
+    "a": null,
+    "b": {
+     "frame": 46,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 72,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 47,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 72,
+    "a": null,
+    "b": {
+     "frame": 47,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 73,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 48,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 73,
+    "a": null,
+    "b": {
+     "frame": 48,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 74,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 49,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 74,
+    "a": null,
+    "b": {
+     "frame": 49,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 75,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 50,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 75,
+    "a": null,
+    "b": {
+     "frame": 50,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 76,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 51,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 76,
+    "a": null,
+    "b": {
+     "frame": 51,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 77,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 52,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 77,
+    "a": null,
+    "b": {
+     "frame": 52,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 78,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 53,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 78,
+    "a": null,
+    "b": {
+     "frame": 53,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 79,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 54,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 79,
+    "a": null,
+    "b": {
+     "frame": 54,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 80,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 55,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 80,
+    "a": null,
+    "b": {
+     "frame": 55,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 81,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 56,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 81,
+    "a": null,
+    "b": {
+     "frame": 56,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 82,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 57,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 82,
+    "a": null,
+    "b": {
+     "frame": 57,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 83,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 58,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 83,
+    "a": null,
+    "b": {
+     "frame": 58,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 84,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 59,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 84,
+    "a": null,
+    "b": {
+     "frame": 59,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 85,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 60,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 85,
+    "a": null,
+    "b": {
+     "frame": 60,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 86,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 61,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 86,
+    "a": null,
+    "b": {
+     "frame": 61,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 87,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 62,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 87,
+    "a": null,
+    "b": {
+     "frame": 62,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 88,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 63,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 88,
+    "a": null,
+    "b": {
+     "frame": 63,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 89,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 64,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 89,
+    "a": null,
+    "b": {
+     "frame": 64,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 90,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 65,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 90,
+    "a": null,
+    "b": {
+     "frame": 65,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 91,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 66,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 91,
+    "a": null,
+    "b": {
+     "frame": 66,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 92,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 67,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 92,
+    "a": null,
+    "b": {
+     "frame": 67,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 93,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 68,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 93,
+    "a": null,
+    "b": {
+     "frame": 68,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 94,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 69,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 94,
+    "a": null,
+    "b": {
+     "frame": 69,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 95,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 70,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 95,
+    "a": null,
+    "b": {
+     "frame": 70,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 96,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 71,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 96,
+    "a": null,
+    "b": {
+     "frame": 71,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 97,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 72,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 97,
+    "a": null,
+    "b": {
+     "frame": 72,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 98,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 73,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 98,
+    "a": null,
+    "b": {
+     "frame": 73,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 99,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 74,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 99,
+    "a": null,
+    "b": {
+     "frame": 74,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 100,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 75,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 100,
+    "a": null,
+    "b": {
+     "frame": 75,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 101,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 76,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 101,
+    "a": null,
+    "b": {
+     "frame": 76,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 102,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 77,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 102,
+    "a": null,
+    "b": {
+     "frame": 77,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 103,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 78,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 103,
+    "a": null,
+    "b": {
+     "frame": 78,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 104,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": true,
+     "frame": 79,
+     "first": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 104,
+    "a": null,
+    "b": {
+     "frame": 79,
+     "alpha": 1
+    }
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 105,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 105,
+    "a": null,
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 106,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 106,
+    "a": null,
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 107,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 107,
+    "a": null,
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 108,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 108,
+    "a": null,
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 109,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 109,
+    "a": null,
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 110,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 110,
+    "a": null,
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 111,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 111,
+    "a": null,
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 112,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 112,
+    "a": null,
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 113,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 113,
+    "a": null,
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 114,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 114,
+    "a": null,
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 115,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 115,
+    "a": null,
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 116,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 116,
+    "a": null,
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 117,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 117,
+    "a": null,
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 118,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 118,
+    "a": null,
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 119,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 119,
+    "a": null,
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 120,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 120,
+    "a": null,
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 121,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 121,
+    "a": null,
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 122,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 122,
+    "a": null,
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 123,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 123,
+    "a": null,
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 124,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 124,
+    "a": null,
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 125,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 125,
+    "a": null,
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 126,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 126,
+    "a": null,
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 127,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 127,
+    "a": null,
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 128,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 128,
+    "a": null,
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 129,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 129,
+    "a": null,
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 130,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 130,
+    "a": null,
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 131,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 131,
+    "a": null,
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 132,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 132,
+    "a": null,
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 133,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 133,
+    "a": null,
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 134,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 134,
+    "a": null,
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  },
+  {
+   "t": 135,
+   "expected": {
+    "a": {
+     "present": false
+    },
+    "b": {
+     "present": false
+    }
+   },
+   "observed": {
+    "timelineFrame": 135,
+    "a": null,
+    "b": null
+   },
+   "ok": true,
+   "problems": []
+  }
+ ]
+}

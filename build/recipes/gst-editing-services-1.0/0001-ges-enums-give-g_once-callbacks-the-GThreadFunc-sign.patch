@@ -1,0 +1,185 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yellow Stick <dev@yellow-stick.local>
+Date: Sun, 8 Nov 2026 22:30:00 +0100
+Subject: [PATCH] ges: enums: give g_once callbacks the GThreadFunc signature
+
+The enum/flags registration callbacks were declared as
+void (*) (GType *) and cast to GThreadFunc. Calling a function through a
+pointer of a different signature is undefined behaviour and traps on
+WebAssembly ("function signature mismatch"), e.g. in
+ges_track_type_get_type () as soon as GES registers its standard
+transition assets. Same fix as the GThreadFunc return type fixes in
+GStreamer core.
+---
+ subprojects/gst-editing-services/ges/ges-enums.c | 54 ++++++++++++++++++++++++++++++++++++------------------
+ 1 file changed, 36 insertions(+), 18 deletions(-)
+
+diff --git a/subprojects/gst-editing-services/ges/ges-enums.c b/subprojects/gst-editing-services/ges/ges-enums.c
+--- a/subprojects/gst-editing-services/ges/ges-enums.c
++++ b/subprojects/gst-editing-services/ges/ges-enums.c
+@@ -44,10 +44,13 @@
+   {0, NULL, NULL}
+ };
+ 
+-static void
+-register_ges_track_type_select_result (GType * id)
++static gpointer
++register_ges_track_type_select_result (gpointer data)
+ {
++  GType *id = data;
+   *id = g_flags_register_static ("GESTrackType", track_types_values);
++
++  return NULL;
+ }
+ 
+ const gchar *
+@@ -69,13 +72,14 @@
+   static GType id;
+   static GOnce once = G_ONCE_INIT;
+ 
+-  g_once (&once, (GThreadFunc) register_ges_track_type_select_result, &id);
++  g_once (&once, register_ges_track_type_select_result, &id);
+   return id;
+ }
+ 
+-static void
+-register_ges_pipeline_flags (GType * id)
++static gpointer
++register_ges_pipeline_flags (gpointer data)
+ {
++  GType *id = data;
+   static const GFlagsValue values[] = {
+     {C_ENUM (GES_PIPELINE_MODE_PREVIEW_AUDIO),
+           "GES_PIPELINE_MODE_PREVIEW_AUDIO",
+@@ -92,6 +96,8 @@
+   };
+ 
+   *id = g_flags_register_static ("GESPipelineFlags", values);
++
++  return NULL;
+ }
+ 
+ GType
+@@ -100,13 +106,14 @@
+   static GType id;
+   static GOnce once = G_ONCE_INIT;
+ 
+-  g_once (&once, (GThreadFunc) register_ges_pipeline_flags, &id);
++  g_once (&once, register_ges_pipeline_flags, &id);
+   return id;
+ }
+ 
+-static void
+-register_ges_edit_mode (GType * id)
++static gpointer
++register_ges_edit_mode (gpointer data)
+ {
++  GType *id = data;
+   static const GEnumValue edit_mode[] = {
+     {C_ENUM (GES_EDIT_MODE_NORMAL), "GES_EDIT_MODE_NORMAL",
+         "edit_normal"},
+@@ -142,6 +149,8 @@
+   };
+ 
+   *id = g_enum_register_static ("GESEditMode", edit_mode);
++
++  return NULL;
+ }
+ 
+ const gchar *
+@@ -169,13 +178,14 @@
+   static GType id;
+   static GOnce once = G_ONCE_INIT;
+ 
+-  g_once (&once, (GThreadFunc) register_ges_edit_mode, &id);
++  g_once (&once, register_ges_edit_mode, &id);
+   return id;
+ }
+ 
+-static void
+-register_ges_edge (GType * id)
++static gpointer
++register_ges_edge (gpointer data)
+ {
++  GType *id = data;
+   static const GEnumValue edges[] = {
+     {C_ENUM (GES_EDGE_START), "GES_EDGE_START", "edge_start"},
+     {C_ENUM (GES_EDGE_START), "GES_EDGE_START", "start"},
+@@ -187,6 +197,8 @@
+   };
+ 
+   *id = g_enum_register_static ("GESEdge", edges);
++
++  return NULL;
+ }
+ 
+ /**
+@@ -216,7 +228,7 @@
+   static GType id;
+   static GOnce once = G_ONCE_INIT;
+ 
+-  g_once (&once, (GThreadFunc) register_ges_edge, &id);
++  g_once (&once, register_ges_edge, &id);
+   return id;
+ }
+ 
+@@ -586,9 +598,10 @@
+   return theType;
+ }
+ 
+-static void
+-register_ges_meta_flag (GType * id)
++static gpointer
++register_ges_meta_flag (gpointer data)
+ {
++  GType *id = data;
+   static const GFlagsValue values[] = {
+     {C_ENUM (GES_META_READABLE), "GES_META_READABLE", "readable"},
+     {C_ENUM (GES_META_WRITABLE), "GES_META_WRITABLE", "writable"},
+@@ -597,6 +610,8 @@
+   };
+ 
+   *id = g_flags_register_static ("GESMetaFlag", values);
++
++  return NULL;
+ }
+ 
+ GType
+@@ -605,13 +620,14 @@
+   static GType id;
+   static GOnce once = G_ONCE_INIT;
+ 
+-  g_once (&once, (GThreadFunc) register_ges_meta_flag, &id);
++  g_once (&once, register_ges_meta_flag, &id);
+   return id;
+ }
+ 
+-static void
+-register_ges_marker_flags (GType * id)
++static gpointer
++register_ges_marker_flags (gpointer data)
+ {
++  GType *id = data;
+   static const GFlagsValue values[] = {
+     {C_ENUM (GES_MARKER_FLAG_NONE), "GES_MARKER_FLAG_NONE", "none"},
+     {C_ENUM (GES_MARKER_FLAG_SNAPPABLE), "GES_MARKER_FLAG_SNAPPABLE",
+@@ -620,6 +636,8 @@
+   };
+ 
+   *id = g_flags_register_static ("GESMarkerFlags", values);
++
++  return NULL;
+ }
+ 
+ GType
+@@ -628,6 +646,6 @@
+   static GType id;
+   static GOnce once = G_ONCE_INIT;
+ 
+-  g_once (&once, (GThreadFunc) register_ges_marker_flags, &id);
++  g_once (&once, register_ges_marker_flags, &id);
+   return id;
+ }
+-- 
+2.43.0
+

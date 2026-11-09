@@ -1,0 +1,26 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>gst.wasm browser capability evidence</title>
+<h1>Browser capabilities — not a pipeline acceptance test</h1>
+<pre id="result">Checking…</pre>
+<script>
+(async () => {
+  const result = {
+    userAgent: navigator.userAgent,
+    crossOriginIsolated,
+    sharedArrayBuffer: typeof SharedArrayBuffer,
+    videoDecoder: typeof VideoDecoder,
+    configs: [],
+  };
+  for (const hardwareAcceleration of ['no-preference', 'prefer-hardware', 'prefer-software']) {
+    const config = {codec: 'avc1.42E01E', codedWidth: 320, codedHeight: 240, hardwareAcceleration};
+    try {
+      result.configs.push(await VideoDecoder.isConfigSupported(config));
+    } catch (error) {
+      result.configs.push({config, error: String(error)});
+    }
+  }
+  document.querySelector('#result').textContent = JSON.stringify(result, null, 2);
+  window.capabilityResult = result;
+})();
+</script>

@@ -1,0 +1,1839 @@
+0:00:00.070860000 [31m        42[00m         42 [31;01mERROR  [00m [00m          discoverer gstdiscoverer.c:388:gst_discoverer_init:<GstDiscoverer@0x19e240>[00m Can't create uridecodebin
+0:00:00.074934000 [31m        42[00m         42 [31;01mERROR  [00m [00;33m                 ges ges-uri-asset.c:938:_ges_uri_asset_ensure_setup:[00m Could not create discoverer: Couldn't create 'uridecodebin' element
+0:00:00.075965000 [31m        42[00m         42 [31;01mERROR  [00m [00m          discoverer gstdiscoverer.c:388:gst_discoverer_init:<GstDiscoverer@0x19e2a0>[00m Can't create uridecodebin
+0:00:00.076790000 [31m        42[00m         42 [31;01mERROR  [00m [00;33m                 ges ges-uri-asset.c:938:_ges_uri_asset_ensure_setup:[00m Could not create discoverer: Couldn't create 'uridecodebin' element
+0:00:00.086295000 [31m        42[00m         42 [31;01mERROR  [00m [00;33m                 ges ges.c:124:ges_init_post:[00m cannot setup uri asset
+0:00:00.088500000 [31m        42[00m         42 [31;01mERROR  [00m [00;33m                 ges ges.c:183:ges_init_post:[00m Could not initialize GES.
+gessrc: Factory Details:
+gessrc:   Rank                     none (0)
+gessrc:   Long-name                GStreamer Editing Services based 'source'
+gessrc:   Klass                    Codec/Source/Editing
+gessrc:   Description              Source for GESTimeline.
+gessrc:   Author                   Thibault Saunier <tsaunier@igalia.com
+gessrc:   Documentation            https://gstreamer.freedesktop.org/documentation/ges/gessrc.html
+gessrc: 
+gessrc: Plugin Details:
+gessrc:   Name                     ges
+gessrc:   Description              GStreamer Editing Services Plugin
+gessrc:   Filename                 (null)
+gessrc:   Version                  1.29.1.1
+gessrc:   License                  LGPL
+gessrc:   Source module            gst-editing-services
+gessrc:   Documentation            https://gstreamer.freedesktop.org/documentation/ges/
+gessrc:   Binary package           GStreamer Editing Services
+gessrc:   Origin URL               Unknown package origin
+gessrc: 
+gessrc: GObject
+gessrc:  +----GInitiallyUnowned
+gessrc:        +----GstObject
+gessrc:              +----GstElement
+gessrc:                    +----GstBin
+gessrc:                          +----GESBaseBin
+gessrc:                                +----GESSrc
+gessrc: 
+gessrc: Implemented Interfaces:
+gessrc:   GstChildProxy
+gessrc:   GstURIHandler
+gessrc: 
+gessrc: Element Flags:
+gessrc: 
+gessrc: Pad Templates:
+gessrc:   SRC template: 'audio_src'
+gessrc:     Availability: Sometimes
+gessrc:     Capabilities:
+gessrc:       audio/x-raw(ANY)
+gessrc:   
+gessrc:   SRC template: 'video_src'
+gessrc:     Availability: Sometimes
+gessrc:     Capabilities:
+gessrc:       video/x-raw(ANY)
+gessrc: 
+gessrc: Element has no clocking capabilities.
+gessrc: 
+gessrc: URI handling capabilities:
+gessrc:   Element can act as source.
+gessrc:   Supported URI protocols:
+gessrc:     ges
+gessrc: 
+gessrc: Pads:
+gessrc:   none
+
+gessrc: Element Properties:
+gessrc: 
+gessrc:   async-handling      : The bin will handle Asynchronous state changes
+gessrc:                         flags: readable, writable
+gessrc:                         Boolean. Default: false
+gessrc:   
+gessrc:   message-forward     : Forwards all children messages
+gessrc:                         flags: readable, writable
+gessrc:                         Boolean. Default: false
+gessrc:   
+gessrc:   name                : The name of the object
+gessrc:                         flags: readable, writable
+gessrc:                         String. Default: "gessrc0"
+gessrc:   
+gessrc:   parent              : The parent of the object
+gessrc:                         flags: readable, writable
+gessrc:                         Object of type "GstObject"
+gessrc:   
+gessrc:   timeline            : Timeline to use in this src.
+gessrc:                         flags: readable, writable
+gessrc:                         Object of type "GESTimeline"
+gessrc:   
+gessrc: 
+gessrc: Element Signals:
+gessrc: 
+gessrc:   "pad-added" :  void user_function (GstElement * object,
+gessrc:                                      GstPad * arg0,
+gessrc:                                      gpointer user_data);
+
+gessrc:   "pad-removed" :  void user_function (GstElement * object,
+gessrc:                                        GstPad * arg0,
+gessrc:                                        gpointer user_data);
+
+gessrc:   "no-more-pads" :  void user_function (GstElement * object,
+gessrc:                                         gpointer user_data);
+
+0:00:00.119410000 [31m        42[00m         42 [31;01mERROR  [00m [00m          discoverer gstdiscoverer.c:388:gst_discoverer_init:<GstDiscoverer@0x19cfb0>[00m Can't create uridecodebin
+0:00:00.121075000 [31m        42[00m         42 [31;01mERROR  [00m [00;33m                 ges ges-uri-asset.c:938:_ges_uri_asset_ensure_setup:[00m Could not create discoverer: Couldn't create 'uridecodebin' element
+0:00:00.121689000 [31m        42[00m         42 [31;01mERROR  [00m [00;33m                 ges ges.c:124:ges_init_post:[00m cannot setup uri asset
+0:00:00.122230000 [31m        42[00m         42 [31;01mERROR  [00m [00;33m                 ges ges.c:183:ges_init_post:[00m Could not initialize GES.
+gesdemux: Factory Details:
+gesdemux:   Rank                     primary (256)
+gesdemux:   Long-name                GStreamer Editing Services based 'demuxer'
+gesdemux:   Klass                    Codec/Demux/Editing
+gesdemux:   Description              Demuxer for complex timeline file formats using GES.
+gesdemux:   Author                   Thibault Saunier <tsaunier@igalia.com
+gesdemux:   Documentation            https://gstreamer.freedesktop.org/documentation/ges/gesdemux.html
+gesdemux: 
+gesdemux: Plugin Details:
+gesdemux:   Name                     ges
+gesdemux:   Description              GStreamer Editing Services Plugin
+gesdemux:   Filename                 (null)
+gesdemux:   Version                  1.29.1.1
+gesdemux:   License                  LGPL
+gesdemux:   Source module            gst-editing-services
+gesdemux:   Documentation            https://gstreamer.freedesktop.org/documentation/ges/
+gesdemux:   Binary package           GStreamer Editing Services
+gesdemux:   Origin URL               Unknown package origin
+gesdemux: 
+gesdemux: GObject
+gesdemux:  +----GInitiallyUnowned
+gesdemux:        +----GstObject
+gesdemux:              +----GstElement
+gesdemux:                    +----GstBin
+gesdemux:                          +----GESBaseBin
+gesdemux:                                +----GESDemux
+gesdemux: 
+gesdemux: Implemented Interfaces:
+gesdemux:   GstChildProxy
+gesdemux: 
+gesdemux: Element Flags:
+gesdemux: 
+gesdemux: Pad Templates:
+gesdemux:   SRC template: 'audio_src'
+gesdemux:     Availability: Sometimes
+gesdemux:     Capabilities:
+gesdemux:       audio/x-raw(ANY)
+gesdemux:   
+gesdemux:   SINK template: 'sink'
+gesdemux:     Availability: Always
+gesdemux:     Capabilities:
+gesdemux:       application/xges
+gesdemux:   
+gesdemux:   SRC template: 'video_src'
+gesdemux:     Availability: Sometimes
+gesdemux:     Capabilities:
+gesdemux:       video/x-raw(ANY)
+gesdemux: 
+gesdemux: Element has no clocking capabilities.
+gesdemux: Element has no URI handling capabilities.
+gesdemux: 
+gesdemux: Pads:
+gesdemux:   SINK: 'sink'
+gesdemux:     Pad Template: 'sink'
+
+gesdemux: Element Properties:
+gesdemux: 
+gesdemux:   async-handling      : The bin will handle Asynchronous state changes
+gesdemux:                         flags: readable, writable
+gesdemux:                         Boolean. Default: false
+gesdemux:   
+gesdemux:   message-forward     : Forwards all children messages
+gesdemux:                         flags: readable, writable
+gesdemux:                         Boolean. Default: false
+gesdemux:   
+gesdemux:   name                : The name of the object
+gesdemux:                         flags: readable, writable
+gesdemux:                         String. Default: "gesdemux0"
+gesdemux:   
+gesdemux:   parent              : The parent of the object
+gesdemux:                         flags: readable, writable
+gesdemux:                         Object of type "GstObject"
+gesdemux:   
+gesdemux:   timeline            : Timeline to use in this src.
+gesdemux:                         flags: readable, writable
+gesdemux:                         Object of type "GESTimeline"
+gesdemux:   
+gesdemux: 
+gesdemux: Element Signals:
+gesdemux: 
+gesdemux:   "pad-added" :  void user_function (GstElement * object,
+gesdemux:                                      GstPad * arg0,
+gesdemux:                                      gpointer user_data);
+
+gesdemux:   "pad-removed" :  void user_function (GstElement * object,
+gesdemux:                                        GstPad * arg0,
+gesdemux:                                        gpointer user_data);
+
+gesdemux:   "no-more-pads" :  void user_function (GstElement * object,
+gesdemux:                                         gpointer user_data);
+
+
+(gst-inspect-1.0:42): GStreamer-[1;35mCRITICAL[0m **: [34m22:24:17.236[0m: gst_bin_add: assertion 'GST_IS_ELEMENT (element)' failed
+nlesource: Factory Details:
+nlesource:   Rank                     none (0)
+nlesource:   Long-name                GNonLin Source
+nlesource:   Klass                    Filter/Editor
+nlesource:   Description              Manages source elements
+nlesource:   Author                   Wim Taymans <wim.taymans@gmail.com>, Edward Hervey <bilboed@bilboed.com>
+nlesource:   Documentation            https://gstreamer.freedesktop.org/documentation/nle/nlesource.html
+nlesource: 
+nlesource: Plugin Details:
+nlesource:   Name                     nle
+nlesource:   Description              GStreamer Non Linear Engine
+nlesource:   Filename                 (null)
+nlesource:   Version                  1.29.1.1
+nlesource:   License                  LGPL
+nlesource:   Source module            gst-editing-services
+nlesource:   Documentation            https://gstreamer.freedesktop.org/documentation/nle/
+nlesource:   Binary package           GStreamer Editing Services
+nlesource:   Origin URL               Unknown package origin
+nlesource: 
+nlesource: GObject
+nlesource:  +----GInitiallyUnowned
+nlesource:        +----GstObject
+nlesource:              +----GstElement
+nlesource:                    +----GstBin
+nlesource:                          +----NleObject
+nlesource:                                +----NleSource
+nlesource: 
+nlesource: Implemented Interfaces:
+nlesource:   GstChildProxy
+nlesource: 
+nlesource: Element Flags:
+nlesource: 
+nlesource: Pad Templates:
+nlesource:   SRC template: 'src'
+nlesource:     Availability: Always
+nlesource:     Capabilities:
+nlesource:       ANY
+nlesource: 
+nlesource: Element has no clocking capabilities.
+nlesource: Element has no URI handling capabilities.
+nlesource: 
+nlesource: Pads:
+nlesource:   SRC: 'src'
+nlesource:     Pad Template: 'src'
+
+nlesource: Element Properties:
+nlesource: 
+nlesource:   active              : Use this object in the NleComposition
+nlesource:                         flags: readable, writable
+nlesource:                         Boolean. Default: true
+nlesource:   
+nlesource:   async-handling      : The bin will handle Asynchronous state changes
+nlesource:                         flags: readable, writable
+nlesource:                         Boolean. Default: true
+nlesource:   
+nlesource:   caps                : Caps used to filter/choose the output stream
+nlesource:                         flags: readable, writable
+nlesource:                                                    ANY
+
+nlesource:   
+nlesource:   duration            : Outgoing duration (in nanoseconds)
+nlesource:                         flags: readable, writable
+nlesource:                         Integer64. Range: 0 - 9223372036854775807 Default: 0 
+nlesource:   
+nlesource:   expandable          : Expand to the full duration of the container composition
+nlesource:                         flags: readable, writable
+nlesource:                         Boolean. Default: false
+nlesource:   
+nlesource:   inpoint             : The media start position (in nanoseconds)
+nlesource:                         flags: readable, writable
+nlesource:                         Unsigned Integer64. Range: 0 - 18446744073709551615 Default: 18446744073709551615 
+nlesource:   
+nlesource:   media-duration-factor: The relative rate caused by this object
+nlesource:                         flags: readable, writable, deprecated
+nlesource:                         Double. Range:            0.01 -   1.797693e+308 Default:               1 
+nlesource:   
+nlesource:   message-forward     : Forwards all children messages
+nlesource:                         flags: readable, writable
+nlesource:                         Boolean. Default: false
+nlesource:   
+nlesource:   name                : The name of the object
+nlesource:                         flags: readable, writable
+nlesource:                         String. Default: "nlesource0"
+nlesource:   
+nlesource:   parent              : The parent of the object
+nlesource:                         flags: readable, writable
+nlesource:                         Object of type "GstObject"
+nlesource:   
+nlesource:   priority            : The priority of the object (0 = highest priority)
+nlesource:                         flags: readable, writable
+nlesource:                         Unsigned Integer. Range: 0 - 4294967295 Default: 0 
+nlesource:   
+nlesource:   reverse             : Whether to playback the source reverse or not
+nlesource:                         flags: readable, writable
+nlesource:                         Boolean. Default: false
+nlesource:   
+nlesource:   start               : The start position relative to the parent (in nanoseconds)
+nlesource:                         flags: readable, writable
+nlesource:                         Unsigned Integer64. Range: 0 - 18446744073709551615 Default: 0 
+nlesource:   
+nlesource:   stop                : The stop position relative to the parent (in nanoseconds)
+nlesource:                         flags: readable
+nlesource:                         Unsigned Integer64. Range: 0 - 18446744073709551615 Default: 0 
+nlesource:   
+nlesource: 
+nlesource: Element Actions:
+nlesource: 
+nlesource:   "commit" -> gboolean  :  g_signal_emit_by_name (element, "commit",
+nlesource:                                                   gboolean arg0,
+nlesource:                                                   gboolean * p_return_value);
+
+
+(gst-inspect-1.0:42): GStreamer-[1;35mCRITICAL[0m **: [34m22:24:17.265[0m: gst_bin_remove: assertion 'GST_IS_ELEMENT (element)' failed
+nlecomposition: Factory Details:
+nlecomposition:   Rank                     none (0)
+nlecomposition:   Long-name                GNonLin Composition
+nlecomposition:   Klass                    Filter/Editor
+nlecomposition:   Description              Combines NLE objects
+nlecomposition:   Author                   Wim Taymans <wim.taymans@gmail.com>, Edward Hervey <bilboed@bilboed.com>, Mathieu Duponchelle <mathieu.duponchelle@opencreed.com>, Thibault Saunier <tsaunier@gnome.org>
+nlecomposition:   Documentation            https://gstreamer.freedesktop.org/documentation/nle/nlecomposition.html
+nlecomposition: 
+nlecomposition: Plugin Details:
+nlecomposition:   Name                     nle
+nlecomposition:   Description              GStreamer Non Linear Engine
+nlecomposition:   Filename                 (null)
+nlecomposition:   Version                  1.29.1.1
+nlecomposition:   License                  LGPL
+nlecomposition:   Source module            gst-editing-services
+nlecomposition:   Documentation            https://gstreamer.freedesktop.org/documentation/nle/
+nlecomposition:   Binary package           GStreamer Editing Services
+nlecomposition:   Origin URL               Unknown package origin
+nlecomposition: 
+nlecomposition: GObject
+nlecomposition:  +----GInitiallyUnowned
+nlecomposition:        +----GstObject
+nlecomposition:              +----GstElement
+nlecomposition:                    +----GstBin
+nlecomposition:                          +----NleObject
+nlecomposition:                                +----NleComposition
+nlecomposition: 
+nlecomposition: Implemented Interfaces:
+nlecomposition:   GstChildProxy
+nlecomposition: 
+nlecomposition: Element Flags:
+nlecomposition: 
+nlecomposition: Pad Templates:
+nlecomposition:   SRC template: 'src'
+nlecomposition:     Availability: Always
+nlecomposition:     Capabilities:
+nlecomposition:       ANY
+nlecomposition: 
+nlecomposition: Element has no clocking capabilities.
+nlecomposition: Element has no URI handling capabilities.
+nlecomposition: 
+nlecomposition: Pads:
+nlecomposition:   SRC: 'src'
+nlecomposition:     Pad Template: 'src'
+
+nlecomposition: Element Properties:
+nlecomposition: 
+nlecomposition:   active              : Use this object in the NleComposition
+nlecomposition:                         flags: readable, writable
+nlecomposition:                         Boolean. Default: true
+nlecomposition:   
+nlecomposition:   async-handling      : The bin will handle Asynchronous state changes
+nlecomposition:                         flags: readable, writable
+nlecomposition:                         Boolean. Default: false
+nlecomposition:   
+nlecomposition:   caps                : Caps used to filter/choose the output stream
+nlecomposition:                         flags: readable, writable
+nlecomposition:                                                    ANY
+
+nlecomposition:   
+nlecomposition:   drop-tags           : Whether the composition should drop tags from its children
+nlecomposition:                         flags: readable, writable, changeable in NULL, READY, PAUSED or PLAYING state
+nlecomposition:                         Boolean. Default: true
+nlecomposition:   
+nlecomposition:   duration            : Outgoing duration (in nanoseconds)
+nlecomposition:                         flags: readable, writable
+nlecomposition:                         Integer64. Range: 0 - 9223372036854775807 Default: 0 
+nlecomposition:   
+nlecomposition:   expandable          : Expand to the full duration of the container composition
+nlecomposition:                         flags: readable, writable
+nlecomposition:                         Boolean. Default: false
+nlecomposition:   
+nlecomposition:   id                  : The stream-id of the composition
+nlecomposition:                         flags: readable, writable
+nlecomposition:                         String. Default: "8b4a11300967c1a68a480920d31360b1"
+nlecomposition:   
+nlecomposition:   inpoint             : The media start position (in nanoseconds)
+nlecomposition:                         flags: readable, writable
+nlecomposition:                         Unsigned Integer64. Range: 0 - 18446744073709551615 Default: 18446744073709551615 
+nlecomposition:   
+nlecomposition:   media-duration-factor: The relative rate caused by this object
+nlecomposition:                         flags: readable, writable, deprecated
+nlecomposition:                         Double. Range:            0.01 -   1.797693e+308 Default:               1 
+nlecomposition:   
+nlecomposition:   message-forward     : Forwards all children messages
+nlecomposition:                         flags: readable, writable
+nlecomposition:                         Boolean. Default: false
+nlecomposition:   
+nlecomposition:   name                : The name of the object
+nlecomposition:                         flags: readable, writable
+nlecomposition:                         String. Default: "nlecomposition0"
+nlecomposition:   
+nlecomposition:   parent              : The parent of the object
+nlecomposition:                         flags: readable, writable
+nlecomposition:                         Object of type "GstObject"
+nlecomposition:   
+nlecomposition:   priority            : The priority of the object (0 = highest priority)
+nlecomposition:                         flags: readable, writable
+nlecomposition:                         Unsigned Integer. Range: 0 - 4294967295 Default: 0 
+nlecomposition:   
+nlecomposition:   start               : The start position relative to the parent (in nanoseconds)
+nlecomposition:                         flags: readable, writable
+nlecomposition:                         Unsigned Integer64. Range: 0 - 18446744073709551615 Default: 0 
+nlecomposition:   
+nlecomposition:   stop                : The stop position relative to the parent (in nanoseconds)
+nlecomposition:                         flags: readable
+nlecomposition:                         Unsigned Integer64. Range: 0 - 18446744073709551615 Default: 0 
+nlecomposition:   
+nlecomposition: 
+nlecomposition: Element Signals:
+nlecomposition: 
+nlecomposition:   "commited" :  void user_function (GstElement * object,
+nlecomposition:                                     gboolean arg0,
+nlecomposition:                                     gpointer user_data);
+
+nlecomposition: 
+nlecomposition: Element Actions:
+nlecomposition: 
+nlecomposition:   "commit" -> gboolean  :  g_signal_emit_by_name (element, "commit",
+nlecomposition:                                                   gboolean arg0,
+nlecomposition:                                                   gboolean * p_return_value);
+
+nlecomposition: 
+nlecomposition: Children:
+nlecomposition:   current-bin
+nleoperation: Factory Details:
+nleoperation:   Rank                     none (0)
+nleoperation:   Long-name                GNonLin Operation
+nleoperation:   Klass                    Filter/Editor
+nleoperation:   Description              Encapsulates filters/effects for use with NLE Objects
+nleoperation:   Author                   Wim Taymans <wim.taymans@gmail.com>, Edward Hervey <bilboed@bilboed.com>
+nleoperation:   Documentation            https://gstreamer.freedesktop.org/documentation/nle/nleoperation.html
+nleoperation: 
+nleoperation: Plugin Details:
+nleoperation:   Name                     nle
+nleoperation:   Description              GStreamer Non Linear Engine
+nleoperation:   Filename                 (null)
+nleoperation:   Version                  1.29.1.1
+nleoperation:   License                  LGPL
+nleoperation:   Source module            gst-editing-services
+nleoperation:   Documentation            https://gstreamer.freedesktop.org/documentation/nle/
+nleoperation:   Binary package           GStreamer Editing Services
+nleoperation:   Origin URL               Unknown package origin
+nleoperation: 
+nleoperation: GObject
+nleoperation:  +----GInitiallyUnowned
+nleoperation:        +----GstObject
+nleoperation:              +----GstElement
+nleoperation:                    +----GstBin
+nleoperation:                          +----NleObject
+nleoperation:                                +----NleOperation
+nleoperation: 
+nleoperation: Implemented Interfaces:
+nleoperation:   GstChildProxy
+nleoperation: 
+nleoperation: Element Flags:
+nleoperation: 
+nleoperation: Pad Templates:
+nleoperation:   SINK template: 'sink%d'
+nleoperation:     Availability: On request
+nleoperation:     Capabilities:
+nleoperation:       ANY
+nleoperation:   
+nleoperation:   SRC template: 'src'
+nleoperation:     Availability: Always
+nleoperation:     Capabilities:
+nleoperation:       ANY
+nleoperation: 
+nleoperation: Element has no clocking capabilities.
+nleoperation: Element has no URI handling capabilities.
+nleoperation: 
+nleoperation: Pads:
+nleoperation:   SRC: 'src'
+nleoperation:     Pad Template: 'src'
+
+nleoperation: Element Properties:
+nleoperation: 
+nleoperation:   active              : Use this object in the NleComposition
+nleoperation:                         flags: readable, writable
+nleoperation:                         Boolean. Default: true
+nleoperation:   
+nleoperation:   async-handling      : The bin will handle Asynchronous state changes
+nleoperation:                         flags: readable, writable
+nleoperation:                         Boolean. Default: false
+nleoperation:   
+nleoperation:   caps                : Caps used to filter/choose the output stream
+nleoperation:                         flags: readable, writable
+nleoperation:                                                    ANY
+
+nleoperation:   
+nleoperation:   duration            : Outgoing duration (in nanoseconds)
+nleoperation:                         flags: readable, writable
+nleoperation:                         Integer64. Range: 0 - 9223372036854775807 Default: 0 
+nleoperation:   
+nleoperation:   expandable          : Expand to the full duration of the container composition
+nleoperation:                         flags: readable, writable
+nleoperation:                         Boolean. Default: false
+nleoperation:   
+nleoperation:   inpoint             : The media start position (in nanoseconds)
+nleoperation:                         flags: readable, writable
+nleoperation:                         Unsigned Integer64. Range: 0 - 18446744073709551615 Default: 18446744073709551615 
+nleoperation:   
+nleoperation:   media-duration-factor: The relative rate caused by this object
+nleoperation:                         flags: readable, writable, deprecated
+nleoperation:                         Double. Range:            0.01 -   1.797693e+308 Default:               1 
+nleoperation:   
+nleoperation:   message-forward     : Forwards all children messages
+nleoperation:                         flags: readable, writable
+nleoperation:                         Boolean. Default: false
+nleoperation:   
+nleoperation:   name                : The name of the object
+nleoperation:                         flags: readable, writable
+nleoperation:                         String. Default: "nleoperation0"
+nleoperation:   
+nleoperation:   parent              : The parent of the object
+nleoperation:                         flags: readable, writable
+nleoperation:                         Object of type "GstObject"
+nleoperation:   
+nleoperation:   priority            : The priority of the object (0 = highest priority)
+nleoperation:                         flags: readable, writable
+nleoperation:                         Unsigned Integer. Range: 0 - 4294967295 Default: 0 
+nleoperation:   
+nleoperation:   sinks               : Number of input sinks (-1 for automatic handling)
+nleoperation:                         flags: readable, writable
+nleoperation:                         Integer. Range: -1 - 2147483647 Default: 1 
+nleoperation:   
+nleoperation:   start               : The start position relative to the parent (in nanoseconds)
+nleoperation:                         flags: readable, writable
+nleoperation:                         Unsigned Integer64. Range: 0 - 18446744073709551615 Default: 0 
+nleoperation:   
+nleoperation:   stop                : The stop position relative to the parent (in nanoseconds)
+nleoperation:                         flags: readable
+nleoperation:                         Unsigned Integer64. Range: 0 - 18446744073709551615 Default: 0 
+nleoperation:   
+nleoperation: 
+nleoperation: Element Signals:
+nleoperation: 
+nleoperation:   "input-priority-changed" :  void user_function (GstElement * object,
+nleoperation:                                                   GstPad * arg0,
+nleoperation:                                                   guint arg1,
+nleoperation:                                                   gpointer user_data);
+
+nleoperation: 
+nleoperation: Element Actions:
+nleoperation: 
+nleoperation:   "commit" -> gboolean  :  g_signal_emit_by_name (element, "commit",
+nleoperation:                                                   gboolean arg0,
+nleoperation:                                                   gboolean * p_return_value);
+
+
+(gst-inspect-1.0:42): GStreamer-[1;35mCRITICAL[0m **: [34m22:24:17.334[0m: gst_bin_add: assertion 'GST_IS_ELEMENT (element)' failed
+
+(gst-inspect-1.0:42): GLib-GObject-[1;35mCRITICAL[0m **: [34m22:24:17.336[0m: g_object_set: assertion 'G_IS_OBJECT (object)' failed
+
+(gst-inspect-1.0:42): GStreamer-[1;35mCRITICAL[0m **: [34m22:24:17.338[0m: gst_bin_add: assertion 'GST_IS_ELEMENT (element)' failed
+
+(gst-inspect-1.0:42): GStreamer-[1;35mCRITICAL[0m **: [34m22:24:17.339[0m: gst_pad_link_full: assertion 'GST_IS_PAD (sinkpad)' failed
+0:00:00.256524000 [31m        42[00m         42 [31;01mERROR  [00m [00;01;34m           nlesource nlesource.c:443:nle_source_control_element_func:<NleURISource@0x19f8d0>[00m Could not link pads: <internal-bin:src> and (NULL)
+
+(gst-inspect-1.0:42): GLib-GObject-[1;35mCRITICAL[0m **: [34m22:24:17.340[0m: invalid (NULL) pointer instance
+
+(gst-inspect-1.0:42): GLib-GObject-[1;35mCRITICAL[0m **: [34m22:24:17.341[0m: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+nleurisource: Factory Details:
+nleurisource:   Rank                     none (0)
+nleurisource:   Long-name                GNonLin URI Source
+nleurisource:   Klass                    Filter/Editor
+nleurisource:   Description              High-level URI Source element
+nleurisource:   Author                   Edward Hervey <bilboed@bilboed.com>
+nleurisource:   Documentation            https://gstreamer.freedesktop.org/documentation/nle/nleurisource.html
+nleurisource: 
+nleurisource: Plugin Details:
+nleurisource:   Name                     nle
+nleurisource:   Description              GStreamer Non Linear Engine
+nleurisource:   Filename                 (null)
+nleurisource:   Version                  1.29.1.1
+nleurisource:   License                  LGPL
+nleurisource:   Source module            gst-editing-services
+nleurisource:   Documentation            https://gstreamer.freedesktop.org/documentation/nle/
+nleurisource:   Binary package           GStreamer Editing Services
+nleurisource:   Origin URL               Unknown package origin
+nleurisource: 
+nleurisource: GObject
+nleurisource:  +----GInitiallyUnowned
+nleurisource:        +----GstObject
+nleurisource:              +----GstElement
+nleurisource:                    +----GstBin
+nleurisource:                          +----NleObject
+nleurisource:                                +----NleSource
+nleurisource:                                      +----NleURISource
+nleurisource: 
+nleurisource: Implemented Interfaces:
+nleurisource:   GstChildProxy
+nleurisource: 
+nleurisource: Element Flags:
+nleurisource: 
+nleurisource: Pad Templates:
+nleurisource:   SRC template: 'src'
+nleurisource:     Availability: Sometimes
+nleurisource:     Capabilities:
+nleurisource:       ANY
+nleurisource: 
+nleurisource: Element has no clocking capabilities.
+nleurisource: Element has no URI handling capabilities.
+nleurisource: 
+nleurisource: Pads:
+nleurisource:   SRC: 'src'
+nleurisource:     Pad Template: 'src'
+
+nleurisource: Element Properties:
+nleurisource: 
+nleurisource:   active              : Use this object in the NleComposition
+nleurisource:                         flags: readable, writable
+nleurisource:                         Boolean. Default: true
+nleurisource:   
+nleurisource:   async-handling      : The bin will handle Asynchronous state changes
+nleurisource:                         flags: readable, writable
+nleurisource:                         Boolean. Default: true
+nleurisource:   
+nleurisource:   caps                : Caps used to filter/choose the output stream
+nleurisource:                         flags: readable, writable
+nleurisource:                                                    ANY
+
+nleurisource:   
+nleurisource:   duration            : Outgoing duration (in nanoseconds)
+nleurisource:                         flags: readable, writable
+nleurisource:                         Integer64. Range: 0 - 9223372036854775807 Default: 0 
+nleurisource:   
+nleurisource:   expandable          : Expand to the full duration of the container composition
+nleurisource:                         flags: readable, writable
+nleurisource:                         Boolean. Default: false
+nleurisource:   
+nleurisource:   inpoint             : The media start position (in nanoseconds)
+nleurisource:                         flags: readable, writable
+nleurisource:                         Unsigned Integer64. Range: 0 - 18446744073709551615 Default: 18446744073709551615 
+nleurisource:   
+nleurisource:   media-duration-factor: The relative rate caused by this object
+nleurisource:                         flags: readable, writable, deprecated
+nleurisource:                         Double. Range:            0.01 -   1.797693e+308 Default:               1 
+nleurisource:   
+nleurisource:   message-forward     : Forwards all children messages
+nleurisource:                         flags: readable, writable
+nleurisource:                         Boolean. Default: false
+nleurisource:   
+nleurisource:   name                : The name of the object
+nleurisource:                         flags: readable, writable
+nleurisource:                         String. Default: "nleurisource0"
+nleurisource:   
+nleurisource:   parent              : The parent of the object
+nleurisource:                         flags: readable, writable
+nleurisource:                         Object of type "GstObject"
+nleurisource:   
+nleurisource:   priority            : The priority of the object (0 = highest priority)
+nleurisource:                         flags: readable, writable
+nleurisource:                         Unsigned Integer. Range: 0 - 4294967295 Default: 0 
+nleurisource:   
+nleurisource:   reverse             : Whether to playback the source reverse or not
+nleurisource:                         flags: readable, writable
+nleurisource:                         Boolean. Default: false
+nleurisource:   
+nleurisource:   start               : The start position relative to the parent (in nanoseconds)
+nleurisource:                         flags: readable, writable
+nleurisource:                         Unsigned Integer64. Range: 0 - 18446744073709551615 Default: 0 
+nleurisource:   
+nleurisource:   stop                : The stop position relative to the parent (in nanoseconds)
+nleurisource:                         flags: readable
+nleurisource:                         Unsigned Integer64. Range: 0 - 18446744073709551615 Default: 0 
+nleurisource:   
+nleurisource:   uri                 : Uri of the file to use
+
+(gst-inspect-1.0:42): GLib-GObject-[1;35mCRITICAL[0m **: [34m22:24:17.377[0m: g_object_get_property: assertion 'G_IS_OBJECT (object)' failed
+nleurisource:                         flags: readable, writable
+nleurisource:                         String. Default: null
+nleurisource:   
+nleurisource: 
+nleurisource: Element Signals:
+nleurisource: 
+nleurisource:   "pad-added" :  void user_function (GstElement * object,
+nleurisource:                                      GstPad * arg0,
+nleurisource:                                      gpointer user_data);
+
+nleurisource:   "pad-removed" :  void user_function (GstElement * object,
+nleurisource:                                        GstPad * arg0,
+nleurisource:                                        gpointer user_data);
+
+nleurisource:   "no-more-pads" :  void user_function (GstElement * object,
+nleurisource:                                         gpointer user_data);
+
+nleurisource: 
+nleurisource: Element Actions:
+nleurisource: 
+nleurisource:   "commit" -> gboolean  :  g_signal_emit_by_name (element, "commit",
+nleurisource:                                                   gboolean arg0,
+nleurisource:                                                   gboolean * p_return_value);
+
+nleurisource: 
+nleurisource: Children:
+nleurisource:   internal-bin
+
+(gst-inspect-1.0:42): GStreamer-[1;35mCRITICAL[0m **: [34m22:24:17.383[0m: gst_bin_remove: assertion 'GST_IS_ELEMENT (element)' failed
+sdl2sink: Factory Details:
+sdl2sink:   Rank                     none (0)
+sdl2sink:   Long-name                SDL2 Video sink
+sdl2sink:   Klass                    Sink/Video
+sdl2sink:   Description              Video rendering using SDL2
+sdl2sink:   Author                   Alexander Slobodeniuk <aslobodeniuk@fluendo.com>
+sdl2sink: 
+sdl2sink: Plugin Details:
+sdl2sink:   Name                     sdl2
+sdl2sink:   Description              GStreamer SDL2
+sdl2sink:   Filename                 (null)
+sdl2sink:   Version                  1.22.0
+sdl2sink:   License                  LGPL
+sdl2sink:   Source module            gst-plugins-web
+sdl2sink:   Binary package           GStreamer Plugins Web
+sdl2sink:   Origin URL               https://fluendo.com
+sdl2sink: 
+sdl2sink: GObject
+sdl2sink:  +----GInitiallyUnowned
+sdl2sink:        +----GstObject
+sdl2sink:              +----GstElement
+sdl2sink:                    +----GstBaseSink
+sdl2sink:                          +----GstVideoSink
+sdl2sink:                                +----GstSDL2Sink
+sdl2sink: 
+sdl2sink: Element Flags:
+sdl2sink:   - SINK
+sdl2sink: 
+sdl2sink: Pad Templates:
+sdl2sink:   SINK template: 'sink'
+sdl2sink:     Availability: Always
+sdl2sink:     Capabilities:
+sdl2sink:       video/x-raw
+sdl2sink:                  format: BGRA (string)
+sdl2sink:               framerate: [ 0/1, 2147483647/1 ] (GstFractionRange)
+sdl2sink:                   width: [ 1, 2147483647 ] (GstIntRange)
+sdl2sink:                  height: [ 1, 2147483647 ] (GstIntRange)
+sdl2sink: 
+sdl2sink: Element has no clocking capabilities.
+sdl2sink: Element has no URI handling capabilities.
+sdl2sink: 
+sdl2sink: Pads:
+sdl2sink:   SINK: 'sink'
+sdl2sink:     Pad Template: 'sink'
+
+sdl2sink: Element Properties:
+sdl2sink: 
+sdl2sink:   async               : Go asynchronously to PAUSED
+sdl2sink:                         flags: readable, writable
+sdl2sink:                         Boolean. Default: true
+sdl2sink:   
+sdl2sink:   blocksize           : Size in bytes to pull per buffer (0 = default)
+sdl2sink:                         flags: readable, writable
+sdl2sink:                         Unsigned Integer. Range: 0 - 4294967295 Default: 4096 
+sdl2sink:   
+sdl2sink:   enable-last-sample  : Enable the last-sample property
+sdl2sink:                         flags: readable, writable
+sdl2sink:                         Boolean. Default: true
+sdl2sink:   
+sdl2sink:   last-sample         : The last sample received in the sink
+sdl2sink:                         flags: readable
+sdl2sink:                         Boxed pointer of type "GstSample"
+sdl2sink:   
+sdl2sink:   max-bitrate         : The maximum bits per second to render (0 = disabled)
+sdl2sink:                         flags: readable, writable
+sdl2sink:                         Unsigned Integer64. Range: 0 - 18446744073709551615 Default: 0 
+sdl2sink:   
+sdl2sink:   max-lateness        : Maximum number of nanoseconds that a buffer can be late before it is dropped (-1 unlimited)
+sdl2sink:                         flags: readable, writable
+sdl2sink:                         Integer64. Range: -1 - 9223372036854775807 Default: 5000000 
+sdl2sink:   
+sdl2sink:   name                : The name of the object
+sdl2sink:                         flags: readable, writable
+sdl2sink:                         String. Default: "sdl2sink0"
+sdl2sink:   
+sdl2sink:   parent              : The parent of the object
+sdl2sink:                         flags: readable, writable
+sdl2sink:                         Object of type "GstObject"
+sdl2sink:   
+sdl2sink:   processing-deadline : Maximum processing time for a buffer in nanoseconds
+sdl2sink:                         flags: readable, writable
+sdl2sink:                         Unsigned Integer64. Range: 0 - 18446744073709551615 Default: 15000000 
+sdl2sink:   
+sdl2sink:   qos                 : Generate Quality-of-Service events upstream
+sdl2sink:                         flags: readable, writable
+sdl2sink:                         Boolean. Default: true
+sdl2sink:   
+sdl2sink:   render-delay        : Additional render delay of the sink in nanoseconds
+sdl2sink:                         flags: readable, writable
+sdl2sink:                         Unsigned Integer64. Range: 0 - 18446744073709551615 Default: 0 
+sdl2sink:   
+sdl2sink:   show-preroll-frame  : Whether to render video frames during preroll
+sdl2sink:                         flags: readable, writable
+sdl2sink:                         Boolean. Default: true
+sdl2sink:   
+sdl2sink:   stats               : Sink Statistics
+sdl2sink:                         flags: readable
+sdl2sink:                         Boxed pointer of type "GstStructure"
+sdl2sink:                                                         average-rate: 0 (gdouble)
+sdl2sink:                                                              dropped: 0 (guint64)
+sdl2sink:                                                             rendered: 0 (guint64)
+
+sdl2sink:   
+sdl2sink:   sync                : Sync on the clock
+sdl2sink:                         flags: readable, writable
+sdl2sink:                         Boolean. Default: true
+sdl2sink:   
+sdl2sink:   throttle-time       : The time to keep between rendered buffers (0 = disabled)
+sdl2sink:                         flags: readable, writable
+sdl2sink:                         Unsigned Integer64. Range: 0 - 18446744073709551615 Default: 0 
+sdl2sink:   
+sdl2sink:   ts-offset           : Timestamp offset in nanoseconds
+sdl2sink:                         flags: readable, writable
+sdl2sink:                         Integer64. Range: -9223372036854775808 - 9223372036854775807 Default: 0 
+sdl2sink:   
+webcodecsviddech264sw: Factory Details:
+webcodecsviddech264sw:   Rank                     secondary (128)
+webcodecsviddech264sw:   Long-name                WebCodecs base video decoder
+webcodecsviddech264sw:   Klass                    Codec/Decoder/Video
+webcodecsviddech264sw:   Description              decode streams using WebCodecs API
+webcodecsviddech264sw:   Author                   Fluendo S.A. <engineering@fluendo.com>
+webcodecsviddech264sw: 
+webcodecsviddech264sw: Plugin Details:
+webcodecsviddech264sw:   Name                     web
+webcodecsviddech264sw:   Description              web related elements
+webcodecsviddech264sw:   Filename                 (null)
+webcodecsviddech264sw:   Version                  1.22.0
+webcodecsviddech264sw:   License                  UNKNOWN
+webcodecsviddech264sw:   Source module            gst-plugins-web
+webcodecsviddech264sw:   Binary package           GStreamer Plugins Web
+webcodecsviddech264sw:   Origin URL               https://fluendo.com
+webcodecsviddech264sw: 
+webcodecsviddech264sw: GObject
+webcodecsviddech264sw:  +----GInitiallyUnowned
+webcodecsviddech264sw:        +----GstObject
+webcodecsviddech264sw:              +----GstElement
+webcodecsviddech264sw:                    +----GstVideoDecoder
+webcodecsviddech264sw:                          +----GstWebCodecsVideoDecoder
+webcodecsviddech264sw:                                +----GstWebCodecsVideoDecoderH264SW
+webcodecsviddech264sw: 
+webcodecsviddech264sw: Element Flags:
+webcodecsviddech264sw: 
+webcodecsviddech264sw: Pad Templates:
+webcodecsviddech264sw:   SINK template: 'sink'
+webcodecsviddech264sw:     Availability: Always
+webcodecsviddech264sw:     Capabilities:
+webcodecsviddech264sw:       video/x-h264
+webcodecsviddech264sw:   
+webcodecsviddech264sw:   SRC template: 'src'
+webcodecsviddech264sw:     Availability: Always
+webcodecsviddech264sw:     Capabilities:
+webcodecsviddech264sw:       video/x-raw(memory:GLMemory)
+webcodecsviddech264sw:                  format: RGBA (string)
+webcodecsviddech264sw:          texture-target: 2D (string)
+webcodecsviddech264sw:       video/x-raw
+webcodecsviddech264sw:                  format: { (string)RGBA, (string)RGBx, (string)BGRA, (string)BGRx, (string)I420, (string)A420, (string)Y42B, (string)Y444, (string)NV12 } (GstValueList)
+webcodecsviddech264sw:       video/x-raw(memory:WebVideoFrame)
+webcodecsviddech264sw:                  format: { (string)RGBA, (string)RGBx, (string)BGRA, (string)BGRx, (string)I420, (string)A420, (string)Y42B, (string)Y444, (string)NV12 } (GstValueList)
+webcodecsviddech264sw: 
+webcodecsviddech264sw: Element has no clocking capabilities.
+webcodecsviddech264sw: Element has no URI handling capabilities.
+webcodecsviddech264sw: 
+webcodecsviddech264sw: Pads:
+webcodecsviddech264sw:   SINK: 'sink'
+webcodecsviddech264sw:     Pad Template: 'sink'
+webcodecsviddech264sw:   SRC: 'src'
+webcodecsviddech264sw:     Pad Template: 'src'
+
+webcodecsviddech264sw: Element Properties:
+webcodecsviddech264sw: 
+webcodecsviddech264sw:   automatic-request-sync-point-flags: Flags to use when automatically requesting sync points
+webcodecsviddech264sw:                         flags: readable, writable
+webcodecsviddech264sw:                         Flags "GstVideoDecoderRequestSyncPointFlags" Default: 0x00000003, "corrupt-output+discard-input"
+webcodecsviddech264sw:                            (0x00000001): discard-input    - GST_VIDEO_DECODER_REQUEST_SYNC_POINT_DISCARD_INPUT
+webcodecsviddech264sw:                            (0x00000002): corrupt-output   - GST_VIDEO_DECODER_REQUEST_SYNC_POINT_CORRUPT_OUTPUT
+webcodecsviddech264sw:   
+webcodecsviddech264sw:   automatic-request-sync-points: Automatically request sync points when it would be useful
+webcodecsviddech264sw:                         flags: readable, writable
+webcodecsviddech264sw:                         Boolean. Default: false
+webcodecsviddech264sw:   
+webcodecsviddech264sw:   discard-corrupted-frames: Discard frames marked as corrupted instead of outputting them
+webcodecsviddech264sw:                         flags: readable, writable
+webcodecsviddech264sw:                         Boolean. Default: false
+webcodecsviddech264sw:   
+webcodecsviddech264sw:   max-errors          : Max consecutive decoder errors before returning flow error
+webcodecsviddech264sw:                         flags: readable, writable
+webcodecsviddech264sw:                         Integer. Range: -1 - 2147483647 Default: -1 
+webcodecsviddech264sw:   
+webcodecsviddech264sw:   min-force-key-unit-interval: Minimum interval between force-keyunit requests in nanoseconds
+webcodecsviddech264sw:                         flags: readable, writable
+webcodecsviddech264sw:                         Unsigned Integer64. Range: 0 - 18446744073709551615 Default: 0 
+webcodecsviddech264sw:   
+webcodecsviddech264sw:   name                : The name of the object
+webcodecsviddech264sw:                         flags: readable, writable
+webcodecsviddech264sw:                         String. Default: "webcodecsvideodecoderh264sw0"
+webcodecsviddech264sw:   
+webcodecsviddech264sw:   parent              : The parent of the object
+webcodecsviddech264sw:                         flags: readable, writable
+webcodecsviddech264sw:                         Object of type "GstObject"
+webcodecsviddech264sw:   
+webcodecsviddech264sw:   qos                 : Handle Quality-of-Service events from downstream
+webcodecsviddech264sw:                         flags: readable, writable
+webcodecsviddech264sw:                         Boolean. Default: true
+webcodecsviddech264sw:   
+webcodecsauddecaacsw: Factory Details:
+webcodecsauddecaacsw:   Rank                     secondary (128)
+webcodecsauddecaacsw:   Long-name                WebCodecs base audio decoder
+webcodecsauddecaacsw:   Klass                    Codec/Decoder/Audio
+webcodecsauddecaacsw:   Description              decode streams using WebCodecs API
+webcodecsauddecaacsw:   Author                   Fluendo S.A. <engineering@fluendo.com>
+webcodecsauddecaacsw: 
+webcodecsauddecaacsw: Plugin Details:
+webcodecsauddecaacsw:   Name                     web
+webcodecsauddecaacsw:   Description              web related elements
+webcodecsauddecaacsw:   Filename                 (null)
+webcodecsauddecaacsw:   Version                  1.22.0
+webcodecsauddecaacsw:   License                  UNKNOWN
+webcodecsauddecaacsw:   Source module            gst-plugins-web
+webcodecsauddecaacsw:   Binary package           GStreamer Plugins Web
+webcodecsauddecaacsw:   Origin URL               https://fluendo.com
+webcodecsauddecaacsw: 
+webcodecsauddecaacsw: GObject
+webcodecsauddecaacsw:  +----GInitiallyUnowned
+webcodecsauddecaacsw:        +----GstObject
+webcodecsauddecaacsw:              +----GstElement
+webcodecsauddecaacsw:                    +----GstAudioDecoder
+webcodecsauddecaacsw:                          +----GstWebCodecsAudioDecoder
+webcodecsauddecaacsw:                                +----GstWebCodecsAudioDecoderAACSW
+webcodecsauddecaacsw: 
+webcodecsauddecaacsw: Element Flags:
+webcodecsauddecaacsw: 
+webcodecsauddecaacsw: Pad Templates:
+webcodecsauddecaacsw:   SINK template: 'sink'
+webcodecsauddecaacsw:     Availability: Always
+webcodecsauddecaacsw:     Capabilities:
+webcodecsauddecaacsw:       audio/mpeg
+webcodecsauddecaacsw:           stream-format: raw (string)
+webcodecsauddecaacsw:   
+webcodecsauddecaacsw:   SRC template: 'src'
+webcodecsauddecaacsw:     Availability: Always
+webcodecsauddecaacsw:     Capabilities:
+webcodecsauddecaacsw:       audio/x-raw
+webcodecsauddecaacsw: 
+webcodecsauddecaacsw: Element has no clocking capabilities.
+webcodecsauddecaacsw: Element has no URI handling capabilities.
+webcodecsauddecaacsw: 
+webcodecsauddecaacsw: Pads:
+webcodecsauddecaacsw:   SINK: 'sink'
+webcodecsauddecaacsw:     Pad Template: 'sink'
+webcodecsauddecaacsw:   SRC: 'src'
+webcodecsauddecaacsw:     Pad Template: 'src'
+
+webcodecsauddecaacsw: Element Properties:
+webcodecsauddecaacsw: 
+webcodecsauddecaacsw:   max-errors          : Max consecutive decoder errors before returning flow error
+webcodecsauddecaacsw:                         flags: readable, writable
+webcodecsauddecaacsw:                         Integer. Range: -1 - 2147483647 Default: -1 
+webcodecsauddecaacsw:   
+webcodecsauddecaacsw:   min-latency         : Aggregate output data to a minimum of latency time (ns)
+webcodecsauddecaacsw:                         flags: readable, writable
+webcodecsauddecaacsw:                         Integer64. Range: 0 - 9223372036854775807 Default: 0 
+webcodecsauddecaacsw:   
+webcodecsauddecaacsw:   name                : The name of the object
+webcodecsauddecaacsw:                         flags: readable, writable
+webcodecsauddecaacsw:                         String. Default: "webcodecsaudiodecoderaacsw0"
+webcodecsauddecaacsw:   
+webcodecsauddecaacsw:   parent              : The parent of the object
+webcodecsauddecaacsw:                         flags: readable, writable
+webcodecsauddecaacsw:                         Object of type "GstObject"
+webcodecsauddecaacsw:   
+webcodecsauddecaacsw:   plc                 : Perform packet loss concealment (if supported)
+webcodecsauddecaacsw:                         flags: readable, writable
+webcodecsauddecaacsw:                         Boolean. Default: false
+webcodecsauddecaacsw:   
+webcodecsauddecaacsw:   tolerance           : Perfect ts while timestamp jitter/imperfection within tolerance (ns)
+webcodecsauddecaacsw:                         flags: readable, writable
+webcodecsauddecaacsw:                         Integer64. Range: 0 - 9223372036854775807 Default: 0 
+webcodecsauddecaacsw:   
+webcanvassink: Factory Details:
+webcanvassink:   Rank                     secondary (128)
+webcanvassink:   Long-name                Web Canvas sink
+webcanvassink:   Klass                    Sink/Video
+webcanvassink:   Description              Video sink for Web Canvas
+webcanvassink:   Author                   Fluendo S.A. <engineering@fluendo.com>
+webcanvassink: 
+webcanvassink: Plugin Details:
+webcanvassink:   Name                     web
+webcanvassink:   Description              web related elements
+webcanvassink:   Filename                 (null)
+webcanvassink:   Version                  1.22.0
+webcanvassink:   License                  UNKNOWN
+webcanvassink:   Source module            gst-plugins-web
+webcanvassink:   Binary package           GStreamer Plugins Web
+webcanvassink:   Origin URL               https://fluendo.com
+webcanvassink: 
+webcanvassink: GObject
+webcanvassink:  +----GInitiallyUnowned
+webcanvassink:        +----GstObject
+webcanvassink:              +----GstElement
+webcanvassink:                    +----GstBaseSink
+webcanvassink:                          +----GstVideoSink
+webcanvassink:                                +----GstWebCanvasSink
+webcanvassink: 
+webcanvassink: Implemented Interfaces:
+webcanvassink:   GstNavigation
+webcanvassink: 
+webcanvassink: Element Flags:
+webcanvassink:   - SINK
+webcanvassink: 
+webcanvassink: Pad Templates:
+webcanvassink:   SINK template: 'sink'
+webcanvassink:     Availability: Always
+webcanvassink:     Capabilities:
+webcanvassink:       video/x-raw(memory:WebVideoFrame)
+webcanvassink:                  format: { (string)RGBA, (string)RGBx, (string)BGRA, (string)BGRx, (string)I420, (string)A420, (string)Y42B, (string)Y444, (string)NV12 } (GstValueList)
+webcanvassink:                   width: [ 1, 2147483647 ] (GstIntRange)
+webcanvassink:                  height: [ 1, 2147483647 ] (GstIntRange)
+webcanvassink:               framerate: [ 0/1, 2147483647/1 ] (GstFractionRange)
+webcanvassink:       video/x-raw
+webcanvassink:                  format: RGBA (string)
+webcanvassink:                   width: [ 1, 2147483647 ] (GstIntRange)
+webcanvassink:                  height: [ 1, 2147483647 ] (GstIntRange)
+webcanvassink:               framerate: [ 0/1, 2147483647/1 ] (GstFractionRange)
+webcanvassink: 
+webcanvassink: Element has no clocking capabilities.
+webcanvassink: Element has no URI handling capabilities.
+webcanvassink: 
+webcanvassink: Pads:
+webcanvassink:   SINK: 'sink'
+webcanvassink:     Pad Template: 'sink'
+
+webcanvassink: Element Properties:
+webcanvassink: 
+webcanvassink:   async               : Go asynchronously to PAUSED
+webcanvassink:                         flags: readable, writable
+webcanvassink:                         Boolean. Default: true
+webcanvassink:   
+webcanvassink:   blocksize           : Size in bytes to pull per buffer (0 = default)
+webcanvassink:                         flags: readable, writable
+webcanvassink:                         Unsigned Integer. Range: 0 - 4294967295 Default: 4096 
+webcanvassink:   
+webcanvassink:   enable-last-sample  : Enable the last-sample property
+webcanvassink:                         flags: readable, writable
+webcanvassink:                         Boolean. Default: true
+webcanvassink:   
+webcanvassink:   id                  : id of canvas DOM element
+webcanvassink:                         flags: readable, writable
+webcanvassink:                         String. Default: "#canvas"
+webcanvassink:   
+webcanvassink:   last-sample         : The last sample received in the sink
+webcanvassink:                         flags: readable
+webcanvassink:                         Boxed pointer of type "GstSample"
+webcanvassink:   
+webcanvassink:   max-bitrate         : The maximum bits per second to render (0 = disabled)
+webcanvassink:                         flags: readable, writable
+webcanvassink:                         Unsigned Integer64. Range: 0 - 18446744073709551615 Default: 0 
+webcanvassink:   
+webcanvassink:   max-lateness        : Maximum number of nanoseconds that a buffer can be late before it is dropped (-1 unlimited)
+webcanvassink:                         flags: readable, writable
+webcanvassink:                         Integer64. Range: -1 - 9223372036854775807 Default: 5000000 
+webcanvassink:   
+webcanvassink:   name                : The name of the object
+webcanvassink:                         flags: readable, writable
+webcanvassink:                         String. Default: "webcanvassink0"
+webcanvassink:   
+webcanvassink:   parent              : The parent of the object
+webcanvassink:                         flags: readable, writable
+webcanvassink:                         Object of type "GstObject"
+webcanvassink:   
+webcanvassink:   processing-deadline : Maximum processing time for a buffer in nanoseconds
+webcanvassink:                         flags: readable, writable
+webcanvassink:                         Unsigned Integer64. Range: 0 - 18446744073709551615 Default: 15000000 
+webcanvassink:   
+webcanvassink:   qos                 : Generate Quality-of-Service events upstream
+webcanvassink:                         flags: readable, writable
+webcanvassink:                         Boolean. Default: true
+webcanvassink:   
+webcanvassink:   render-delay        : Additional render delay of the sink in nanoseconds
+webcanvassink:                         flags: readable, writable
+webcanvassink:                         Unsigned Integer64. Range: 0 - 18446744073709551615 Default: 0 
+webcanvassink:   
+webcanvassink:   show-preroll-frame  : Whether to render video frames during preroll
+webcanvassink:                         flags: readable, writable
+webcanvassink:                         Boolean. Default: true
+webcanvassink:   
+webcanvassink:   stats               : Sink Statistics
+webcanvassink:                         flags: readable
+webcanvassink:                         Boxed pointer of type "GstStructure"
+webcanvassink:                                                         average-rate: 0 (gdouble)
+webcanvassink:                                                              dropped: 0 (guint64)
+webcanvassink:                                                             rendered: 0 (guint64)
+
+webcanvassink:   
+webcanvassink:   sync                : Sync on the clock
+webcanvassink:                         flags: readable, writable
+webcanvassink:                         Boolean. Default: true
+webcanvassink:   
+webcanvassink:   throttle-time       : The time to keep between rendered buffers (0 = disabled)
+webcanvassink:                         flags: readable, writable
+webcanvassink:                         Unsigned Integer64. Range: 0 - 18446744073709551615 Default: 0 
+webcanvassink:   
+webcanvassink:   ts-offset           : Timestamp offset in nanoseconds
+webcanvassink:                         flags: readable, writable
+webcanvassink:                         Integer64. Range: -9223372036854775808 - 9223372036854775807 Default: 0 
+webcanvassink:   
+webcanvassrc: Factory Details:
+webcanvassrc:   Rank                     none (0)
+webcanvassrc:   Long-name                Web Canvas test source
+webcanvassrc:   Klass                    Source/Video
+webcanvassrc:   Description              Consumes data from an canvas DOM HTML element.
+webcanvassrc:   Author                   Fluendo S.A. <engineering@fluendo.com>
+webcanvassrc: 
+webcanvassrc: Plugin Details:
+webcanvassrc:   Name                     web
+webcanvassrc:   Description              web related elements
+webcanvassrc:   Filename                 (null)
+webcanvassrc:   Version                  1.22.0
+webcanvassrc:   License                  UNKNOWN
+webcanvassrc:   Source module            gst-plugins-web
+webcanvassrc:   Binary package           GStreamer Plugins Web
+webcanvassrc:   Origin URL               https://fluendo.com
+webcanvassrc: 
+webcanvassrc: GObject
+webcanvassrc:  +----GInitiallyUnowned
+webcanvassrc:        +----GstObject
+webcanvassrc:              +----GstElement
+webcanvassrc:                    +----GstBaseSrc
+webcanvassrc:                          +----GstPushSrc
+webcanvassrc:                                +----GstWebCanvasSrc
+webcanvassrc: 
+webcanvassrc: Element Flags:
+webcanvassrc:   - SOURCE
+webcanvassrc: 
+webcanvassrc: Pad Templates:
+webcanvassrc:   SRC template: 'src'
+webcanvassrc:     Availability: Always
+webcanvassrc:     Capabilities:
+webcanvassrc:       video/x-raw
+webcanvassrc:                  format: RGBA (string)
+webcanvassrc:                   width: [ 1, 2147483647 ] (GstIntRange)
+webcanvassrc:                  height: [ 1, 2147483647 ] (GstIntRange)
+webcanvassrc:               framerate: [ 0/1, 2147483647/1 ] (GstFractionRange)
+webcanvassrc: 
+webcanvassrc: Element has no clocking capabilities.
+webcanvassrc: Element has no URI handling capabilities.
+webcanvassrc: 
+webcanvassrc: Pads:
+webcanvassrc:   SRC: 'src'
+webcanvassrc:     Pad Template: 'src'
+
+webcanvassrc: Element Properties:
+webcanvassrc: 
+webcanvassrc:   automatic-eos       : Automatically EOS when the segment is done
+webcanvassrc:                         flags: readable, writable
+webcanvassrc:                         Boolean. Default: true
+webcanvassrc:   
+webcanvassrc:   blocksize           : Size in bytes to read per buffer (-1 = default)
+webcanvassrc:                         flags: readable, writable
+webcanvassrc:                         Unsigned Integer. Range: 0 - 4294967295 Default: 4096 
+webcanvassrc:   
+webcanvassrc:   do-timestamp        : Apply current stream time to buffers
+webcanvassrc:                         flags: readable, writable
+webcanvassrc:                         Boolean. Default: false
+webcanvassrc:   
+webcanvassrc:   id                  : id of canvas DOM element
+webcanvassrc:                         flags: readable, writable
+webcanvassrc:                         String. Default: null
+webcanvassrc:   
+webcanvassrc:   name                : The name of the object
+webcanvassrc:                         flags: readable, writable
+webcanvassrc:                         String. Default: "webcanvassrc0"
+webcanvassrc:   
+webcanvassrc:   num-buffers         : Number of buffers to output before sending EOS (-1 = unlimited)
+webcanvassrc:                         flags: readable, writable
+webcanvassrc:                         Integer. Range: -1 - 2147483647 Default: -1 
+webcanvassrc:   
+webcanvassrc:   parent              : The parent of the object
+webcanvassrc:                         flags: readable, writable
+webcanvassrc:                         Object of type "GstObject"
+webcanvassrc:   
+webcanvassrc:   typefind            : Run typefind before negotiating (deprecated, non-functional)
+webcanvassrc:                         flags: readable, writable, deprecated
+webcanvassrc:                         Boolean. Default: false
+webcanvassrc:   
+webemfetchsrc: Factory Details:
+webemfetchsrc:   Rank                     secondary (128)
+webemfetchsrc:   Long-name                HTTP Client Source using Emscripten Fetch API
+webemfetchsrc:   Klass                    Source/Network
+webemfetchsrc:   Description              Receiver data as a client over a network via HTTP using Emscripten Fetch API
+webemfetchsrc:   Author                   Alexander Slobodeniuk <aslobodeniuk@fluendo.com>
+webemfetchsrc: 
+webemfetchsrc: Plugin Details:
+webemfetchsrc:   Name                     web
+webemfetchsrc:   Description              web related elements
+webemfetchsrc:   Filename                 (null)
+webemfetchsrc:   Version                  1.22.0
+webemfetchsrc:   License                  UNKNOWN
+webemfetchsrc:   Source module            gst-plugins-web
+webemfetchsrc:   Binary package           GStreamer Plugins Web
+webemfetchsrc:   Origin URL               https://fluendo.com
+webemfetchsrc: 
+webemfetchsrc: GObject
+webemfetchsrc:  +----GInitiallyUnowned
+webemfetchsrc:        +----GstObject
+webemfetchsrc:              +----GstElement
+webemfetchsrc:                    +----GstBaseSrc
+webemfetchsrc:                          +----GstPushSrc
+webemfetchsrc:                                +----GstWebEmFetchSrc
+webemfetchsrc: 
+webemfetchsrc: Implemented Interfaces:
+webemfetchsrc:   GstURIHandler
+webemfetchsrc: 
+webemfetchsrc: Element Flags:
+webemfetchsrc:   - SOURCE
+webemfetchsrc: 
+webemfetchsrc: Pad Templates:
+webemfetchsrc:   SRC template: 'src'
+webemfetchsrc:     Availability: Always
+webemfetchsrc:     Capabilities:
+webemfetchsrc:       ANY
+webemfetchsrc: 
+webemfetchsrc: Element has no clocking capabilities.
+webemfetchsrc: 
+webemfetchsrc: URI handling capabilities:
+webemfetchsrc:   Element can act as source.
+webemfetchsrc:   Supported URI protocols:
+webemfetchsrc:     http
+webemfetchsrc:     https
+webemfetchsrc: 
+webemfetchsrc: Pads:
+webemfetchsrc:   SRC: 'src'
+webemfetchsrc:     Pad Template: 'src'
+
+webemfetchsrc: Element Properties:
+webemfetchsrc: 
+webemfetchsrc:   automatic-eos       : Automatically EOS when the segment is done
+webemfetchsrc:                         flags: readable, writable
+webemfetchsrc:                         Boolean. Default: true
+webemfetchsrc:   
+webemfetchsrc:   blocksize           : Size in bytes to read per buffer (-1 = default)
+webemfetchsrc:                         flags: readable, writable
+webemfetchsrc:                         Unsigned Integer. Range: 0 - 4294967295 Default: 4096 
+webemfetchsrc:   
+webemfetchsrc:   do-timestamp        : Apply current stream time to buffers
+webemfetchsrc:                         flags: readable, writable
+webemfetchsrc:                         Boolean. Default: false
+webemfetchsrc:   
+webemfetchsrc:   location            : URI of resource to read
+webemfetchsrc:                         flags: readable, writable
+webemfetchsrc:                         String. Default: null
+webemfetchsrc:   
+webemfetchsrc:   name                : The name of the object
+webemfetchsrc:                         flags: readable, writable
+webemfetchsrc:                         String. Default: "webemfetchsrc0"
+webemfetchsrc:   
+webemfetchsrc:   num-buffers         : Number of buffers to output before sending EOS (-1 = unlimited)
+webemfetchsrc:                         flags: readable, writable
+webemfetchsrc:                         Integer. Range: -1 - 2147483647 Default: -1 
+webemfetchsrc:   
+webemfetchsrc:   parent              : The parent of the object
+webemfetchsrc:                         flags: readable, writable
+webemfetchsrc:                         Object of type "GstObject"
+webemfetchsrc:   
+webemfetchsrc:   typefind            : Run typefind before negotiating (deprecated, non-functional)
+webemfetchsrc:                         flags: readable, writable, deprecated
+webemfetchsrc:                         Boolean. Default: false
+webemfetchsrc:   
+webfetchsrc: Factory Details:
+webfetchsrc:   Rank                     primary (256)
+webfetchsrc:   Long-name                HTTP/HTTPS Client Source using Fetch + Streams API
+webfetchsrc:   Klass                    Source/Network
+webfetchsrc:   Description              Receives data as a client over HTTP/HTTPS using Fetch and ReadableStream
+webfetchsrc:   Author                   Jorge Zapata <jzapata@fluendo.com>
+webfetchsrc: 
+webfetchsrc: Plugin Details:
+webfetchsrc:   Name                     web
+webfetchsrc:   Description              web related elements
+webfetchsrc:   Filename                 (null)
+webfetchsrc:   Version                  1.22.0
+webfetchsrc:   License                  UNKNOWN
+webfetchsrc:   Source module            gst-plugins-web
+webfetchsrc:   Binary package           GStreamer Plugins Web
+webfetchsrc:   Origin URL               https://fluendo.com
+webfetchsrc: 
+webfetchsrc: GObject
+webfetchsrc:  +----GInitiallyUnowned
+webfetchsrc:        +----GstObject
+webfetchsrc:              +----GstElement
+webfetchsrc:                    +----GstBin
+webfetchsrc:                          +----GstWebFetchSrc
+webfetchsrc: 
+webfetchsrc: Implemented Interfaces:
+webfetchsrc:   GstChildProxy
+webfetchsrc:   GstURIHandler
+webfetchsrc:   GstWebTransferable
+webfetchsrc: 
+webfetchsrc: Element Flags:
+webfetchsrc: 
+webfetchsrc: Pad Templates:
+webfetchsrc:   none
+webfetchsrc: 
+webfetchsrc: Element has no clocking capabilities.
+webfetchsrc: 
+webfetchsrc: URI handling capabilities:
+webfetchsrc:   Element can act as source.
+webfetchsrc:   Supported URI protocols:
+webfetchsrc:     http
+webfetchsrc:     https
+webfetchsrc: 
+webfetchsrc: Pads:
+webfetchsrc:   SRC: 'src'
+
+webfetchsrc: Element Properties:
+webfetchsrc: 
+webfetchsrc:   async-handling      : The bin will handle Asynchronous state changes
+webfetchsrc:                         flags: readable, writable
+webfetchsrc:                         Boolean. Default: false
+webfetchsrc:   
+webfetchsrc:   location            : URI of resource to read
+webfetchsrc:                         flags: readable, writable, changeable only in NULL or READY state
+webfetchsrc:                         String. Default: null
+webfetchsrc:   
+webfetchsrc:   message-forward     : Forwards all children messages
+webfetchsrc:                         flags: readable, writable
+webfetchsrc:                         Boolean. Default: false
+webfetchsrc:   
+webfetchsrc:   name                : The name of the object
+webfetchsrc:                         flags: readable, writable
+webfetchsrc:                         String. Default: "webfetchsrc0"
+webfetchsrc:   
+webfetchsrc:   parent              : The parent of the object
+webfetchsrc:                         flags: readable, writable
+webfetchsrc:                         Object of type "GstObject"
+webfetchsrc:   
+webstreamsrc: Factory Details:
+webstreamsrc:   Rank                     secondary (128)
+webstreamsrc:   Long-name                HTTP Client Source using Web Streams API
+webstreamsrc:   Klass                    Source/Network
+webstreamsrc:   Description              Receiver data as a client over a network via HTTP using Web Streams API
+webstreamsrc:   Author                   Alexander Slobodeniuk <aslobodeniuk@fluendo.com>
+webstreamsrc: 
+webstreamsrc: Plugin Details:
+webstreamsrc:   Name                     web
+webstreamsrc:   Description              web related elements
+webstreamsrc:   Filename                 (null)
+webstreamsrc:   Version                  1.22.0
+webstreamsrc:   License                  UNKNOWN
+webstreamsrc:   Source module            gst-plugins-web
+webstreamsrc:   Binary package           GStreamer Plugins Web
+webstreamsrc:   Origin URL               https://fluendo.com
+webstreamsrc: 
+webstreamsrc: GObject
+webstreamsrc:  +----GInitiallyUnowned
+webstreamsrc:        +----GstObject
+webstreamsrc:              +----GstElement
+webstreamsrc:                    +----GstBaseSrc
+webstreamsrc:                          +----GstPushSrc
+webstreamsrc:                                +----GstWebStreamSrc
+webstreamsrc: 
+webstreamsrc: Implemented Interfaces:
+webstreamsrc:   GstURIHandler
+webstreamsrc: 
+webstreamsrc: Element Flags:
+webstreamsrc:   - SOURCE
+webstreamsrc: 
+webstreamsrc: Pad Templates:
+webstreamsrc:   SRC template: 'src'
+webstreamsrc:     Availability: Always
+webstreamsrc:     Capabilities:
+webstreamsrc:       ANY
+webstreamsrc: 
+webstreamsrc: Element has no clocking capabilities.
+webstreamsrc: 
+webstreamsrc: URI handling capabilities:
+webstreamsrc:   Element can act as source.
+webstreamsrc:   Supported URI protocols:
+webstreamsrc:     http
+webstreamsrc:     https
+webstreamsrc: 
+webstreamsrc: Pads:
+webstreamsrc:   SRC: 'src'
+webstreamsrc:     Pad Template: 'src'
+
+webstreamsrc: Element Properties:
+webstreamsrc: 
+webstreamsrc:   automatic-eos       : Automatically EOS when the segment is done
+webstreamsrc:                         flags: readable, writable
+webstreamsrc:                         Boolean. Default: true
+webstreamsrc:   
+webstreamsrc:   blocksize           : Size in bytes to read per buffer (-1 = default)
+webstreamsrc:                         flags: readable, writable
+webstreamsrc:                         Unsigned Integer. Range: 0 - 4294967295 Default: 4096 
+webstreamsrc:   
+webstreamsrc:   do-timestamp        : Apply current stream time to buffers
+webstreamsrc:                         flags: readable, writable
+webstreamsrc:                         Boolean. Default: false
+webstreamsrc:   
+webstreamsrc:   location            : URI of resource to read
+webstreamsrc:                         flags: readable, writable
+webstreamsrc:                         String. Default: null
+webstreamsrc:   
+webstreamsrc:   name                : The name of the object
+webstreamsrc:                         flags: readable, writable
+webstreamsrc:                         String. Default: "webstreamsrc0"
+webstreamsrc:   
+webstreamsrc:   num-buffers         : Number of buffers to output before sending EOS (-1 = unlimited)
+webstreamsrc:                         flags: readable, writable
+webstreamsrc:                         Integer. Range: -1 - 2147483647 Default: -1 
+webstreamsrc:   
+webstreamsrc:   parent              : The parent of the object
+webstreamsrc:                         flags: readable, writable
+webstreamsrc:                         Object of type "GstObject"
+webstreamsrc:   
+webstreamsrc:   typefind            : Run typefind before negotiating (deprecated, non-functional)
+webstreamsrc:                         flags: readable, writable, deprecated
+webstreamsrc:                         Boolean. Default: false
+webstreamsrc:   
+webtransportsrc: Factory Details:
+webtransportsrc:   Rank                     secondary (128)
+webtransportsrc:   Long-name                HTTP/3 WebTransport Source
+webtransportsrc:   Klass                    Source/Network
+webtransportsrc:   Description              Receiver data as a client over a network via HTTP/3 using WebTransport API
+webtransportsrc:   Author                   Fluendo S.A. <engineering@fluendo.com>
+webtransportsrc: 
+webtransportsrc: Plugin Details:
+webtransportsrc:   Name                     web
+webtransportsrc:   Description              web related elements
+webtransportsrc:   Filename                 (null)
+webtransportsrc:   Version                  1.22.0
+webtransportsrc:   License                  UNKNOWN
+webtransportsrc:   Source module            gst-plugins-web
+webtransportsrc:   Binary package           GStreamer Plugins Web
+webtransportsrc:   Origin URL               https://fluendo.com
+webtransportsrc: 
+webtransportsrc: GObject
+webtransportsrc:  +----GInitiallyUnowned
+webtransportsrc:        +----GstObject
+webtransportsrc:              +----GstElement
+webtransportsrc:                    +----GstBin
+webtransportsrc:                          +----GstWebTransportSrc
+webtransportsrc: 
+webtransportsrc: Implemented Interfaces:
+webtransportsrc:   GstChildProxy
+webtransportsrc:   GstURIHandler
+webtransportsrc:   GstWebTransferable
+webtransportsrc: 
+webtransportsrc: Element Flags:
+webtransportsrc: 
+webtransportsrc: Pad Templates:
+webtransportsrc:   SRC template: 'bidi_%u'
+webtransportsrc:     Availability: Sometimes
+webtransportsrc:     Capabilities:
+webtransportsrc:       ANY
+webtransportsrc:   
+webtransportsrc:   SRC template: 'datagram'
+webtransportsrc:     Availability: Always
+webtransportsrc:     Capabilities:
+webtransportsrc:       ANY
+webtransportsrc:   
+webtransportsrc:   SRC template: 'rbidi_%u'
+webtransportsrc:     Availability: On request
+webtransportsrc:     Capabilities:
+webtransportsrc:       ANY
+webtransportsrc:   
+webtransportsrc:   SRC template: 'unidi_%u'
+webtransportsrc:     Availability: Sometimes
+webtransportsrc:     Capabilities:
+webtransportsrc:       ANY
+webtransportsrc: 
+webtransportsrc: Element has no clocking capabilities.
+webtransportsrc: 
+webtransportsrc: URI handling capabilities:
+webtransportsrc:   Element can act as source.
+webtransportsrc:   Supported URI protocols:
+webtransportsrc:     https
+webtransportsrc: 
+webtransportsrc: Pads:
+webtransportsrc:   SRC: 'datagram'
+webtransportsrc:     Pad Template: 'datagram'
+
+webtransportsrc: Element Properties:
+webtransportsrc: 
+webtransportsrc:   async-handling      : The bin will handle Asynchronous state changes
+webtransportsrc:                         flags: readable, writable
+webtransportsrc:                         Boolean. Default: false
+webtransportsrc:   
+webtransportsrc:   datagrams-incoming-high-water-mark: High water mark for incoming chunks of data
+webtransportsrc:                         flags: readable, writable
+webtransportsrc:                         Integer. Range: 1 - 2147483647 Default: 0 
+webtransportsrc:   
+webtransportsrc:   location            : URI of resource to read
+webtransportsrc:                         flags: readable, writable, changeable only in NULL or READY state
+webtransportsrc:                         String. Default: null
+webtransportsrc:   
+webtransportsrc:   message-forward     : Forwards all children messages
+webtransportsrc:                         flags: readable, writable
+webtransportsrc:                         Boolean. Default: false
+webtransportsrc:   
+webtransportsrc:   name                : The name of the object
+webtransportsrc:                         flags: readable, writable
+webtransportsrc:                         String. Default: "webtransportsrc0"
+webtransportsrc:   
+webtransportsrc:   parent              : The parent of the object
+webtransportsrc:                         flags: readable, writable
+webtransportsrc:                         Object of type "GstObject"
+webtransportsrc:   
+webtransportsrc:   server-certificate-hashes: List of ECSDA certificate to authenticate the certificate provided by the server.
+webtransportsrc:                         flags: readable, writable, changeable only in NULL or READY state
+webtransportsrc:                         Default: "<  >"
+webtransportsrc:                         GstValueArray of GValues of type "gchararray"
+webtransportsrc:   
+webtransportsrc: 
+webtransportsrc: Element Signals:
+webtransportsrc: 
+webtransportsrc:   "pad-added" :  void user_function (GstElement * object,
+webtransportsrc:                                      GstPad * arg0,
+webtransportsrc:                                      gpointer user_data);
+
+webtransportsrc:   "pad-removed" :  void user_function (GstElement * object,
+webtransportsrc:                                        GstPad * arg0,
+webtransportsrc:                                        gpointer user_data);
+
+webtransportsrc:   "no-more-pads" :  void user_function (GstElement * object,
+webtransportsrc:                                         gpointer user_data);
+
+webdownload: Factory Details:
+webdownload:   Rank                     none (0)
+webdownload:   Long-name                Web Canvas Download
+webdownload:   Klass                    Filter/Video
+webdownload:   Description              Converts VideoFrame (memory) to raw pixel data
+webdownload:   Author                   Fluendo S.A. <engineering@fluendo.com>
+webdownload: 
+webdownload: Plugin Details:
+webdownload:   Name                     web
+webdownload:   Description              web related elements
+webdownload:   Filename                 (null)
+webdownload:   Version                  1.22.0
+webdownload:   License                  UNKNOWN
+webdownload:   Source module            gst-plugins-web
+webdownload:   Binary package           GStreamer Plugins Web
+webdownload:   Origin URL               https://fluendo.com
+webdownload: 
+webdownload: GObject
+webdownload:  +----GInitiallyUnowned
+webdownload:        +----GstObject
+webdownload:              +----GstElement
+webdownload:                    +----GstBaseTransform
+webdownload:                          +----GstWebDownload
+webdownload: 
+webdownload: Element Flags:
+webdownload: 
+webdownload: Pad Templates:
+webdownload:   SINK template: 'sink'
+webdownload:     Availability: Always
+webdownload:     Capabilities:
+webdownload:       video/x-raw
+webdownload:                  format: { (string)RGBA, (string)RGBx, (string)BGRA, (string)BGRx, (string)I420, (string)A420, (string)Y42B, (string)Y444, (string)NV12 } (GstValueList)
+webdownload:                   width: [ 1, 2147483647 ] (GstIntRange)
+webdownload:                  height: [ 1, 2147483647 ] (GstIntRange)
+webdownload:               framerate: [ 0/1, 2147483647/1 ] (GstFractionRange)
+webdownload:       video/x-raw(memory:WebVideoFrame)
+webdownload:                  format: { (string)RGBA, (string)RGBx, (string)BGRA, (string)BGRx, (string)I420, (string)A420, (string)Y42B, (string)Y444, (string)NV12 } (GstValueList)
+webdownload:                   width: [ 1, 2147483647 ] (GstIntRange)
+webdownload:                  height: [ 1, 2147483647 ] (GstIntRange)
+webdownload:               framerate: [ 0/1, 2147483647/1 ] (GstFractionRange)
+webdownload:   
+webdownload:   SRC template: 'src'
+webdownload:     Availability: Always
+webdownload:     Capabilities:
+webdownload:       video/x-raw
+webdownload:                  format: { (string)RGBA, (string)RGBx, (string)BGRA, (string)BGRx, (string)I420, (string)A420, (string)Y42B, (string)Y444, (string)NV12 } (GstValueList)
+webdownload:                   width: [ 1, 2147483647 ] (GstIntRange)
+webdownload:                  height: [ 1, 2147483647 ] (GstIntRange)
+webdownload:               framerate: [ 0/1, 2147483647/1 ] (GstFractionRange)
+webdownload:       video/x-raw(memory:WebVideoFrame)
+webdownload:                  format: { (string)RGBA, (string)RGBx, (string)BGRA, (string)BGRx, (string)I420, (string)A420, (string)Y42B, (string)Y444, (string)NV12 } (GstValueList)
+webdownload:                   width: [ 1, 2147483647 ] (GstIntRange)
+webdownload:                  height: [ 1, 2147483647 ] (GstIntRange)
+webdownload:               framerate: [ 0/1, 2147483647/1 ] (GstFractionRange)
+webdownload: 
+webdownload: Element has no clocking capabilities.
+webdownload: Element has no URI handling capabilities.
+webdownload: 
+webdownload: Pads:
+webdownload:   SINK: 'sink'
+webdownload:     Pad Template: 'sink'
+webdownload:   SRC: 'src'
+webdownload:     Pad Template: 'src'
+
+webdownload: Element Properties:
+webdownload: 
+webdownload:   name                : The name of the object
+webdownload:                         flags: readable, writable
+webdownload:                         String. Default: "webdownload0"
+webdownload:   
+webdownload:   parent              : The parent of the object
+webdownload:                         flags: readable, writable
+webdownload:                         Object of type "GstObject"
+webdownload:   
+webdownload:   qos                 : Handle Quality-of-Service events
+webdownload:                         flags: readable, writable
+webdownload:                         Boolean. Default: false
+webdownload:   
+webupload: Factory Details:
+webupload:   Rank                     none (0)
+webupload:   Long-name                Web Canvas Upload
+webupload:   Klass                    Filter/Video
+webupload:   Description              Converts raw pixel data to VideoFrame (memory)
+webupload:   Author                   Fluendo S.A. <engineering@fluendo.com>
+webupload: 
+webupload: Plugin Details:
+webupload:   Name                     web
+webupload:   Description              web related elements
+webupload:   Filename                 (null)
+webupload:   Version                  1.22.0
+webupload:   License                  UNKNOWN
+webupload:   Source module            gst-plugins-web
+webupload:   Binary package           GStreamer Plugins Web
+webupload:   Origin URL               https://fluendo.com
+webupload: 
+webupload: GObject
+webupload:  +----GInitiallyUnowned
+webupload:        +----GstObject
+webupload:              +----GstElement
+webupload:                    +----GstBaseTransform
+webupload:                          +----GstWebUpload
+webupload: 
+webupload: Element Flags:
+webupload: 
+webupload: Pad Templates:
+webupload:   SINK template: 'sink'
+webupload:     Availability: Always
+webupload:     Capabilities:
+webupload:       video/x-raw
+webupload:                  format: { (string)RGBA, (string)RGBx, (string)BGRA, (string)BGRx, (string)I420, (string)A420, (string)Y42B, (string)Y444, (string)NV12 } (GstValueList)
+webupload:                   width: [ 1, 2147483647 ] (GstIntRange)
+webupload:                  height: [ 1, 2147483647 ] (GstIntRange)
+webupload:               framerate: [ 0/1, 2147483647/1 ] (GstFractionRange)
+webupload:       video/x-raw(memory:WebVideoFrame)
+webupload:                  format: { (string)RGBA, (string)RGBx, (string)BGRA, (string)BGRx, (string)I420, (string)A420, (string)Y42B, (string)Y444, (string)NV12 } (GstValueList)
+webupload:                   width: [ 1, 2147483647 ] (GstIntRange)
+webupload:                  height: [ 1, 2147483647 ] (GstIntRange)
+webupload:               framerate: [ 0/1, 2147483647/1 ] (GstFractionRange)
+webupload:   
+webupload:   SRC template: 'src'
+webupload:     Availability: Always
+webupload:     Capabilities:
+webupload:       video/x-raw
+webupload:                  format: { (string)RGBA, (string)RGBx, (string)BGRA, (string)BGRx, (string)I420, (string)A420, (string)Y42B, (string)Y444, (string)NV12 } (GstValueList)
+webupload:                   width: [ 1, 2147483647 ] (GstIntRange)
+webupload:                  height: [ 1, 2147483647 ] (GstIntRange)
+webupload:               framerate: [ 0/1, 2147483647/1 ] (GstFractionRange)
+webupload:       video/x-raw(memory:WebVideoFrame)
+webupload:                  format: { (string)RGBA, (string)RGBx, (string)BGRA, (string)BGRx, (string)I420, (string)A420, (string)Y42B, (string)Y444, (string)NV12 } (GstValueList)
+webupload:                   width: [ 1, 2147483647 ] (GstIntRange)
+webupload:                  height: [ 1, 2147483647 ] (GstIntRange)
+webupload:               framerate: [ 0/1, 2147483647/1 ] (GstFractionRange)
+webupload: 
+webupload: Element has no clocking capabilities.
+webupload: Element has no URI handling capabilities.
+webupload: 
+webupload: Pads:
+webupload:   SINK: 'sink'
+webupload:     Pad Template: 'sink'
+webupload:   SRC: 'src'
+webupload:     Pad Template: 'src'
+
+webupload: Element Properties:
+webupload: 
+webupload:   name                : The name of the object
+webupload:                         flags: readable, writable
+webupload:                         String. Default: "webupload0"
+webupload:   
+webupload:   parent              : The parent of the object
+webupload:                         flags: readable, writable
+webupload:                         Object of type "GstObject"
+webupload:   
+webupload:   qos                 : Handle Quality-of-Service events
+webupload:                         flags: readable, writable
+webupload:                         Boolean. Default: false
+webupload:   
+bin: Factory Details:
+bin:   Rank                     primary (256)
+bin:   Long-name                Generic bin
+bin:   Klass                    Generic/Bin
+bin:   Description              Simple container object
+bin:   Author                   Erik Walthinsen <omega@cse.ogi.edu>,Wim Taymans <wim.taymans@gmail.com>
+bin:   Documentation            https://gstreamer.freedesktop.org/documentation/staticelements/bin.html
+bin: 
+bin: Plugin Details:
+bin:   Name                     staticelements
+bin:   Description              core elements linked into the GStreamer library
+bin:   Filename                 (null)
+bin:   Version                  1.29.1.1
+bin:   License                  LGPL
+bin:   Source module            gstreamer
+bin:   Documentation            https://gstreamer.freedesktop.org/documentation/staticelements/
+bin:   Binary package           GStreamer git
+bin:   Origin URL               Unknown package origin
+bin: 
+bin: GObject
+bin:  +----GInitiallyUnowned
+bin:        +----GstObject
+bin:              +----GstElement
+bin:                    +----GstBin
+bin: 
+bin: Implemented Interfaces:
+bin:   GstChildProxy
+bin: 
+bin: Element Flags:
+bin: 
+bin: Pad Templates:
+bin:   none
+bin: 
+bin: Element has no clocking capabilities.
+bin: Element has no URI handling capabilities.
+bin: 
+bin: Pads:
+bin:   none
+
+bin: Element Properties:
+bin: 
+bin:   async-handling      : The bin will handle Asynchronous state changes
+bin:                         flags: readable, writable
+bin:                         Boolean. Default: false
+bin:   
+bin:   message-forward     : Forwards all children messages
+bin:                         flags: readable, writable
+bin:                         Boolean. Default: false
+bin:   
+bin:   name                : The name of the object
+bin:                         flags: readable, writable
+bin:                         String. Default: "bin0"
+bin:   
+bin:   parent              : The parent of the object
+bin:                         flags: readable, writable
+bin:                         Object of type "GstObject"
+bin:   
+bin: 
+bin: Element Signals:
+bin: 
+bin:   "element-added" :  void user_function (GstElement * object,
+bin:                                          GstElement * arg0,
+bin:                                          gpointer user_data);
+
+bin:   "element-removed" :  void user_function (GstElement * object,
+bin:                                            GstElement * arg0,
+bin:                                            gpointer user_data);
+
+bin:   "deep-element-added" :  void user_function (GstElement * object,
+bin:                                               GstBin * arg0,
+bin:                                               GstElement * arg1,
+bin:                                               gpointer user_data);
+
+bin:   "deep-element-removed" :  void user_function (GstElement * object,
+bin:                                                 GstBin * arg0,
+bin:                                                 GstElement * arg1,
+bin:                                                 gpointer user_data);
+
+bin:   "do-latency" :  gboolean user_function (GstElement * object,
+bin:                                           gpointer user_data);
+
+pipeline: Factory Details:
+pipeline:   Rank                     primary (256)
+pipeline:   Long-name                Pipeline object
+pipeline:   Klass                    Generic/Bin
+pipeline:   Description              Complete pipeline object
+pipeline:   Author                   Erik Walthinsen <omega@cse.ogi.edu>, Wim Taymans <wim@fluendo.com>
+pipeline:   Documentation            https://gstreamer.freedesktop.org/documentation/staticelements/pipeline.html
+pipeline: 
+pipeline: Plugin Details:
+pipeline:   Name                     staticelements
+pipeline:   Description              core elements linked into the GStreamer library
+pipeline:   Filename                 (null)
+pipeline:   Version                  1.29.1.1
+pipeline:   License                  LGPL
+pipeline:   Source module            gstreamer
+pipeline:   Documentation            https://gstreamer.freedesktop.org/documentation/staticelements/
+pipeline:   Binary package           GStreamer git
+pipeline:   Origin URL               Unknown package origin
+pipeline: 
+pipeline: GObject
+pipeline:  +----GInitiallyUnowned
+pipeline:        +----GstObject
+pipeline:              +----GstElement
+pipeline:                    +----GstBin
+pipeline:                          +----GstPipeline
+pipeline: 
+pipeline: Implemented Interfaces:
+pipeline:   GstChildProxy
+pipeline: 
+pipeline: Element Flags:
+pipeline: 
+pipeline: Pad Templates:
+pipeline:   none
+pipeline: 
+pipeline: Element has no clocking capabilities.
+pipeline: Element has no URI handling capabilities.
+pipeline: 
+pipeline: Pads:
+pipeline:   none
+
+pipeline: Element Properties:
+pipeline: 
+pipeline:   async-handling      : The bin will handle Asynchronous state changes
+pipeline:                         flags: readable, writable
+pipeline:                         Boolean. Default: false
+pipeline:   
+pipeline:   auto-flush-bus      : Whether to automatically flush the pipeline's bus when going from READY into NULL state
+pipeline:                         flags: readable, writable
+pipeline:                         Boolean. Default: true
+pipeline:   
+pipeline:   delay               : Expected delay needed for elements to spin up to PLAYING in nanoseconds
+pipeline:                         flags: readable, writable
+pipeline:                         Unsigned Integer64. Range: 0 - 18446744073709551615 Default: 0 
+pipeline:   
+pipeline:   latency             : Latency to configure on the pipeline
+pipeline:                         flags: readable, writable
+pipeline:                         Unsigned Integer64. Range: 0 - 18446744073709551615 Default: 18446744073709551615 
+pipeline:   
+pipeline:   message-forward     : Forwards all children messages
+pipeline:                         flags: readable, writable
+pipeline:                         Boolean. Default: false
+pipeline:   
+pipeline:   name                : The name of the object
+pipeline:                         flags: readable, writable
+pipeline:                         String. Default: "pipeline0"
+pipeline:   
+pipeline:   parent              : The parent of the object
+pipeline:                         flags: readable, writable
+pipeline:                         Object of type "GstObject"
+pipeline:   
+
+Total count: 5 plugins, 19 features

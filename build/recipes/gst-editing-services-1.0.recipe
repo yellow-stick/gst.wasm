@@ -1,0 +1,51 @@
+# -*- Mode: Python -*- vi:si:et:sw=4:sts=4:ts=4:syntax=python
+import os
+import cerbero
+from cerbero.utils import imp_load_source
+from cerbero.build import recipe
+
+def recipes_path():
+    if os.environ.get('CERBERO_UNINSTALLED'):
+        return os.path.join(os.path.dirname(cerbero.__file__), '..',  'recipes')
+    else:
+        return os.path.join(os.path.dirname(cerbero.__file__), '..', 'cerbero_share', 'recipes')
+
+if os.environ.get('CERBERO_UNINSTALLED'):
+    custom = imp_load_source('custom', os.path.join(os.path.dirname(cerbero.__file__), '..','recipes', 'custom.py'))
+else:
+    custom = imp_load_source('custom', os.path.join(os.path.dirname(cerbero.__file__), '..', 'cerbero_share','recipes', 'custom.py'))
+
+original_recipe = recipe.import_recipe(os.path.join(recipes_path(), 'gst-editing-services-1.0.recipe'))
+
+class Recipe(original_recipe):
+    # gst-devtools only provides GstValidate integration, which pulls
+    # json-glib and gst-rtsp-server and has no browser use.
+    deps = ['gstreamer-1.0', 'gst-plugins-base-1.0', 'gst-plugins-good-1.0']
+
+    # Paths are relative to the GStreamer monorepo shared by all the
+    # GStreamer recipes. TODO upstreaming to the fluendo/gstreamer branches
+    patches = [
+        'gst-editing-services-1.0/0001-ges-enums-give-g_once-callbacks-the-GThreadFunc-sign.patch',
+        'gst-editing-services-1.0/0002-ges-give-signal-handlers-the-arity-their-marshaller-.patch',
+        'gst-editing-services-1.0/0003-ges-container-use-the-generic-marshaller-for-child-s.patch',
+        'gst-editing-services-1.0/0004-nle-composition-make-_initialize_stack_func-return-v.patch',
+    ]
+
+    # ges-launch-1.0 relies on dynamic plugin loading and a command line;
+    # the browser equivalent is the statically linked `ges` sample.
+    files_bins = []
+    files_typelibs = []
+
+    meson_options = {
+        'tools': 'disabled',
+        'validate': 'disabled',
+        'python': 'disabled',
+        'introspection': 'disabled',
+        'bash-completion': 'disabled',
+        'xptv': 'disabled',
+    }
+
+    def prepare(self):
+        super().prepare()
+        self.files_validate = []
+        self.files_python = []

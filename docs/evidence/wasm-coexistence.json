@@ -1,0 +1,7 @@
+{
+  "pass": true,
+  "rustNanoseconds": "1500000000",
+  "emscriptenMilliseconds": 1500,
+  "crossOriginIsolated": true,
+  "note": "Real separate modules coexist. This is not GStreamer or generated Flutter FRB API validation."
+}

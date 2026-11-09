@@ -1,0 +1,166 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yellow Stick <dev@yellow-stick.local>
+Date: Mon, 9 Nov 2026 01:30:00 +0100
+Subject: [PATCH] glib: sort without GCompareFunc to GCompareDataFunc casts
+
+g_list_sort (), g_slist_sort (), g_*_insert_sorted (), g_array_sort (),
+g_ptr_array_sort () and g_tree_new () called a GCompareFunc as a
+GCompareDataFunc. With -fwasm-fix-function-bitcasts each such cast goes
+through a pool of runtime wrappers whose targets live in shared memory;
+casts made by other threads retarget them, so a sort can run with another
+caller's compare function. Seen as NleComposition building a wrong stack
+(a source sorted above the transition it belongs to). Pass the GCompareFunc
+as data to a fixed trampoline instead.
+---
+ 4 files changed, 49 insertions(+), 9 deletions(-)
+
+diff --git a/glib/glist.c b/glib/glist.c
+--- a/glib/glist.c
++++ b/glib/glist.c
+@@ -36,6 +36,15 @@
+ 
+ #include "gtestutils.h"
+ 
++/* Calls the GCompareFunc passed as @func: casting a GCompareFunc to a
++ * GCompareDataFunc goes through shared runtime wrappers on WebAssembly
++ * (-fwasm-fix-function-bitcasts), which concurrent callers can retarget */
++static gint
++compare_func_trampoline (gconstpointer a, gconstpointer b, gpointer func)
++{
++  return ((GCompareFunc) func) (a, b);
++}
++
+ /**
+  * SECTION:linked_lists_double
+  * @title: Doubly-Linked Lists
+@@ -1174,7 +1183,8 @@
+                       gpointer      data,
+                       GCompareFunc  func)
+ {
+-  return g_list_insert_sorted_real (list, data, (GCompareDataFunc) func, NULL);
++  return g_list_insert_sorted_real (list, data, compare_func_trampoline,
++      (gpointer) func);
+ }
+ 
+ /**
+@@ -1305,7 +1315,8 @@
+ g_list_sort (GList        *list,
+              GCompareFunc  compare_func)
+ {
+-  return g_list_sort_real (list, (GCompareDataFunc) compare_func, NULL);
++  return g_list_sort_real (list, compare_func_trampoline,
++      (gpointer) compare_func);
+ }
+ 
+ /**
+diff --git a/glib/gslist.c b/glib/gslist.c
+--- a/glib/gslist.c
++++ b/glib/gslist.c
+@@ -35,6 +35,15 @@
+ #include "gtestutils.h"
+ #include "gslice.h"
+ 
++/* Calls the GCompareFunc passed as @func: casting a GCompareFunc to a
++ * GCompareDataFunc goes through shared runtime wrappers on WebAssembly
++ * (-fwasm-fix-function-bitcasts), which concurrent callers can retarget */
++static gint
++compare_func_trampoline (gconstpointer a, gconstpointer b, gpointer func)
++{
++  return ((GCompareFunc) func) (a, b);
++}
++
+ /**
+  * SECTION:linked_lists_single
+  * @title: Singly-Linked Lists
+@@ -965,7 +974,8 @@
+                        gpointer      data,
+                        GCompareFunc  func)
+ {
+-  return g_slist_insert_sorted_real (list, data, (GCompareDataFunc) func, NULL);
++  return g_slist_insert_sorted_real (list, data, compare_func_trampoline,
++      (gpointer) func);
+ }
+ 
+ /**
+@@ -1072,7 +1082,8 @@
+ g_slist_sort (GSList       *list,
+               GCompareFunc  compare_func)
+ {
+-  return g_slist_sort_real (list, (GCompareDataFunc) compare_func, NULL);
++  return g_slist_sort_real (list, compare_func_trampoline,
++      (gpointer) compare_func);
+ }
+ 
+ /**
+diff --git a/glib/garray.c b/glib/garray.c
+--- a/glib/garray.c
++++ b/glib/garray.c
+@@ -47,6 +47,15 @@
+ #include "grefcount.h"
+ #include "gutilsprivate.h"
+ 
++/* Calls the GCompareFunc passed as @func: casting a GCompareFunc to a
++ * GCompareDataFunc goes through shared runtime wrappers on WebAssembly
++ * (-fwasm-fix-function-bitcasts), which concurrent callers can retarget */
++static gint
++compare_func_trampoline (gconstpointer a, gconstpointer b, gpointer func)
++{
++  return ((GCompareFunc) func) (a, b);
++}
++
+ /**
+  * SECTION:arrays
+  * @title: Arrays
+@@ -970,8 +979,8 @@
+     g_qsort_with_data (array->data,
+                        array->len,
+                        array->elt_size,
+-                       (GCompareDataFunc)compare_func,
+-                       NULL);
++                       compare_func_trampoline,
++                       (gpointer) compare_func);
+ }
+ 
+ /**
+@@ -2500,8 +2509,8 @@
+     g_qsort_with_data (array->pdata,
+                        array->len,
+                        sizeof (gpointer),
+-                       (GCompareDataFunc)compare_func,
+-                       NULL);
++                       compare_func_trampoline,
++                       (gpointer) compare_func);
+ }
+ 
+ /* Please keep this doc-comment in sync with
+diff --git a/glib/gtree.c b/glib/gtree.c
+--- a/glib/gtree.c
++++ b/glib/gtree.c
+@@ -36,6 +36,15 @@
+ #include "gtestutils.h"
+ #include "gslice.h"
+ 
++/* Calls the GCompareFunc passed as @func: casting a GCompareFunc to a
++ * GCompareDataFunc goes through shared runtime wrappers on WebAssembly
++ * (-fwasm-fix-function-bitcasts), which concurrent callers can retarget */
++static gint
++compare_func_trampoline (gconstpointer a, gconstpointer b, gpointer func)
++{
++  return ((GCompareFunc) func) (a, b);
++}
++
+ /**
+  * SECTION:trees-binary
+  * @title: Balanced Binary Trees
+@@ -165,7 +174,7 @@
+ {
+   g_return_val_if_fail (key_compare_func != NULL, NULL);
+ 
+-  return g_tree_new_full ((GCompareDataFunc) key_compare_func, NULL,
++  return g_tree_new_full (compare_func_trampoline, (gpointer) key_compare_func,
+                           NULL, NULL);
+ }
+ 
+-- 
+2.43.0
+

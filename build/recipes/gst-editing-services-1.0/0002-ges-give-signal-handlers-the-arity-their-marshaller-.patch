@@ -1,0 +1,80 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yellow Stick <dev@yellow-stick.local>
+Date: Sun, 8 Nov 2026 23:00:00 +0100
+Subject: [PATCH] ges: give signal handlers the arity their marshaller calls
+
+These handlers omit trailing parameters the signal marshaller passes
+(user_data, or the instance for swapped connections). Calling a function
+with a different number of arguments is undefined behaviour and traps on
+WebAssembly ("function signature mismatch"), e.g. in
+GstDiscoverer::source-setup while loading a project.
+
+Found by checking every g_signal_connect* of GES and NLE against the
+n_params of the signal (n_params + 2 expected).
+---
+ 4 files changed, 9 insertions(+), 5 deletions(-)
+
+diff --git a/subprojects/gst-editing-services/ges/ges-audio-transition.c b/subprojects/gst-editing-services/ges/ges-audio-transition.c
+--- a/subprojects/gst-editing-services/ges/ges-audio-transition.c
++++ b/subprojects/gst-editing-services/ges/ges-audio-transition.c
+@@ -69,7 +69,8 @@
+     property_id, const GValue * value, GParamSpec * pspec);
+ 
+ static void
+-duration_changed_cb (GESTrackElement * self, GParamSpec * arg G_GNUC_UNUSED)
++duration_changed_cb (GESTrackElement * self, GParamSpec * arg G_GNUC_UNUSED,
++    gpointer user_data G_GNUC_UNUSED)
+ {
+   ges_audio_transition_duration_changed (self,
+       ges_timeline_element_get_duration (GES_TIMELINE_ELEMENT (self)));
+diff --git a/subprojects/gst-editing-services/ges/ges-video-transition.c b/subprojects/gst-editing-services/ges/ges-video-transition.c
+--- a/subprojects/gst-editing-services/ges/ges-video-transition.c
++++ b/subprojects/gst-editing-services/ges/ges-video-transition.c
+@@ -112,7 +112,8 @@
+     property_id, const GValue * value, GParamSpec * pspec);
+ 
+ static void
+-duration_changed_cb (GESTrackElement * self, GParamSpec * arg G_GNUC_UNUSED)
++duration_changed_cb (GESTrackElement * self, GParamSpec * arg G_GNUC_UNUSED,
++    gpointer user_data G_GNUC_UNUSED)
+ {
+   ges_video_transition_duration_changed (self,
+       ges_timeline_element_get_duration (GES_TIMELINE_ELEMENT (self)));
+diff --git a/subprojects/gst-editing-services/ges/ges-discoverer-manager.c b/subprojects/gst-editing-services/ges/ges-discoverer-manager.c
+--- a/subprojects/gst-editing-services/ges/ges-discoverer-manager.c
++++ b/subprojects/gst-editing-services/ges/ges-discoverer-manager.c
+@@ -344,7 +344,8 @@
+ }
+ 
+ static GstDiscovererInfo *
+-proxy_load_serialized_info_cb (GESDiscovererManager * self, const gchar * uri)
++proxy_load_serialized_info_cb (GESDiscovererManager * self, const gchar * uri,
++    GstDiscoverer * discoverer G_GNUC_UNUSED)
+ {
+   GstDiscovererInfo *info;
+ 
+@@ -354,7 +355,8 @@
+ }
+ 
+ static void
+-source_setup_cb (GESDiscovererManager * self, GstElement * source)
++source_setup_cb (GESDiscovererManager * self, GstElement * source,
++    GstDiscoverer * discoverer G_GNUC_UNUSED)
+ {
+   g_signal_emit (self, signals[DISCOVERER_SOURCE_SETUP], 0, source);
+ }
+diff --git a/subprojects/gst-editing-services/ges/ges-timeline.c b/subprojects/gst-editing-services/ges/ges-timeline.c
+--- a/subprojects/gst-editing-services/ges/ges-timeline.c
++++ b/subprojects/gst-editing-services/ges/ges-timeline.c
+@@ -3009,7 +3009,7 @@
+ }
+ 
+ static void
+-commited_cb (GESTimeline * timeline)
++commited_cb (GESTimeline * timeline, gpointer user_data G_GNUC_UNUSED)
+ {
+   g_mutex_lock (&timeline->priv->commited_lock);
+   g_cond_signal (&timeline->priv->commited_cond);
+-- 
+2.43.0
+

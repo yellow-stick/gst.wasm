@@ -1,0 +1,25 @@
+# -*- Mode: Python -*- vi:si:et:sw=4:sts=4:ts=4:syntax=python
+import os
+import cerbero
+from cerbero.utils import imp_load_source
+from cerbero.build import recipe
+
+def recipes_path():
+    if os.environ.get('CERBERO_UNINSTALLED'):
+        return os.path.join(os.path.dirname(cerbero.__file__), '..',  'recipes')
+    else:
+        return os.path.join(os.path.dirname(cerbero.__file__), '..', 'cerbero_share', 'recipes')
+
+if os.environ.get('CERBERO_UNINSTALLED'):
+    custom = imp_load_source('custom', os.path.join(os.path.dirname(cerbero.__file__), '..','recipes', 'custom.py'))
+else:
+    custom = imp_load_source('custom', os.path.join(os.path.dirname(cerbero.__file__), '..', 'cerbero_share','recipes', 'custom.py'))
+
+original_recipe = recipe.import_recipe(os.path.join(recipes_path(), 'gstreamer-1.0.recipe'))
+
+class Recipe(original_recipe):
+    # Paths are relative to the GStreamer monorepo shared by all the
+    # GStreamer recipes. TODO upstreaming to the fluendo/gstreamer branches
+    patches = [
+        'gstreamer-1.0/0001-bus-make-bus-watches-work-without-a-pollable-fd.patch',
+    ]

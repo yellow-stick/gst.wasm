@@ -328,10 +328,10 @@ gst_web_utils_element_handle_context_query (
     GstContext *old_context;
     GstContext *context;
 
+    /* transfer none: the context belongs to the query */
     gst_query_parse_context (query, &old_context);
     if (old_context) {
       GST_ERROR_OBJECT (element, "Previous context value not supported");
-      gst_context_unref (old_context);
       return FALSE;
     }
 
@@ -376,8 +376,16 @@ gst_web_utils_element_set_context (
   context_type = gst_context_get_context_type (context);
 
   if (g_strcmp0 (context_type, GST_WEB_CANVAS_CONTEXT_TYPE) == 0) {
-    GST_DEBUG_OBJECT (element, "context found %" GST_PTR_FORMAT, *canvas);
-    return gst_web_utils_context_get_web_canvas (context, canvas);
+    GstWebCanvas *new_canvas = NULL;
+
+    if (!gst_web_utils_context_get_web_canvas (context, &new_canvas))
+      return FALSE;
+    GST_DEBUG_OBJECT (element, "context found %" GST_PTR_FORMAT, new_canvas);
+    /* new_canvas is a new reference: drop the one it replaces */
+    if (*canvas)
+      gst_object_unref (*canvas);
+    *canvas = new_canvas;
+    return TRUE;
   }
 
   return FALSE;

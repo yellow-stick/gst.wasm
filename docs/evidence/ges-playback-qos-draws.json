@@ -1,0 +1,544 @@
+{
+ "renderAll": false,
+ "playStart": 1794184544980.5,
+ "end": {
+  "event": "eos"
+ },
+ "draws": [
+  {
+   "ms": 21.7,
+   "a": {
+    "frame": 10,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 54.8,
+   "a": {
+    "frame": 11,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 88.7,
+   "a": {
+    "frame": 12,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 121.4,
+   "a": {
+    "frame": 13,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 155.3,
+   "a": {
+    "frame": 14,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 191,
+   "a": {
+    "frame": 15,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 221.2,
+   "a": {
+    "frame": 16,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 257.5,
+   "a": {
+    "frame": 17,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 275.8,
+   "a": {
+    "frame": 18,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 308.9,
+   "a": {
+    "frame": 19,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 361.5,
+   "a": {
+    "frame": 20,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 375.7,
+   "a": {
+    "frame": 21,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 425,
+   "a": {
+    "frame": 22,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 459.6,
+   "a": {
+    "frame": 23,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 479,
+   "a": {
+    "frame": 24,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 507.7,
+   "a": {
+    "frame": 25,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 541,
+   "a": {
+    "frame": 26,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 578,
+   "a": {
+    "frame": 27,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 606.5,
+   "a": {
+    "frame": 28,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 655.2,
+   "a": {
+    "frame": 29,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 689.2,
+   "a": {
+    "frame": 30,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 721.6,
+   "a": {
+    "frame": 31,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 755,
+   "a": {
+    "frame": 32,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 789.2,
+   "a": {
+    "frame": 33,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 821.3,
+   "a": {
+    "frame": 34,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 855,
+   "a": {
+    "frame": 35,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 888.8,
+   "a": {
+    "frame": 36,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 922,
+   "a": {
+    "frame": 37,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 955.1,
+   "a": {
+    "frame": 38,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 988.3,
+   "a": {
+    "frame": 39,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 1021.2,
+   "a": {
+    "frame": 40,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 1055.2,
+   "a": {
+    "frame": 41,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 1088.8,
+   "a": {
+    "frame": 42,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 1121.7,
+   "a": {
+    "frame": 43,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 1155.4,
+   "a": {
+    "frame": 44,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 1189.1,
+   "a": {
+    "frame": 45,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 1222,
+   "a": {
+    "frame": 46,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 1255.4,
+   "a": {
+    "frame": 47,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 1288,
+   "a": {
+    "frame": 48,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 1321.2,
+   "a": {
+    "frame": 49,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 1355.6,
+   "a": {
+    "frame": 50,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 1389,
+   "a": {
+    "frame": 51,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 1421.7,
+   "a": {
+    "frame": 52,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 1455.3,
+   "a": {
+    "frame": 53,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 1490.8,
+   "a": {
+    "frame": 54,
+    "alpha": 1
+   },
+   "b": null
+  },
+  {
+   "ms": 3187.9,
+   "a": null,
+   "b": {
+    "frame": 70,
+    "alpha": 1
+   }
+  },
+  {
+   "ms": 3221.5,
+   "a": null,
+   "b": {
+    "frame": 71,
+    "alpha": 1
+   }
+  },
+  {
+   "ms": 3254.7,
+   "a": null,
+   "b": {
+    "frame": 72,
+    "alpha": 1
+   }
+  },
+  {
+   "ms": 3288,
+   "a": null,
+   "b": {
+    "frame": 73,
+    "alpha": 1
+   }
+  },
+  {
+   "ms": 3321.1,
+   "a": null,
+   "b": {
+    "frame": 74,
+    "alpha": 1
+   }
+  },
+  {
+   "ms": 3354.8,
+   "a": null,
+   "b": {
+    "frame": 75,
+    "alpha": 1
+   }
+  },
+  {
+   "ms": 3387.8,
+   "a": null,
+   "b": {
+    "frame": 76,
+    "alpha": 1
+   }
+  },
+  {
+   "ms": 3421.2,
+   "a": null,
+   "b": {
+    "frame": 77,
+    "alpha": 1
+   }
+  },
+  {
+   "ms": 3454.8,
+   "a": null,
+   "b": {
+    "frame": 78,
+    "alpha": 1
+   }
+  },
+  {
+   "ms": 3487.8,
+   "a": null,
+   "b": {
+    "frame": 79,
+    "alpha": 1
+   }
+  },
+  {
+   "ms": 3575.9,
+   "a": null,
+   "b": null
+  },
+  {
+   "ms": 3591.3,
+   "a": null,
+   "b": null
+  },
+  {
+   "ms": 3627.8,
+   "a": null,
+   "b": null
+  },
+  {
+   "ms": 3672.8,
+   "a": null,
+   "b": null
+  },
+  {
+   "ms": 3690.2,
+   "a": null,
+   "b": null
+  },
+  {
+   "ms": 3724.1,
+   "a": null,
+   "b": null
+  },
+  {
+   "ms": 3754.7,
+   "a": null,
+   "b": null
+  },
+  {
+   "ms": 3788,
+   "a": null,
+   "b": null
+  },
+  {
+   "ms": 3821.6,
+   "a": null,
+   "b": null
+  },
+  {
+   "ms": 3854.5,
+   "a": null,
+   "b": null
+  },
+  {
+   "ms": 3888.3,
+   "a": null,
+   "b": null
+  },
+  {
+   "ms": 3921.2,
+   "a": null,
+   "b": null
+  },
+  {
+   "ms": 3954.4,
+   "a": null,
+   "b": null
+  },
+  {
+   "ms": 3987.7,
+   "a": null,
+   "b": null
+  },
+  {
+   "ms": 4288.2,
+   "a": null,
+   "b": null
+  },
+  {
+   "ms": 4320.9,
+   "a": null,
+   "b": null
+  },
+  {
+   "ms": 4354.8,
+   "a": null,
+   "b": null
+  },
+  {
+   "ms": 4388,
+   "a": null,
+   "b": null
+  },
+  {
+   "ms": 4421.8,
+   "a": null,
+   "b": null
+  }
+ ]
+}

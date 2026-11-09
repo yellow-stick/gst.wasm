@@ -1,0 +1,48 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yellow Stick <dev@yellow-stick.local>
+Date: Mon, 9 Nov 2026 00:10:00 +0100
+Subject: [PATCH] ges: container: use the generic marshaller for child signals
+
+GESContainerClass::child_added/child_removed take (container, element)
+while the VOID__OBJECT marshaller GLib selects for these signals calls the
+class handler with a trailing user_data. That is undefined behaviour and
+traps on WebAssembly ("function signature mismatch" in
+g_cclosure_marshal_VOID__OBJECT from ges_container_add) as soon as a clip
+is added to a timeline. Changing the vfuncs would break the ABI; the
+generic marshaller (libffi) calls them with the declared arguments.
+---
+ subprojects/gst-editing-services/ges/ges-container.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/subprojects/gst-editing-services/ges/ges-container.c b/subprojects/gst-editing-services/ges/ges-container.c
+--- a/subprojects/gst-editing-services/ges/ges-container.c
++++ b/subprojects/gst-editing-services/ges/ges-container.c
+@@ -474,9 +474,14 @@
+    * may be stopped internally.
+    */
+   ges_container_signals[CHILD_ADDED_SIGNAL] =
++      /* The class handlers take no user_data; the VOID__OBJECT marshaller
++       * GLib picks by default would call them with one argument too many,
++       * which traps on WebAssembly. The generic marshaller calls through
++       * libffi with the declared arguments. */
+       g_signal_new ("child-added", G_TYPE_FROM_CLASS (klass),
+       G_SIGNAL_RUN_FIRST, G_STRUCT_OFFSET (GESContainerClass, child_added),
+-      NULL, NULL, NULL, G_TYPE_NONE, 1, GES_TYPE_TIMELINE_ELEMENT);
++      NULL, NULL, g_cclosure_marshal_generic, G_TYPE_NONE, 1,
++      GES_TYPE_TIMELINE_ELEMENT);
+ 
+   /**
+    * GESContainer::child-removed:
+@@ -488,7 +493,8 @@
+   ges_container_signals[CHILD_REMOVED_SIGNAL] =
+       g_signal_new ("child-removed", G_TYPE_FROM_CLASS (klass),
+       G_SIGNAL_RUN_LAST, G_STRUCT_OFFSET (GESContainerClass, child_removed),
+-      NULL, NULL, NULL, G_TYPE_NONE, 1, GES_TYPE_TIMELINE_ELEMENT);
++      NULL, NULL, g_cclosure_marshal_generic, G_TYPE_NONE, 1,
++      GES_TYPE_TIMELINE_ELEMENT);
+ 
+ 
+   element_class->set_start = _set_start;
+-- 
+2.43.0
+
