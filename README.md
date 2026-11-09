@@ -130,6 +130,27 @@ emrun ./build/gst.wasm_web_wasm32/dist/web_wasm32/share/gst.wasm/samples/videote
 emrun ./build/gst.wasm_web_wasm32/dist/web_wasm32/share/gst.wasm/samples/openal-example/openal-example.html # Click to hear to the sound.
 ```
 
+#### GES timeline in the browser
+
+`ges-timeline-example` loads a GStreamer Editing Services project (two H.264
+clips with a crossfade), decodes it with WebCodecs and draws it on a canvas.
+The page exposes `ys.load()`, `ys.play()`, `ys.pause()`, `ys.seekFrame(n)`
+and `ysCheckTimeline()`, a frame by frame check of the `[In, Out)` intervals.
+The H.264 test clips are not in the repository (codec patents); generate them
+with `tools/make_test_clips.sh build/ys-media` and copy them to the sample's
+`media/` directory. Serve with `tools/serve_samples.py`, which sends the
+COOP/COEP headers the threads need:
+
+```
+python3 tools/serve_samples.py build/gst.wasm_web_wasm32/dist/web_wasm32/share/gst.wasm/samples --port 8082
+# http://127.0.0.1:8082/ges-timeline-example/ges-timeline-example.html
+```
+
+`flutter/ys_gst_web` drives the same module from a Flutter Web page, see its
+[README](flutter/ys_gst_web/README.md). Acceptance evidence, measured limits
+(not real time at NLE stack switches, 1 ns frame boundary ambiguity) and the
+patches applied to GLib, GStreamer and GES are in [docs/YS_STATUS.md](docs/YS_STATUS.md).
+
 ## Development
 
 Refer to the [Development guide ](DEVELOPMENT.md)
